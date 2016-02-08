@@ -33,14 +33,10 @@ public class ArcadeDrive extends Command {
     		leftSpeed = -1;
     		rightSpeed = -1;
     	}
-    	// Turn left or right with a variable speed if left/right trigger is held
-    	if(gamepad.getRawAxis(2) > 0){
-    		leftSpeed = -gamepad.getRawAxis(2);
-    		rightSpeed = -leftSpeed;
-    	}
-    	if(gamepad.getRawAxis(3) > 0){
-    		rightSpeed = -gamepad.getRawAxis(3);
-    		leftSpeed = -rightSpeed;
+    	// Go completely backward if right bumper is held
+    	if(gamepad.getRawButton(5)){
+    		leftSpeed = 1;
+    		rightSpeed = 1;
     	}
     	// Send in values to tank drive
     	Robot.drivetrain.drive(leftSpeed, rightSpeed);

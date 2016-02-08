@@ -32,14 +32,10 @@ public class TankDrive extends Command {
     		left = -1;
     		right = -1;
     	}
-    	// Turn left or right with a variable speed if left/right trigger is held
-    	if(gamepad.getRawAxis(2) > 0){
-    		left = -gamepad.getRawAxis(2);
-    		right = -left;
-    	}
-    	if(gamepad.getRawAxis(3) > 0){
-    		right = -gamepad.getRawAxis(3);
-    		left = -right;
+    	// Go completely backward if right bumper is held
+    	if(gamepad.getRawButton(5)){
+    		left = 1;
+    		right = 1;
     	}
     	// Send in values to tank drive
     	
