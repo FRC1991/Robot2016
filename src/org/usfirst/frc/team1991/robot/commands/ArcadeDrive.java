@@ -28,16 +28,7 @@ public class ArcadeDrive extends Command {
     	double Y = gamepad.getRawAxis(1);
     	double leftSpeed = Y + X;
     	double rightSpeed = Y - X;
-    	// Go completely forward if right bumper is held
-    	if (gamepad.getRawButton(6)) {
-    		leftSpeed = -1;
-    		rightSpeed = -1;
-    	}
-    	// Go completely backward if right bumper is held
-    	if(gamepad.getRawButton(5)){
-    		leftSpeed = 1;
-    		rightSpeed = 1;
-    	}
+    	
     	// Send in values to tank drive
     	Robot.drivetrain.drive(leftSpeed, rightSpeed);
     }

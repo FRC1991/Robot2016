@@ -39,10 +39,35 @@ public class Reader {
 		
 		return values;
 	}
+	
+	
+	//Reads autonomous values from text file
+	public String[] readAut(){
+		String[] vals = new String[5];
+		try{
+			fr = new FileReader(file);
+			br = new BufferedReader(fr);
+			String temp;
+			
+			
+			while((temp = br.readLine()) != null){
+				if(temp.substring(0, 1) == "#"){
+					vals = temp.split(" ");
+				}
+				
+			}
+		}catch(Exception e){
+			
+		}
+		vals[0] = vals[0].substring(1);
+		return vals;
+	}
+	
 	//Outputs Preferences
 	public Map getPrefs(){
 		Map<String, String> prefs = new HashMap<>();
 		prefs = readPrefs(prefs);
 		return prefs;
 	}
+	
 }

@@ -9,20 +9,24 @@ public class Preferences {
 	
 	
 	Reader read = new Reader(System.getProperty("user.dir"));
-	double speed_offset_right;
-	double speed_offset_left;
-	double speed_multiplier;
-	double speed_rotate;
+	double speed_offset_right = 0.0;
+	double speed_offset_left = 0.0;
+	double speed_multiplier = 0.5;
+	double speed_rotate = 0.5;
 	Map<String,String> prefs = new HashMap<String,String>();
 	//Pulls preferences from the Reader class
 	public Preferences(){
 		prefs = read.getPrefs();
 	}
 	void getPrefs(Map prefs){
+		try{
 		speed_offset_right = Double.parseDouble((String) prefs.get("speedR"));
 		speed_offset_left = Double.parseDouble((String) prefs.get("speedL"));
 		speed_multiplier = Double.parseDouble((String) prefs.get("speedMultiplier"));
 		speed_rotate = Double.parseDouble((String) prefs.get("speedRotate"));
+		}catch(Exception e){
+			
+		}
 	}
 	
 	//Getters and Setters 

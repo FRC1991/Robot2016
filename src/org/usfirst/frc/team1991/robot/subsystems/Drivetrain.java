@@ -19,7 +19,7 @@ public class Drivetrain extends Subsystem {
     
 	List<CANTalon> leftSide = RobotMap.leftDriveSide;
 	List<CANTalon> rightSide = RobotMap.rightDriveSide;
-	Preferences pref = new Preferences();
+	Preferences pref = Robot.pref;
 	double multiplier = pref.getSpeed_multiplier();
 	double rightOffset = pref.getSpeed_offset_right();
 	double leftOffset = pref.getSpeed_offset_left();
@@ -48,6 +48,12 @@ public class Drivetrain extends Subsystem {
    public void drive(double left, double right) {
 	   if(joy.getRawAxis(2) > 0|| joy.getRawAxis(3) > 0){
 		   rotate();
+	   }else if(joy.getRawButton(5)){//Makes robot move straight forwards
+		   left = -1;
+  			right = -1;
+	   }else if(joy.getRawButton(6)){//Makes robot move straight backwards
+		   left = 1;
+   			right = 1;
 	   }else{
 		   if(reverse){
 			   driveSide(leftSide, right * -1, "left");

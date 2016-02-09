@@ -26,20 +26,8 @@ public class TankDrive extends Command {
     protected void execute() {
     	double right = Robot.oi.joy.getRawAxis(1);
     	double left = Robot.oi.joy.getRawAxis(5);
-    	
-    	// Go completely forward if right bumper is held
-    	if (gamepad.getRawButton(6)) {
-    		left = -1;
-    		right = -1;
-    	}
-    	// Go completely backward if right bumper is held
-    	if(gamepad.getRawButton(5)){
-    		left = 1;
-    		right = 1;
-    	}
+    
     	// Send in values to tank drive
-    	
-    	
     	Robot.drivetrain.drive(left, right);
     }
 

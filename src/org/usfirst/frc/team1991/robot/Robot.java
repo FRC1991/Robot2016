@@ -22,6 +22,7 @@ public class Robot extends IterativeRobot {
 
 	public static final Drivetrain drivetrain = new Drivetrain();
 	public static Preferences pref = new Preferences();
+	public static Autonomous aut = new Autonomous();
 	public static OI oi;
 
     Command autonomousCommand;
