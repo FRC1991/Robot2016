@@ -3,6 +3,7 @@ package org.usfirst.frc.team1991.robot;
 
 import org.usfirst.frc.team1991.robot.commands.ArcadeDrive;
 import org.usfirst.frc.team1991.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team1991.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -20,8 +21,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
-	public static final Drivetrain drivetrain = new Drivetrain();
-	public static Preferences pref = new Preferences();
+	public static Drivetrain drivetrain;
+	public static Shooter shooter;
+	public static Preferences prefs;
 	public static OI oi;
 
     Command autonomousCommand;
@@ -33,11 +35,16 @@ public class Robot extends IterativeRobot {
      */
     public void robotInit() {
     	RobotMap.init();
+    	drivetrain = new Drivetrain();
+    	shooter = new Shooter();
+    	prefs = new Preferences();
 		oi = new OI();
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", new ArcadeDrive());
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
+        SmartDashboard.putNumber("Left Speed", 1);
+        SmartDashboard.putNumber("Right Speed", 1);
     }
 	
 	/**
