@@ -6,7 +6,7 @@ import java.util.List;
 import org.usfirst.frc.team1991.robot.Preferences;
 import org.usfirst.frc.team1991.robot.Robot;
 import org.usfirst.frc.team1991.robot.RobotMap;
-import org.usfirst.frc.team1991.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team1991.robot.commands.Startup;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Joystick;
@@ -30,7 +30,7 @@ public class Drivetrain extends Subsystem {
     // here. Call these from Commands.
 
     public void initDefaultCommand() {
-    	setDefaultCommand(new ArcadeDrive());
+    	setDefaultCommand(new Startup());
     }
     //Drives 1 of the sides in the tank drive based on side parameter
     private void driveSide(List<CANTalon> side, double speed, String sides) {
@@ -94,6 +94,7 @@ public class Drivetrain extends Subsystem {
 		   
 	   }
    }
+  
 
 	public static boolean isReverse() {
 		return reverse;

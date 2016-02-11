@@ -3,29 +3,29 @@ package org.usfirst.frc.team1991.robot;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.usfirst.frc.team1991.robot.IO.Reader;
+
 //Gets preferences from the pref file on the robot
 public class Preferences {
 	
 	
-	Reader read = new Reader(System.getProperty("user.dir"));
+	
 	double speed_offset_right = 0.0;
 	double speed_offset_left = 0.0;
 	double speed_multiplier = 0.5;
 	double speed_rotate = 0.5;
 	Map<String,String> prefs = new HashMap<String,String>();
-	//Pulls preferences from the Reader class
+	
 	public Preferences(){
-		prefs = read.getPrefs();
+		
 	}
-	void getPrefs(Map prefs){
+	public void setPrefs(Map prefs){
 		try{
 		speed_offset_right = Double.parseDouble((String) prefs.get("speedR"));
 		speed_offset_left = Double.parseDouble((String) prefs.get("speedL"));
 		speed_multiplier = Double.parseDouble((String) prefs.get("speedMultiplier"));
 		speed_rotate = Double.parseDouble((String) prefs.get("speedRotate"));
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
 	}
 	

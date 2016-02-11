@@ -1,10 +1,10 @@
 package org.usfirst.frc.team1991.robot;
 
-import org.usfirst.frc.team1991.robot.IO.Reader;
+
 
 public class Autonomous {
 	
-	Reader read = new Reader(System.getProperty("user.dir"));
+	//Reader read = new Reader(System.getProperty("user.dir"));
 	int defense = 1;
 	int position = 1;
 	boolean shoot = false;
@@ -12,7 +12,7 @@ public class Autonomous {
 	
 	
 	public Autonomous(){
-		values = read.readAut();
+		//values = read.readAut();
 		try{
 			position = Integer.parseInt(values[0]);
 			defense = Integer.parseInt(values[1]);
