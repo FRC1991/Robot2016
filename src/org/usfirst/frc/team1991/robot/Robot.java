@@ -2,10 +2,14 @@
 package org.usfirst.frc.team1991.robot;
 
 import org.usfirst.frc.team1991.robot.commands.ArcadeDrive;
+import org.usfirst.frc.team1991.robot.commands.TestDrive;
 import org.usfirst.frc.team1991.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1991.robot.subsystems.Shooter;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -25,6 +29,7 @@ public class Robot extends IterativeRobot {
 	public static Shooter shooter;
 	public static Preferences prefs;
 	public static OI oi;
+	public static AHRS navX;
 
     Command autonomousCommand;
     SendableChooser chooser;
@@ -39,10 +44,12 @@ public class Robot extends IterativeRobot {
     	shooter = new Shooter();
     	prefs = new Preferences();
 		oi = new OI();
+		navX = new AHRS(SPI.Port.kMXP);
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", new ArcadeDrive());
 //        chooser.addObject("My Auto", new MyAutoCommand());
         SmartDashboard.putData("Auto mode", chooser);
+        autonomousCommand = new TestDrive();
         SmartDashboard.putNumber("Left Speed", 1);
         SmartDashboard.putNumber("Right Speed", 1);
     }
@@ -70,8 +77,7 @@ public class Robot extends IterativeRobot {
 	 * or additional comparisons to the switch structure below with additional strings & commands.
 	 */
     public void autonomousInit() {
-        autonomousCommand = (Command) chooser.getSelected();
-        
+        //autonomousCommand = (Command) chooser.getSelected();
 		/* String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		switch(autoSelected) {
 		case "My Auto":
@@ -84,7 +90,7 @@ public class Robot extends IterativeRobot {
 		} */
     	
     	// schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
+        autonomousCommand.start();
     }
 
     /**
