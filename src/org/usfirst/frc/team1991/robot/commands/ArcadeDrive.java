@@ -33,6 +33,11 @@ public class ArcadeDrive extends Command {
     		leftSpeed = -1;
     		rightSpeed = -1;
     	}
+    	// Go completely backward if right bumper is held
+    	if (gamepad.getRawButton(5)) {
+    		leftSpeed = 1;
+    		rightSpeed = 1;
+    	}
     	// Turn left or right with a variable speed if left/right trigger is held
     	if(gamepad.getRawAxis(2) > 0){
     		leftSpeed = -gamepad.getRawAxis(2);

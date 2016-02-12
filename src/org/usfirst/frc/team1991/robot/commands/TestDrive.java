@@ -10,7 +10,7 @@ public class TestDrive extends CommandGroup {
     
     public TestDrive() {
         addSequential(new AutoDrive(0.5, 0.5, 3));
-        addSequential(new WaitCommand(3));
-        addSequential(new AutoDrive(0.2, 0.2, 1));
+        addSequential(new AutoDrive(1, 0, 1.3));
+        addSequential(new AutoDrive(0.6, 0.6, 1));
     }
 }
