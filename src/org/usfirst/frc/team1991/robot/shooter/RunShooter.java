@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1991.robot.commands;
+package org.usfirst.frc.team1991.robot.shooter;
 
 import org.usfirst.frc.team1991.robot.Robot;
 

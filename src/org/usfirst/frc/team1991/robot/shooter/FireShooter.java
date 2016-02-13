@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1991.robot.commands;
+package org.usfirst.frc.team1991.robot.shooter;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;

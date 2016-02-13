@@ -1,5 +1,5 @@
 
-package org.usfirst.frc.team1991.robot.commands;
+package org.usfirst.frc.team1991.robot.drivetrain;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,11 +9,11 @@ import org.usfirst.frc.team1991.robot.Robot;
 /**
  *
  */
-public class ArcadeDrive extends Command {
+public class TankDrive extends Command {
 	
 	Joystick gamepad;
 
-    public ArcadeDrive() {
+    public TankDrive() {
         requires(Robot.drivetrain);
     }
 
@@ -24,31 +24,32 @@ public class ArcadeDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	double X = gamepad.getRawAxis(0) * 0.7;
-    	double Y = gamepad.getRawAxis(1);
-    	double leftSpeed = Y + X;
-    	double rightSpeed = Y - X;
+    	double right = Robot.oi.joy.getRawAxis(1);
+    	double left = Robot.oi.joy.getRawAxis(5);
+    	
     	// Go completely forward if right bumper is held
     	if (gamepad.getRawButton(6)) {
-    		leftSpeed = -1;
-    		rightSpeed = -1;
+    		left = -1;
+    		right = -1;
     	}
     	// Go completely backward if right bumper is held
     	if (gamepad.getRawButton(5)) {
-    		leftSpeed = 1;
-    		rightSpeed = 1;
+    		left = 1;
+    		right = 1;
     	}
     	// Turn left or right with a variable speed if left/right trigger is held
     	if(gamepad.getRawAxis(2) > 0){
-    		leftSpeed = -gamepad.getRawAxis(2);
-    		rightSpeed = -leftSpeed;
+    		left = -gamepad.getRawAxis(2);
+    		right = -left;
     	}
     	if(gamepad.getRawAxis(3) > 0){
-    		rightSpeed = -gamepad.getRawAxis(3);
-    		leftSpeed = -rightSpeed;
+    		right = -gamepad.getRawAxis(3);
+    		left = -right;
     	}
     	// Send in values to tank drive
-    	Robot.drivetrain.drive(leftSpeed, rightSpeed);
+    	
+    	
+    	Robot.drivetrain.drive(left, right);
     }
 
     // Make this return true when this Command no longer needs to run execute()

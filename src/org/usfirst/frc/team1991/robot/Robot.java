@@ -1,10 +1,10 @@
 
 package org.usfirst.frc.team1991.robot;
 
-import org.usfirst.frc.team1991.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team1991.robot.commands.TestDrive;
-import org.usfirst.frc.team1991.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team1991.robot.subsystems.Shooter;
+import org.usfirst.frc.team1991.robot.drivetrain.ArcadeDrive;
+import org.usfirst.frc.team1991.robot.drivetrain.Drivetrain;
+import org.usfirst.frc.team1991.robot.drivetrain.TestDrive;
+import org.usfirst.frc.team1991.robot.shooter.Shooter;
 
 import com.kauailabs.navx.frc.AHRS;
 

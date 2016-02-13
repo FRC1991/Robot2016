@@ -1,44 +1,45 @@
-package org.usfirst.frc.team1991.robot.commands;
 
-import org.usfirst.frc.team1991.robot.Robot;
+package org.usfirst.frc.team1991.robot.drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
+
+import org.usfirst.frc.team1991.robot.Robot;
 
 /**
  *
  */
-public class AutoDrive extends Command {
-
-	double left, right, duration;
+public class ReverseDrive extends Command {
 	
-    public AutoDrive(double left, double right, double duration) {
-    	requires(Robot.drivetrain);
-        this.left = left;
-        this.right = right;
-        this.duration = duration;
+	
+
+    public ReverseDrive() {
+        //requires(Robot.drivetrain);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	setTimeout(duration);
+    	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.drivetrain.drive(left * -1,  right * -1);
+    	Robot.drivetrain.setReverse(true);
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return isTimedOut();
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	Robot.drivetrain.setReverse(false);
     }
 }

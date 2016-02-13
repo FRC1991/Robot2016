@@ -1,5 +1,5 @@
 
-package org.usfirst.frc.team1991.robot.subsystems;
+package org.usfirst.frc.team1991.robot.shooter;
 
 import org.usfirst.frc.team1991.robot.RobotMap;
 
@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Shooter extends Subsystem {
     
-	CANTalon left = RobotMap.leftShooter;
-	CANTalon right = RobotMap.rightShooter;
-	CANTalon feeder = RobotMap.feedShooter;
+	CANTalon left = RobotMap.leftRunner;
+	CANTalon right = RobotMap.rightRunner;
+	CANTalon feeder = RobotMap.feeder;
 
 	public void run(double leftSpeed, double rightSpeed) {
 		left.set(leftSpeed);

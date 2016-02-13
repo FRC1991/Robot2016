@@ -1,9 +1,9 @@
 package org.usfirst.frc.team1991.robot;
 
-import org.usfirst.frc.team1991.robot.commands.ArcadeDrive;
-import org.usfirst.frc.team1991.robot.commands.ReverseDrive;
-import org.usfirst.frc.team1991.robot.commands.StraightDrive;
-import org.usfirst.frc.team1991.robot.commands.TankDrive;
+import org.usfirst.frc.team1991.robot.drivetrain.ArcadeDrive;
+import org.usfirst.frc.team1991.robot.drivetrain.ReverseDrive;
+import org.usfirst.frc.team1991.robot.drivetrain.StraightDrive;
+import org.usfirst.frc.team1991.robot.drivetrain.TankDrive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -28,7 +28,7 @@ public class OI {
         Y.whenPressed(new ArcadeDrive());
         B.toggleWhenPressed(new ReverseDrive());
        // A.whenPressed(new FireShooter());
-        A.whenPressed(new StraightDrive(0.6, 2));
+        A.whenReleased(new StraightDrive(0.4, 3));
     }
 }
 
