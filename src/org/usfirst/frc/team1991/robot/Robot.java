@@ -27,8 +27,8 @@ public class Robot extends IterativeRobot {
 
 	public static Drivetrain drivetrain;
 	public static Shooter shooter;
-	public static Preferences prefs;
 	public static OI oi;
+	public static Camera cam;
 	public static AHRS navX;
 
     Command autonomousCommand;
@@ -42,8 +42,8 @@ public class Robot extends IterativeRobot {
     	RobotMap.init();
     	drivetrain = new Drivetrain();
     	shooter = new Shooter();
-    	prefs = new Preferences();
 		oi = new OI();
+		cam = new Camera();
 		navX = new AHRS(SPI.Port.kMXP);
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", new ArcadeDrive());
@@ -106,6 +106,7 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
     	navX.reset();
+		cam.startCamera("cam0");
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
 
@@ -114,6 +115,7 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
     	SmartDashboard.putNumber("Yaw", navX.getYaw());
+    	cam.refreshFrame();
         Scheduler.getInstance().run();
     }
     

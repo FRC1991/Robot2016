@@ -24,6 +24,7 @@ public class ArcadeDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	System.out.println("Arcade");
     	double X = gamepad.getRawAxis(0) * 0.7;
     	double Y = gamepad.getRawAxis(1);
     	double leftSpeed = Y + X;
@@ -39,14 +40,14 @@ public class ArcadeDrive extends Command {
     		rightSpeed = 1;
     	}
     	// Turn left or right with a variable speed if left/right trigger is held
-    	if(gamepad.getRawAxis(2) > 0){
+    	/*if(gamepad.getRawAxis(2) > 0){
     		leftSpeed = -gamepad.getRawAxis(2);
     		rightSpeed = -leftSpeed;
     	}
     	if(gamepad.getRawAxis(3) > 0){
     		rightSpeed = -gamepad.getRawAxis(3);
     		leftSpeed = -rightSpeed;
-    	}
+    	}*/
     	// Send in values to tank drive
     	Robot.drivetrain.drive(leftSpeed, rightSpeed);
     }

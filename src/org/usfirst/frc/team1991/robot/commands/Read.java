@@ -24,7 +24,7 @@ public class Read extends Command {
 	File file;
 	FileReader fr;
 	BufferedReader br;
-	Map<String, String> prefs;
+	HashMap prefs;
     public Read(String dir) {
     	this.dir = dir;
     }
@@ -44,14 +44,20 @@ public class Read extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-  		Robot.prefs.setPrefs(readPrefs(prefs));
+  		Robot.drivetrain.setValues(readPrefs(prefs));
+  		
   		finished = true;
     	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+    	if(finished == true){
+    		return true;
+    	}else{
+    		return false;
+    	}
+        
     }
 
     // Called once after isFinished returns true
@@ -64,7 +70,8 @@ public class Read extends Command {
     protected void interrupted() {
     	
     }
-    public Map readPrefs(Map values){
+    public Double[] readPrefs(HashMap values){
+    		Double[] speeds = new Double[5];
 		try{
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
@@ -73,10 +80,14 @@ public class Read extends Command {
 			String value;
 			String key;
 			while((temp = br.readLine()) != null){
-				if(temp.substring(0, 1) == "#"){
+				//System.out.println(temp);
+				if(temp.substring(0, 1).equals("#")){
+					
 					vals = temp.split(" ");
 					key = vals[0].substring(1);
 					value = vals[2];
+					//System.out.println(value);
+					//System.out.println(key);
 					values.put(key, value);
 				}
 				
@@ -84,8 +95,18 @@ public class Read extends Command {
 		}catch(Exception e){
 			
 		}
+		try{
+			speeds[0] = Double.parseDouble((String) values.get("SMultiplier"));
+			speeds[3] = Double.parseDouble((String) values.get("SRotate"));
+			speeds[1] = Double.parseDouble((String) values.get("SLeft"));
+			speeds[2] = Double.parseDouble((String) values.get("SRight"));
+			
+			System.out.println(speeds[0] + " " + speeds[1]);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
-		return values;
+		return speeds;
 	}
   //Reads autonomous values from text file
   	public String[] readAut(){
