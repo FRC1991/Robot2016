@@ -6,6 +6,7 @@ import java.util.List;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -38,5 +39,7 @@ public class RobotMap {
 //		feeder = new CANTalon(11);
 		angleEncoder = new AnalogInput(4);
 		angleMotor = new Talon(10);
+		LiveWindow.addSensor("Test", "Enc", angleEncoder);
+		LiveWindow.addActuator("Test", "Motor", angleMotor);
 	}
 }

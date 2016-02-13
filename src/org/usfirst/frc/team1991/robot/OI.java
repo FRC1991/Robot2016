@@ -1,9 +1,6 @@
 package org.usfirst.frc.team1991.robot;
 
-import org.usfirst.frc.team1991.robot.drivetrain.ArcadeDrive;
-import org.usfirst.frc.team1991.robot.drivetrain.ReverseDrive;
-import org.usfirst.frc.team1991.robot.drivetrain.StraightDrive;
-import org.usfirst.frc.team1991.robot.drivetrain.TankDrive;
+import org.usfirst.frc.team1991.robot.shooter.AngleShooter;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -24,11 +21,15 @@ public class OI {
         B = new JoystickButton(joy, 2);
         A = new JoystickButton(joy, 1);
         LeftBumper = new JoystickButton(joy, 5);
-        X.whenPressed(new TankDrive());
-        Y.whenPressed(new ArcadeDrive());
-        B.toggleWhenPressed(new ReverseDrive());
-       // A.whenPressed(new FireShooter());
-        A.whenReleased(new StraightDrive(0.4, 3));
+//        X.whenPressed(new TankDrive());
+//        Y.whenPressed(new ArcadeDrive());
+//        B.toggleWhenPressed(new ReverseDrive());
+//       // A.whenPressed(new FireShooter());
+//        A.whenReleased(new StraightDrive(0.4, 3));
+        X.whenPressed(new AngleShooter(1.5));
+        Y.whenPressed(new AngleShooter(3));
+        A.whenPressed(new AngleShooter(1));
+        B.whenPressed(new AngleShooter(3.5));
     }
 }
 

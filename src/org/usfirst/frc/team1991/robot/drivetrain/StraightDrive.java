@@ -14,7 +14,7 @@ public class StraightDrive extends PIDCommand {
 	double duration, turn, speed;
 	
     public StraightDrive(double speed, double duration) {
-    	super(1, 0, 0); // PID 1,1,1
+    	super(1, 0, 0); // PID 1,0,0
     	this.duration = duration;
     	this.speed = speed;
     }
