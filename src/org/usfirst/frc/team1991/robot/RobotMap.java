@@ -34,11 +34,14 @@ public class RobotMap {
 		rightSide.add(new CANTalon(4));
 		rightSide.add(new CANTalon(5));
 		rightSide.add(new CANTalon(6));
-//		leftRunner = new CANTalon(9);
-//		rightRunner = new CANTalon(10);
-//		feeder = new CANTalon(11);
+		leftRunner = new CANTalon(9);
+		rightRunner = new CANTalon(10);
+		feeder = new CANTalon(8);
 		angleEncoder = new AnalogInput(1);
 		angleMotor = new Talon(0);
+		LiveWindow.addActuator("Shooter", "Left", leftRunner);
+		LiveWindow.addActuator("Shooter", "Right", rightRunner);
+		LiveWindow.addActuator("Shooter", "Feed", feeder);
 		LiveWindow.addSensor("Test", "Enc", angleEncoder);
 		LiveWindow.addActuator("Test", "Motor", angleMotor);
 	}

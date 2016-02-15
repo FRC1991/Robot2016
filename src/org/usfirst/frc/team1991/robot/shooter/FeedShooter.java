@@ -3,6 +3,7 @@ package org.usfirst.frc.team1991.robot.shooter;
 import org.usfirst.frc.team1991.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class FeedShooter extends Command {
@@ -25,8 +26,10 @@ public class FeedShooter extends Command {
     }
 
     protected void end() {
+    	Robot.shooter.stop();
     }
 
     protected void interrupted() {
+    	Robot.shooter.stop();
     }
 }

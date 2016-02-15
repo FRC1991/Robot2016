@@ -106,7 +106,7 @@ public class Robot extends IterativeRobot {
         // continue until interrupted by another command, remove
         // this line or comment it out.
     	navX.reset();
-		cam.startCamera("cam0");
+		cam.startCamera("cam1");
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
 

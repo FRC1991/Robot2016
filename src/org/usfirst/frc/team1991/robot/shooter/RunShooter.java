@@ -17,6 +17,7 @@ public class RunShooter extends Command {
 		this.duration = duration;
 	}
     protected void initialize() {
+    	setTimeout(duration);
     }
 
     protected void execute() {
@@ -28,8 +29,10 @@ public class RunShooter extends Command {
     }
 
     protected void end() {
+    	Robot.shooter.stop();
     }
 
     protected void interrupted() {
+    	Robot.shooter.stop();
     }
 }

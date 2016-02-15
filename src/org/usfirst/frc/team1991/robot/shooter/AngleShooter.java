@@ -13,16 +13,16 @@ public class AngleShooter extends PIDCommand {
 	double angle;
 	boolean finished = false;
 	
-    public AngleShooter(double angle) {
-    	super(1, 0, 0);
+    public AngleShooter(double p, double angle) {
+    	super(p, 0, 0);
     	requires(Robot.shooter);
     	this.angle = angle;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	setInputRange(1.5, 3.5);
-    	getPIDController().setAbsoluteTolerance(0.2);
+    	setInputRange(0.872, 1.245);
+    	getPIDController().setAbsoluteTolerance(0.02);
     	getPIDController().setContinuous(false);
     	setSetpoint(angle);
     	getPIDController().enable();
@@ -37,7 +37,7 @@ public class AngleShooter extends PIDCommand {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if (Math.abs(getPIDController().getError()) < 0.2){
+    	if (Math.abs(getPIDController().getError()) < 0.02){
     		SmartDashboard.putBoolean("Devastated", true);
     		return true;
     	}
