@@ -16,11 +16,11 @@ import org.usfirst.frc.team1991.robot.Robot;
  *
  */
 public class Read extends Command {
-	
+
 	boolean finished = false;
-	
+
 	String dir;
-	
+
 	File file;
 	FileReader fr;
 	BufferedReader br;
@@ -38,37 +38,32 @@ public class Read extends Command {
     	}catch(Exception e){
     		e.printStackTrace();
     	}
-    	
-    	
+
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
   		Robot.drivetrain.setValues(readPrefs(prefs));
-  		
+
   		finished = true;
-    	
+
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	if(finished == true){
-    		return true;
-    	}else{
-    		return false;
-    	}
-        
+      	return finished; 
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	
+
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	
+
     }
     public Double[] readPrefs(HashMap values){
     		Double[] speeds = new Double[5];
@@ -82,7 +77,7 @@ public class Read extends Command {
 			while((temp = br.readLine()) != null){
 				//System.out.println(temp);
 				if(temp.substring(0, 1).equals("#")){
-					
+
 					vals = temp.split(" ");
 					key = vals[0].substring(1);
 					value = vals[2];
@@ -90,22 +85,22 @@ public class Read extends Command {
 					//System.out.println(key);
 					values.put(key, value);
 				}
-				
+
 			}
 		}catch(Exception e){
-			
+
 		}
 		try{
 			speeds[0] = Double.parseDouble((String) values.get("SMultiplier"));
 			speeds[3] = Double.parseDouble((String) values.get("SRotate"));
 			speeds[1] = Double.parseDouble((String) values.get("SLeft"));
 			speeds[2] = Double.parseDouble((String) values.get("SRight"));
-			
+
 			System.out.println(speeds[0] + " " + speeds[1]);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
 		return speeds;
 	}
   //Reads autonomous values from text file
@@ -115,19 +110,19 @@ public class Read extends Command {
   			fr = new FileReader(file);
   			br = new BufferedReader(fr);
   			String temp;
-  			
-  			
+
+
   			while((temp = br.readLine()) != null){
   				if(temp.substring(0, 1) == "#"){
   					vals = temp.split(" ");
   				}
-  				
+
   			}
   		}catch(Exception e){
-  			
+
   		}
   		vals[0] = vals[0].substring(1);
   		return vals;
   	}
-  	
+
 }

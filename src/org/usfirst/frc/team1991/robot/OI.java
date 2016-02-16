@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	public Joystick joy;
 	public JoystickButton X, Y, B, A, LeftBumper;
-	
+
 
     public OI() {
         joy = new Joystick(0);
@@ -30,4 +30,3 @@ public class OI {
          X.whenPressed(new FireShooter());
     }
 }
-

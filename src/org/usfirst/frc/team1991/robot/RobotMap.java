@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  * floating around.
  */
 public class RobotMap {
+	// Constants
+	public static final double DRIVETRAIN_SPEED_MULTIPLIER = 0.5;
+	public static final double ARCADE_TURN_SENSITIVITY = 0.7;
 	// Drivetrain
 	public static List<CANTalon> leftSide = new ArrayList<CANTalon>();
 	public static List<CANTalon> rightSide = new ArrayList<CANTalon>();
@@ -24,9 +27,9 @@ public class RobotMap {
 	public static CANTalon feeder;
 	public static AnalogInput angleEncoder;
 	public static Talon angleMotor;
-	
-	
-	
+
+
+
 	public static void init() {
 		leftSide.add(new CANTalon(1));
 		leftSide.add(new CANTalon(2));

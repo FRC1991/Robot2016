@@ -53,7 +53,7 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putNumber("Left Speed", 1);
         SmartDashboard.putNumber("Right Speed", 1);
     }
-	
+
 	/**
      * This function is called once each time the robot enters Disabled mode.
      * You can use it to reset any subsystem information you want to clear when
@@ -62,7 +62,7 @@ public class Robot extends IterativeRobot {
     public void disabledInit(){
 
     }
-	
+
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 	}
@@ -88,7 +88,7 @@ public class Robot extends IterativeRobot {
 			autonomousCommand = new ArcadeDrive();
 			break;
 		} */
-    	
+
     	// schedule the autonomous command (example)
         autonomousCommand.start();
     }
@@ -102,7 +102,7 @@ public class Robot extends IterativeRobot {
 
     public void teleopInit() {
 		// This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to 
+        // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
     	navX.reset();
@@ -118,7 +118,7 @@ public class Robot extends IterativeRobot {
     	cam.refreshFrame();
         Scheduler.getInstance().run();
     }
-    
+
     /**
      * This function is called periodically during test mode
      */
