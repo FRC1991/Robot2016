@@ -16,7 +16,10 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
  */
 public class RobotMap {
 	// Constants
-	public static final double DRIVETRAIN_SPEED_MULTIPLIER = 0.5;
+	public static final double DRIVETRAIN_MAX_SPEED_MULTIPLIER = 0.5;
+	public static final double DRIVETRAIN_ROTATION_MULTIPLIER = 0.5;
+	public static final double DRIVETRAIN_LEFT_SPEED_OFFSET = 0;
+	public static final double DRIVETRAIN_RIGHT_SPEED_OFFSET = 0;
 	public static final double ARCADE_TURN_SENSITIVITY = 0.7;
 	// Drivetrain
 	public static List<CANTalon> leftSide = new ArrayList<CANTalon>();

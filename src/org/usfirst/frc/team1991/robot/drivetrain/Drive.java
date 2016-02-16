@@ -75,6 +75,8 @@ public class Drive extends Command {
       rightSpeed = -rightTrigger;
       leftSpeed = -rightSpeed;
     }
+    leftSpeed *= RobotMap.DRIVETRAIN_ROTATION_MULTIPLIER;
+    rightSpeed *= RobotMap.DRIVETRAIN_ROTATION_MULTIPLIER;
   }
 
   protected void execute() {
