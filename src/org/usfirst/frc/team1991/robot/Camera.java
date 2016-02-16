@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.CameraServer;
 
 public class Camera {
   int session = -1;
-  String cam = "cam0";
+  String cam;
   Image frame;
 
   public Camera() {
@@ -15,6 +15,7 @@ public class Camera {
   }
 
   public void startCamera(String newCam) {
+    NIVision.IMAQdxResetCamera(newCam, 1); // In case the camera was previously in use
     session = NIVision.IMAQdxOpenCamera(newCam, NIVision.IMAQdxCameraControlMode.CameraControlModeController);
     NIVision.IMAQdxConfigureGrab(session);
     NIVision.IMAQdxStartAcquisition(session);

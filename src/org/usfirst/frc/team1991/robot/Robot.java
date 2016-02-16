@@ -41,7 +41,7 @@ public class Robot extends IterativeRobot {
       autonomousCommand = new TestDrive();
     }
 
-    public void disabledInit(){
+    public void disabledInit() {
 			Robot.shooter.stop();
 			Robot.drivetrain.stop();
     }
