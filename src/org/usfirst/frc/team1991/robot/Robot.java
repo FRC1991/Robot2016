@@ -1,7 +1,6 @@
 
 package org.usfirst.frc.team1991.robot;
 
-import org.usfirst.frc.team1991.robot.drivetrain.ArcadeDrive;
 import org.usfirst.frc.team1991.robot.drivetrain.Drivetrain;
 import org.usfirst.frc.team1991.robot.drivetrain.TestDrive;
 import org.usfirst.frc.team1991.robot.shooter.Shooter;
@@ -29,7 +28,6 @@ public class Robot extends IterativeRobot {
 	public static Shooter shooter;
 	public static OI oi;
 	public static Camera cam;
-	public static AHRS navX;
 
     Command autonomousCommand;
     SendableChooser chooser;
@@ -42,9 +40,8 @@ public class Robot extends IterativeRobot {
     	RobotMap.init();
     	drivetrain = new Drivetrain();
     	shooter = new Shooter();
-		oi = new OI();
-		cam = new Camera();
-		navX = new AHRS(SPI.Port.kMXP);
+			oi = new OI();
+			cam = new Camera();
         chooser = new SendableChooser();
         chooser.addDefault("Default Auto", new ArcadeDrive());
 //        chooser.addObject("My Auto", new MyAutoCommand());

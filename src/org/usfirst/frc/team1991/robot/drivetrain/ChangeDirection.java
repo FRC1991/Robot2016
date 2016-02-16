@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import org.usfirst.frc.team1991.robot.Robot;
 
 /**
- *
+ * Toggles the direction of the drivetrain.
  */
 public class ChangeDirection extends Command {
 

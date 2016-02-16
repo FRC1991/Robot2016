@@ -3,6 +3,9 @@ package org.usfirst.frc.team1991.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.Talon;
@@ -21,6 +24,8 @@ public class RobotMap {
 	public static final double DRIVETRAIN_LEFT_SPEED_OFFSET = 0;
 	public static final double DRIVETRAIN_RIGHT_SPEED_OFFSET = 0;
 	public static final double ARCADE_TURN_SENSITIVITY = 0.7;
+	// navX
+	public static AHRS navX;
 	// Drivetrain
 	public static List<CANTalon> leftSide = new ArrayList<CANTalon>();
 	public static List<CANTalon> rightSide = new ArrayList<CANTalon>();
@@ -40,6 +45,7 @@ public class RobotMap {
 		rightSide.add(new CANTalon(4));
 		rightSide.add(new CANTalon(5));
 		rightSide.add(new CANTalon(6));
+		navX = new AHRS(SPI.Port.kMXP);
 		leftRunner = new CANTalon(9);
 		rightRunner = new CANTalon(10);
 		feeder = new CANTalon(8);
