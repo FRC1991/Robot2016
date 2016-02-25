@@ -1,8 +1,12 @@
 package org.usfirst.frc.team1991.robot.drivetrain;
 
+import java.util.HashMap;
+
+import org.usfirst.frc.team1991.robot.Robot;
+import org.usfirst.frc.team1991.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import org.usfirst.frc.team1991.robot.*;
 
 /**
  * A multifunction command meant to be used to control the drivetrain.
@@ -46,18 +50,23 @@ public class Drive extends Command {
    * Just a helper function to return the raw axis value of the gamepad.
    */
   private double axis(int axis) {
-    return this.gamepad.getRawAxis(axis);
+    double value = this.gamepad.getRawAxis(axis);
+	// On an Xbox controller, full up on the Y axis equals -1, so multiply by -1 to get 1
+    if (axis == 1 || axis == 5) {
+    	value *= -1;
+    }
+    return value;
   }
 
   // The next three methods all change the values of leftSpeed and rightSpeed and are used for manual robot control
 
   private void tankDrive() {
-    leftSpeed = axis(5); // Y axis of left stick
-    rightSpeed = axis(1); // Y axis of right stick
+    leftSpeed = axis(1); // Y axis of left stick
+    rightSpeed = axis(5); // Y axis of right stick
   }
 
   private void arcadeDrive() {
-    double x = axis(0) * RobotMap.ARCADE_TURN_SENSITIVITY;
+    double x = axis(0) * RobotMap.pref.get("Arcade_Turn_Sensitivity");
     double y = axis(1);
     leftSpeed = y + x;
     rightSpeed = y - x;
@@ -75,8 +84,8 @@ public class Drive extends Command {
       rightSpeed = -rightTrigger;
       leftSpeed = -rightSpeed;
     }
-    leftSpeed *= RobotMap.DRIVETRAIN_ROTATION_MULTIPLIER;
-    rightSpeed *= RobotMap.DRIVETRAIN_ROTATION_MULTIPLIER;
+    leftSpeed *= RobotMap.pref.get("Drivetrain_Speed_Rotation");
+    rightSpeed *= RobotMap.pref.get("Drivetrain_Speed_Rotation");
   }
 
   protected void execute() {

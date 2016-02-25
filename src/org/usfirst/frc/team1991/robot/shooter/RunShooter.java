@@ -10,18 +10,17 @@ public class RunShooter extends Command {
 	double leftSpeed;
 	double rightSpeed;
 	double duration;
-	
-	public RunShooter(double leftSpeed, double rightSpeed, double duration) {
-		this.leftSpeed = leftSpeed;
-		this.rightSpeed = rightSpeed;
-		this.duration = duration;
-	}
+
     protected void initialize() {
+    	this.leftSpeed = Robot.shooter.currentPosition.leftSpeed;
+		this.rightSpeed = Robot.shooter.currentPosition.rightSpeed;
+		this.duration = Robot.shooter.currentPosition.runTime;
     	setTimeout(duration);
     }
 
     protected void execute() {
     	Robot.shooter.run(leftSpeed, rightSpeed);
+    	
     }
 
     protected boolean isFinished() {

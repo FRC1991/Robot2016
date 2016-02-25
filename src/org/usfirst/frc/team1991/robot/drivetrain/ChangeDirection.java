@@ -19,7 +19,7 @@ public class ChangeDirection extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.drivetrain.reverse = !Robot.drivetrain.reverse;
-			finished = true;
+		finished = true;
 
     }
 
