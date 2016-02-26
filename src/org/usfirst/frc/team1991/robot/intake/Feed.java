@@ -5,36 +5,33 @@ import org.usfirst.frc.team1991.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class IntakeFeeder extends Command{
+public class Feed extends Command {
 
 	@Override
 	protected void initialize() {
-		// TODO Auto-generated method stub
-
+		requires(Robot.intake);
 	}
 
 	@Override
 	protected void execute() {
-		Robot.intake.feed(0.5);
-
+		Robot.intake.feed(RobotMap.intakeFeedSpeed);
+		Robot.shooter.feed(RobotMap.shooterFeedSpeed);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Robot.shooter.ballPresent;
+		return Robot.shooter.ballPresent();
 
 	}
 
 	@Override
 	protected void end() {
 		Robot.intake.stop();
-
 	}
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-
+		Robot.intake.stop();
 	}
 
 }

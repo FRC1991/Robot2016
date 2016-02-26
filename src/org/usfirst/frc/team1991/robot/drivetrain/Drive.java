@@ -66,7 +66,7 @@ public class Drive extends Command {
   }
 
   private void arcadeDrive() {
-    double x = axis(0) * RobotMap.pref.get("Arcade_Turn_Sensitivity");
+    double x = axis(0) * RobotMap.prefs.get("Arcade_Turn_Sensitivity");
     double y = axis(1);
     leftSpeed = y + x;
     rightSpeed = y - x;
@@ -84,8 +84,8 @@ public class Drive extends Command {
       rightSpeed = -rightTrigger;
       leftSpeed = -rightSpeed;
     }
-    leftSpeed *= RobotMap.pref.get("Drivetrain_Speed_Rotation");
-    rightSpeed *= RobotMap.pref.get("Drivetrain_Speed_Rotation");
+    leftSpeed *= RobotMap.prefs.get("Drivetrain_Speed_Rotation");
+    rightSpeed *= RobotMap.prefs.get("Drivetrain_Speed_Rotation");
   }
 
   protected void execute() {

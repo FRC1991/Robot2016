@@ -1,10 +1,9 @@
 package org.usfirst.frc.team1991.robot;
 
 import org.usfirst.frc.team1991.robot.drivetrain.TurnToAngle;
-import org.usfirst.frc.team1991.robot.intake.IntakeFeeder;
-import org.usfirst.frc.team1991.robot.shooter.Feeder;
-import org.usfirst.frc.team1991.robot.shooter.FireShooter;
-import org.usfirst.frc.team1991.robot.shooter.PrepareForShotPosition;
+import org.usfirst.frc.team1991.robot.intake.Feed;
+import org.usfirst.frc.team1991.robot.shooter.Shoot;
+import org.usfirst.frc.team1991.robot.shooter.MoveShooter;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -27,14 +26,7 @@ public class OI {
         A = new JoystickButton(joy, 1);
         LeftBumper = new JoystickButton(joy, 5);
         RightBumper = new JoystickButton(joy, 6);
-        LeftBumper.whenPressed(new Feeder());
-        LeftBumper.whenPressed(new IntakeFeeder());
-        RightBumper.whenPressed(new FireShooter());
-        Y.whenPressed(new PrepareForShotPosition(ShotPositions.BARF));
-        A.whenPressed(new PrepareForShotPosition(ShotPositions.STOWED));
-        X.whenPressed(new PrepareForShotPosition(ShotPositions.CLOSE_SHOT));
-        B.whenPressed(new PrepareForShotPosition(ShotPositions.FAR_SHOT));
-       // X.whenPressed(new TurnToAngle(SmartDashboard.getNumber("Target Yaw")));
-
+        LeftBumper.whenPressed(new Feed());
+        RightBumper.whenPressed(new Shoot());
     }
 }

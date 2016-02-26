@@ -19,21 +19,16 @@ public class PIDControllerConfiguration {
 		this.continuous = continuous;
 	}
 
-	//Sets config values based on parameter
 	public PIDControllerConfiguration(String prefsKey) {
-		if(!keys.contains(prefsKey)) {
-			keys.add(prefsKey);
-		}
-		this.p = RobotMap.pref.get(prefsKey + "_P");
-		this.i = RobotMap.pref.get(prefsKey + "_I");
-		this.d = RobotMap.pref.get(prefsKey + "_D");
-		this.tolerance = RobotMap.pref.get(prefsKey + "_Tolerance");
-		this.min = RobotMap.pref.get(prefsKey + "_Min");
-		this.max = RobotMap.pref.get(prefsKey + "_Max");
-		this.continuous = (RobotMap.pref.get(prefsKey + "_Continuous") == 1.0) ? true : false;
+		this.p = RobotMap.prefs.get(prefsKey + "_P");
+		this.i = RobotMap.prefs.get(prefsKey + "_I");
+		this.d = RobotMap.prefs.get(prefsKey + "_D");
+		this.tolerance = RobotMap.prefs.get(prefsKey + "_Tolerance");
+		this.min = RobotMap.prefs.get(prefsKey + "_Min");
+		this.max = RobotMap.prefs.get(prefsKey + "_Max");
+		this.continuous = (RobotMap.prefs.get(prefsKey + "_Continuous") == 1.0) ? true : false;
 	}
 
-	//Configures PIDController
 	public void configurePIDController(PIDController controller) {
 		controller.setPID(this.p, this.i, this.d);
 		controller.setAbsoluteTolerance(this.tolerance);

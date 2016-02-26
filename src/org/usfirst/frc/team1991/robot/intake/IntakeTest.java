@@ -4,22 +4,19 @@ import org.usfirst.frc.team1991.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class IntakeTest extends Command{
+public class IntakeTest extends Command {
 
-	
+
 	public IntakeTest(){
 		requires(Robot.intake);
 	}
 	@Override
-	protected void initialize() {
-		
-		
-	}
+	protected void initialize() {}
 
 	@Override
 	protected void execute() {
-		Robot.intake.move(Robot.oi.joy.getRawAxis(5));
-		
+		Robot.intake.move(Robot.oi.joy.getRawAxis(5) * 0.05);
+
 	}
 
 	@Override
@@ -31,13 +28,13 @@ public class IntakeTest extends Command{
 	@Override
 	protected void end() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	protected void interrupted() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

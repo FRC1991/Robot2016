@@ -24,7 +24,7 @@ public class Camera {
 	}
 
 	public void stop() {
-		if (!getActive()) {
+		if (getActive()) {
 			NIVision.IMAQdxStopAcquisition(session);
 			NIVision.IMAQdxCloseCamera(session);
 			session = -1;

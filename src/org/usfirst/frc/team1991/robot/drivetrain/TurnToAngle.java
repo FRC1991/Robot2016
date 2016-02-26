@@ -11,23 +11,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class TurnToAngle extends PIDControl {
 	double turn;
-	
+
 	public TurnToAngle(double angle) {
-		super(Robot.drivetrainTurnInPlace, angle, null, null);
+		super(RobotMap.drivetrain_TurnInPlace, angle, null, null);
 		requires(Robot.drivetrain);
-		
+
 	}
-	
+
 	@Override
 	protected void initialize() {
 		//RobotMap.navX.zeroYaw();
-		
-		pid.setPID(SmartDashboard.getNumber("Angle_Turn_P"), 
-				SmartDashboard.getNumber("Angle_Turn_I"), 
+
+		pid.setPID(SmartDashboard.getNumber("Angle_Turn_P"),
+				SmartDashboard.getNumber("Angle_Turn_I"),
 				SmartDashboard.getNumber("Angle_Turn_D"));
-	
+
 	}
-	
+
 	@Override
 	protected void execute() {
 		double speed = 0;
@@ -35,7 +35,7 @@ public class TurnToAngle extends PIDControl {
     	double rightSpeed = speed - turn;
     	Robot.drivetrain.drive(leftSpeed, rightSpeed);
 	}
-	
+
 	@Override
 	protected double returnPIDInput() {
 		return RobotMap.navX.getYaw();

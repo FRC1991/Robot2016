@@ -2,55 +2,69 @@
 package org.usfirst.frc.team1991.robot.shooter;
 
 import org.usfirst.frc.team1991.robot.RobotMap;
-import org.usfirst.frc.team1991.robot.ShotPositions;
-
+import org.usfirst.frc.team1991.robot.Position;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Shooter extends Subsystem {
-    
-	public boolean ballPresent = false;
-	// Begin in stowed position
-	ShotPositions currentPosition = ShotPositions.STOWED;
+	private CANTalon LRunner, RRunner, miniFeeder;
+	private AnalogInput angleEncoder;
+	private Talon angleMotor;
+	private DigitalInput ballSensor;
+	private Position currentPosition;
 
-	CANTalon left = RobotMap.leftRunner;
-	CANTalon right = RobotMap.rightRunner;
-	CANTalon feeder = RobotMap.feeder;
-	AnalogInput angleEncoder = RobotMap.angleEncoder;
-	Talon angleMotor = RobotMap.angleMotor;
-	DigitalInput intakeSensor = RobotMap.intakeSensor;
+	public Shooter() {
+		LRunner = RobotMap.shooter_LRunner;
+		RRunner = RobotMap.shooter_RRunner;
+		miniFeeder = RobotMap.shooter_miniFeeder;
+		angleEncoder = RobotMap.shooter_angleEncoder;
+		angleMotor = RobotMap.shooter_angleMotor;
+		ballSensor = RobotMap.shooter_ballSensor;
+	}
 
 	public void run(double leftSpeed, double rightSpeed) {
-		
-		left.set(leftSpeed);
-		right.set(rightSpeed);
+		LRunner.set(leftSpeed);
+		RRunner.set(rightSpeed);
 	}
-	
-	public void feed(double speed) {
-		feeder.set(speed);
-	}
-	
-	public void stop() {
-		feeder.set(0);
-		left.set(0);
-		right.set(0);
-		// No ball present because true = no ball
-		if (intakeSensor.get()) {
-			ballPresent = false;
-		}
-	}
-    public void initDefaultCommand() {
-    	setTalonPID(left);
-    	setTalonPID(right);
-    }
-    public void setTalonPID(CANTalon motor){
-    	motor.changeControlMode(TalonControlMode.Speed);
-    	motor.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-    	motor.setPID(1.0,0.0,0.0);
-    }
-}
 
+	public void feed(double speed) {
+		miniFeeder.set(speed);
+	}
+
+	public void stop() {
+		LRunner.set(0);
+		RRunner.set(0);
+		miniFeeder.set(0);
+	}
+
+  public boolean ballPresent() {
+    // True = no ball
+		boolean present = !ballSensor.get();
+		SmartDashboard.putBoolean("Ball Present", present);
+    return present;
+  }
+
+	public boolean isAtSpeed() {
+		return true; // placeholder
+	}
+
+	public void setCurrentPosition(Position pos) {
+		currentPosition = pos;
+	}
+
+	public Position getCurrentPosition() {
+		return currentPosition;
+	}
+	public void initDefaultCommand() {}
+
+	// public void setTalonPID(CANTalon motor){
+	//      motor.changeControlMode(TalonControlMode.Speed);
+	//      motor.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
+	//      motor.setPID(1.0,0.0,0.0);
+	// }
+}

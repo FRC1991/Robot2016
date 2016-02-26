@@ -14,65 +14,60 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class RobotMap {
+	// Temp constants
+	// Used for feeding ball in
+	public static final double intakeFeedSpeed = 0.5;
+	public static final double shooterFeedSpeed = 0.35;
+	// Preferences
+	public static Preferences prefs;
 	// navX
 	public static AHRS navX;
 	// Drivetrain
-	public static CANTalon LSide;
-	public static CANTalon RSide;
+	public static ArrayList<CANTalon> drivetrain_LSide, drivetrain_RSide;
 	// Intake
-	public static AnalogInput intakeEncoder;
-	public static CANTalon intakeMotor;
-	public static CANTalon leftIntakeAngleMotor;
-	public static CANTalon intakeMotorL;
-	// Feeder
-	public static CANTalon leftRunner;
-	public static CANTalon rightRunner;
-	public static CANTalon feeder;
-	public static AnalogInput angleEncoder;
-	public static Talon angleMotor;
-	public static DigitalInput intakeSensor;
-
-	//Preferences
-	public static Preferences pref;
-
+	public static AnalogInput intake_angleEncoder;
+	public static CANTalon intake_LAngleMotor, intake_RAngleMotor, intake_feedMotor;
+	// Shooter
+	public static CANTalon shooter_LRunner, shooter_RRunner, shooter_miniFeeder;
+	public static AnalogInput shooter_angleEncoder;
+	public static Talon shooter_angleMotor;
+	public static DigitalInput shooter_ballSensor;
+	// PID Settings
+	public static PIDControllerConfiguration shooter_Up, shooter_Down, intake_Up, intake_Down, drivetrain_TurnInPlace;
 
 	public static void init() {
-		//Preferences
-		pref = new Preferences("home/lvuser/DataFiles/Preferences.txt");
-		pref.setValues();
-
-		// Drivetrain
-		rightSide = new Talon(2);
-		leftSide = new Talon(1);
-		leftSide.setInverted(true);
-
+		// Preferences
+		prefs = new Preferences("home/lvuser/DataFiles/Preferences.txt");
+		prefs.setValues();
+		// PID Settings
+		shooter_Up = new PIDControllerConfiguration("Shooter_Up");
+		shooter_Down = new PIDControllerConfiguration("Shooter_Down");
+		intake_Up = new PIDControllerConfiguration("Intake_Up");
+		intake_Down = new PIDControllerConfiguration("Intake_Down");
+		drivetrain_TurnInPlace = new PIDControllerConfiguration("DriveTrain_Turn");
 		// navX
 		navX = new AHRS(SPI.Port.kMXP);
-		// Feeder
-		leftRunner = new CANTalon(9);
-		rightRunner = new CANTalon(10);
-		rightRunner.setInverted(true);
-		feeder = new CANTalon(8);
-		angleEncoder = new AnalogInput(0);
-		angleMotor = new Talon(0);
-		intakeSensor = new DigitalInput(0);
-
-		//Intake
-		intakeEncoder = new AnalogInput(1);
-		intakeMotorL = new CANTalon(5);
-		intakeMotorR = new CANTalon(4);
-		intakeFeedMotor = new CANTalon(6);
-
-		// Debugging
-		LiveWindow.addActuator("Feeder", "Left", leftRunner);
-		LiveWindow.addActuator("Feeder", "Right", rightRunner);
-		LiveWindow.addActuator("Feeder", "Feed", feeder);
-		LiveWindow.addSensor("Test", "Enc", angleEncoder);
-		LiveWindow.addActuator("Test", "Motor", angleMotor);
-
-		LiveWindow.addActuator("Intake", "Feed", intakeFeedMotor);
-		LiveWindow.addActuator("Intake", "AngleL", intakeMotorL);
-		LiveWindow.addSensor("Intake", "Enc", intakeEncoder);
-		LiveWindow.addSensor("Intake", "AngleR", intakeMotorR);
+		// Drivetrain
+		drivetrain_LSide = new ArrayList<CANTalon>();
+		drivetrain_RSide = new ArrayList<CANTalon>();
+		drivetrain_LSide.add(new CANTalon(1));
+		drivetrain_LSide.add(new CANTalon(2));
+		drivetrain_LSide.add(new CANTalon(3));
+		drivetrain_RSide.add(new CANTalon(4));
+		drivetrain_RSide.add(new CANTalon(5));
+		drivetrain_RSide.add(new CANTalon(6));
+		// Intake
+		intake_angleEncoder = new AnalogInput(1);
+		intake_LAngleMotor = new CANTalon(5);
+		intake_RAngleMotor = new CANTalon(5);
+		intake_feedMotor = new CANTalon(5);
+		// Shooter
+		shooter_LRunner = new CANTalon(5);
+		shooter_RRunner = new CANTalon(5);
+		shooter_RRunner.setInverted(true);
+		shooter_miniFeeder = new CANTalon(5);
+	  shooter_angleEncoder = new AnalogInput(0);
+		shooter_angleMotor = new Talon(0);
+		shooter_ballSensor = new DigitalInput(0);
 	}
 }

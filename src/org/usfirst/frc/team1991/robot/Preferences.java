@@ -6,15 +6,15 @@ import java.io.FileReader;
 import java.util.HashMap;
 
 public class Preferences {
-	
-	
+
+
 	public HashMap<String, Double> prefs;
 	public HashMap<String, Double> TempPrefs;
-	
+
 	File file;
 	FileReader fr;
 	BufferedReader br;
-	
+
 	@SuppressWarnings("unchecked")
 	public Preferences(String dir){
 		
@@ -44,7 +44,7 @@ public class Preferences {
 				prefs.put(key, value);
 			}
 		}
-		
+
 	}
 	//Reads user Preferences from a text file written in AakashLang
 	public HashMap<String, String> readPrefs(){
@@ -75,7 +75,7 @@ public class Preferences {
 							e.printStackTrace();
 						}
 					}else{
-						
+
 						values.put(key, value);
 					}
 				}
@@ -84,7 +84,7 @@ public class Preferences {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
 		return values;
 	}
 
@@ -155,5 +155,5 @@ public class Preferences {
 		prefs.put("Intake_Down1_Continuous", 0.0);
 		prefs.put("Turn_To_Angle", 90.0);
 	}
-	
+
 }
