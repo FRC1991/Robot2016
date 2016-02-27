@@ -1,40 +1,37 @@
-package org.usfirst.frc.team1991.robot.intake;
+package org.usfirst.frc.team1991.robot.shooter;
 
 import org.usfirst.frc.team1991.robot.Robot;
+import org.usfirst.frc.team1991.robot.control.*;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class IntakeTest extends Command {
+public class ManualShooterMove extends Command {
 
 
-	public IntakeTest(){
-		requires(Robot.intake);
+	public ManualShooterMove() {
+		requires(Robot.shooter);
 	}
 	@Override
 	protected void initialize() {}
 
 	@Override
 	protected void execute() {
-		Robot.intake.move(Robot.oi.joy.getRawAxis(5) * 0.05);
-
+		Robot.shooter.move(BaseOI.aux.getY() * -0.5);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-
+		Robot.shooter.stop();
 	}
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-
+		Robot.shooter.stop();
 	}
 
 }

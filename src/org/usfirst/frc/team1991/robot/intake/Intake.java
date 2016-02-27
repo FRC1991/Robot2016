@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Intake extends Subsystem {
 	CANTalon LAngle = RobotMap.intake_LAngleMotor;
 	CANTalon RAngle = RobotMap.intake_RAngleMotor;
-	CANTalon feeder = RobotMap.intake_feedMotor;
+	Talon feeder = RobotMap.intake_feedMotor;
 	AnalogInput encoder = RobotMap.intake_angleEncoder;
 
 	public void feed(double speed) {
@@ -30,7 +30,8 @@ public class Intake extends Subsystem {
 		LAngle.set(speed);
 		RAngle.set(speed);
 	}
+
 	public void initDefaultCommand() {
-		setDefaultCommand(new IntakeTest());
+		// No default command
 	}
 }

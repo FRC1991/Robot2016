@@ -3,6 +3,7 @@ package org.usfirst.frc.team1991.robot.shooter;
 
 import org.usfirst.frc.team1991.robot.RobotMap;
 import org.usfirst.frc.team1991.robot.Position;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon.TalonControlMode;
@@ -14,7 +15,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Shooter extends Subsystem {
 	private CANTalon LRunner, RRunner, miniFeeder;
 	private AnalogInput angleEncoder;
-	private Talon angleMotor;
+	public CANTalon angleMotor;
 	private DigitalInput ballSensor;
 	private Position currentPosition;
 
@@ -25,6 +26,7 @@ public class Shooter extends Subsystem {
 		angleEncoder = RobotMap.shooter_angleEncoder;
 		angleMotor = RobotMap.shooter_angleMotor;
 		ballSensor = RobotMap.shooter_ballSensor;
+		currentPosition = Position.SHOOTER_FAR_SHOT;
 	}
 
 	public void run(double leftSpeed, double rightSpeed) {
@@ -34,6 +36,10 @@ public class Shooter extends Subsystem {
 
 	public void feed(double speed) {
 		miniFeeder.set(speed);
+	}
+
+	public void move(double speed) {
+		angleMotor.set(speed);
 	}
 
 	public void stop() {
@@ -60,11 +66,12 @@ public class Shooter extends Subsystem {
 	public Position getCurrentPosition() {
 		return currentPosition;
 	}
-	public void initDefaultCommand() {}
+	public void initDefaultCommand() {
+		// No default command
+	}
 
 	// public void setTalonPID(CANTalon motor){
 	//      motor.changeControlMode(TalonControlMode.Speed);
 	//      motor.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
 	//      motor.setPID(1.0,0.0,0.0);
-	// }
 }

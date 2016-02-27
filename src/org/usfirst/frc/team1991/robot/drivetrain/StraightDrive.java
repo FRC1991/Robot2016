@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class StraightDrive extends PIDCommand {
 
 	double duration, turn, speed;
-	
+
     public StraightDrive(double speed, double duration) {
-    	super(0.05, 0, 0.05); 
+    	super(0.05, 0, 0.05);
     	this.duration = duration;
     	this.speed = speed;
     }
@@ -25,7 +25,8 @@ public class StraightDrive extends PIDCommand {
     	setSetpoint(0);
     	this.getPIDController().enable();
     	setTimeout(duration);
-    	Robot.drivetrain.reverse = true;
+			// should be reversed but nah
+    	//Robot.drivetrain.reverse = true;
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -44,14 +45,14 @@ public class StraightDrive extends PIDCommand {
     // Called once after isFinished returns true
     protected void end() {
     	this.getPIDController().disable();
-    	Robot.drivetrain.reverse = false;
+    	//Robot.drivetrain.reverse = false;
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
     	this.getPIDController().disable();
-    	Robot.drivetrain.reverse = false;
+    	//Robot.drivetrain.reverse = false;
     }
 
 	@Override
@@ -62,6 +63,6 @@ public class StraightDrive extends PIDCommand {
 	@Override
 	protected void usePIDOutput(double output) {
 		turn = output;
-		
+
 	}
 }

@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1991.robot.intake;
+package org.usfirst.frc.team1991.robot.control;
 
 import org.usfirst.frc.team1991.robot.Robot;
 import org.usfirst.frc.team1991.robot.RobotMap;
@@ -7,10 +7,12 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Feed extends Command {
 
-	@Override
-	protected void initialize() {
+	public Feed() {
 		requires(Robot.intake);
 	}
+
+	@Override
+	protected void initialize() {}
 
 	@Override
 	protected void execute() {
@@ -27,11 +29,13 @@ public class Feed extends Command {
 	@Override
 	protected void end() {
 		Robot.intake.stop();
+		Robot.shooter.stop();
 	}
 
 	@Override
 	protected void interrupted() {
 		Robot.intake.stop();
+		Robot.shooter.stop();
 	}
 
 }

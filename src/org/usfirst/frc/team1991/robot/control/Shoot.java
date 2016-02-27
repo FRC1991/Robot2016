@@ -1,7 +1,7 @@
-package org.usfirst.frc.team1991.robot.shooter;
+package org.usfirst.frc.team1991.robot.control;
 
 import org.usfirst.frc.team1991.robot.Robot;
-
+import org.usfirst.frc.team1991.robot.shooter.*;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
@@ -11,7 +11,7 @@ public class Shoot extends CommandGroup {
       requires(Robot.shooter);
       setTimeout(5); // At most it should take 5 seconds to fire
     	addParallel(new RunShooter());
-    	addSequential(new WaitForShooterSpeed());
+    	addSequential(new WaitCommand(1));
     	addSequential(new FeedShooter());
     }
 
