@@ -18,6 +18,7 @@ public class Shooter extends Subsystem {
 	public CANTalon angleMotor;
 	private DigitalInput ballSensor;
 	private Position currentPosition;
+	public double encoderZero = 0;
 
 	public Shooter() {
 		LRunner = RobotMap.shooter_LRunner;
@@ -26,7 +27,7 @@ public class Shooter extends Subsystem {
 		angleEncoder = RobotMap.shooter_angleEncoder;
 		angleMotor = RobotMap.shooter_angleMotor;
 		ballSensor = RobotMap.shooter_ballSensor;
-		currentPosition = Position.SHOOTER_FAR_SHOT;
+		currentPosition = Position.SHOOTER_STOWED;
 	}
 
 	public void run(double leftSpeed, double rightSpeed) {
@@ -46,6 +47,7 @@ public class Shooter extends Subsystem {
 		LRunner.set(0);
 		RRunner.set(0);
 		miniFeeder.set(0);
+		angleMotor.set(0);
 	}
 
   public boolean ballPresent() {
@@ -69,9 +71,4 @@ public class Shooter extends Subsystem {
 	public void initDefaultCommand() {
 		// No default command
 	}
-
-	// public void setTalonPID(CANTalon motor){
-	//      motor.changeControlMode(TalonControlMode.Speed);
-	//      motor.setFeedbackDevice(CANTalon.FeedbackDevice.QuadEncoder);
-	//      motor.setPID(1.0,0.0,0.0);
 }

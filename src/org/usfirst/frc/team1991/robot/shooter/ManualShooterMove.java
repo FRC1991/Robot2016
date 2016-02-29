@@ -16,7 +16,7 @@ public class ManualShooterMove extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.shooter.move(BaseOI.aux.getY() * -0.5);
+		Robot.shooter.move(BaseOI.aux.getController().getLJoystickY() * -0.5);
 	}
 
 	@Override

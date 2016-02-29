@@ -15,6 +15,8 @@ public class Intake extends Subsystem {
 	CANTalon RAngle = RobotMap.intake_RAngleMotor;
 	Talon feeder = RobotMap.intake_feedMotor;
 	AnalogInput encoder = RobotMap.intake_angleEncoder;
+	public double encoderZero = 0.8;
+	DigitalInput zeroSwitch = RobotMap.intake_limitSwitch;
 
 	public void feed(double speed) {
 		feeder.set(speed);

@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.command.PIDCommand;
  *
  */
 public class PIDControl extends PIDCommand {
-	private AnalogInput encoder;
-	private SpeedController motor;
+	protected AnalogInput encoder;
+	protected SpeedController motor;
 	public PIDController pid;
-	private PIDControllerConfiguration config;
+	protected PIDControllerConfiguration config;
 
 	public PIDControl(PIDControllerConfiguration config, double setPoint, AnalogInput encoder, SpeedController motor) {
 		super(0, 0, 0);

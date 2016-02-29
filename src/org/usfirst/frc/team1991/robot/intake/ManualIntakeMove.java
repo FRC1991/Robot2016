@@ -16,7 +16,7 @@ public class ManualIntakeMove extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.intake.move(BaseOI.aux.getY() * -0.5);
+		Robot.intake.move(BaseOI.aux.getController().getRJoystickY() * -0.5);
 	}
 
 	@Override

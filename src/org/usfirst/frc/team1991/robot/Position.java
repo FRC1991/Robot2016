@@ -2,14 +2,14 @@ package org.usfirst.frc.team1991.robot;
 
 public enum Position {
 	// Shooter
-	SHOOTER_STOWED(2.600, 0.0, 0.0, 0.0, 0.0, 0.0),
-	SHOOTER_CLOSE_SHOT(2.420, 0.6, 0.6, 0.8, 3, 1),
-	SHOOTER_FAR_SHOT(1.978, 0.85, 0.85, 0.8, 3, 1),
-	SHOOTER_BARF(1.225, 0.4, 0.4, 0.8, 3, 1),
+	SHOOTER_STOWED(0, 0.0, 0.0, 0.0, 0.0, 0.0),
+	SHOOTER_FEED(0.848, 0, 0, 0, 0, 0),
+	SHOOTER_CLOSE_SHOT(0, 0.6, 0.6, 0.8, 3, 1),
+	SHOOTER_FAR_SHOT(0, 0.85, 0.85, 0.8, 3, 1),
+	SHOOTER_BARF(1.768, 0.4, 0.4, 0.8, 3, 1),
 	// Intake
-	INTAKE_UP(1.284),
-	INTAKE_DOWN(1.284);
-
+	INTAKE_TOP(0),
+	INTAKE_FEED(2.45);
 	public final double setPoint;
 	public final double leftSpeed;
 	public final double rightSpeed;

@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 public class RobotMap {
 	// Temp constants
 	// Used for feeding ball in
-	public static final double intakeFeedSpeed = 0.75;
+	public static final double intakeFeedSpeed = 0.6;
 	public static final double shooterFeedSpeed = 0.35;
 	// Preferences
 	public static Preferences prefs;
@@ -26,6 +26,7 @@ public class RobotMap {
 	public static ArrayList<CANTalon> drivetrain_LSide, drivetrain_RSide;
 	// Intake
 	public static AnalogInput intake_angleEncoder;
+	public static DigitalInput intake_limitSwitch;
 	public static CANTalon intake_LAngleMotor, intake_RAngleMotor;
 	public static Talon intake_feedMotor;
 	// Shooter
@@ -33,15 +34,14 @@ public class RobotMap {
 	public static AnalogInput shooter_angleEncoder;
 	public static DigitalInput shooter_ballSensor;
 	// PID Settings
-	public static PIDControllerConfiguration shooter_Up, shooter_Down, intake_Up, intake_Down, drivetrain_TurnInPlace;
+	public static PIDControllerConfiguration shooter_Up, shooter_Down, intake, drivetrain_TurnInPlace;
 
 	public static void reloadPreferences() {
 		prefs.setValues();
 		// PID Settings
-		shooter_Up = new PIDControllerConfiguration("Shooter_Up");
-		shooter_Down = new PIDControllerConfiguration("Shooter_Down");
-		intake_Up = new PIDControllerConfiguration("Intake_Up");
-		intake_Down = new PIDControllerConfiguration("Intake_Down");
+		shooter_Up =  new PIDControllerConfiguration(1, 0.05, 0.05, 0.01, 0, 1.9, false);
+		shooter_Down =  new PIDControllerConfiguration(0.1, 0.05, 0.05, 0.002, 0, 1.9, false);
+		intake = new PIDControllerConfiguration(0.2, 0, 0, 0.008, 0, 3.4, false);
 		drivetrain_TurnInPlace = new PIDControllerConfiguration("DriveTrain_Turn");
 	}
 
@@ -69,6 +69,7 @@ public class RobotMap {
 		intake_LAngleMotor.setInverted(true);
 		intake_RAngleMotor = new CANTalon(11);
 		intake_feedMotor = new Talon(0);
+		intake_limitSwitch = new DigitalInput(1);
 		// Shooter
 		shooter_LRunner = new CANTalon(8);
 		shooter_RRunner = new CANTalon(7);
@@ -77,8 +78,7 @@ public class RobotMap {
 	  shooter_angleEncoder = new AnalogInput(0);
 		shooter_angleMotor = new CANTalon(9);
 		shooter_ballSensor = new DigitalInput(0);
-		LiveWindow.addActuator("Shooter", "Left Runner", shooter_LRunner);
-		LiveWindow.addActuator("Shooter", "Right Runner", shooter_RRunner);
-		LiveWindow.addActuator("Shooter", "Mini Feeder", shooter_miniFeeder);
+		LiveWindow.addActuator("Shooter", "Left", shooter_LRunner);
+		LiveWindow.addActuator("Shooter", "Right", shooter_RRunner);
 	}
 }

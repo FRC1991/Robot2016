@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class XboxController {
 	private Joystick controller;
-	public JoystickButton X, Y, A, B, LBumper, RBumper, Start, Select;
+	public JoystickButton X, Y, A, B, LBumper, RBumper, Start, Select, LJoystick, RJoystick;
 
 	public XboxController(int controllerPort) {
 		controller = new Joystick(controllerPort);
@@ -15,6 +15,8 @@ public class XboxController {
 		A = new JoystickButton(controller, 1);
 		LBumper = new JoystickButton(controller, 5);
 		RBumper = new JoystickButton(controller, 6);
+		LJoystick = new JoystickButton(controller, 9);
+		RJoystick = new JoystickButton(controller, 10);
 		Start = new JoystickButton(controller, 8);
 		Select = new JoystickButton(controller, 7);
 	}

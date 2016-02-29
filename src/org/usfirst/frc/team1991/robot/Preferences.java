@@ -17,27 +17,29 @@ public class Preferences {
 
 	@SuppressWarnings("unchecked")
 	public Preferences(String dir){
-		
+
 		prefs = new HashMap<String,Double>();
 		setPrefs();
-		TempPrefs = (HashMap<String, Double>) prefs.clone();
+		TempPrefs = (HashMap<String, Double> )prefs.clone();
 		try{
-    		file = new File(dir);
-    	}catch(Exception e){
-    		e.printStackTrace();
-    	}
+			file = new File(dir);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 	//Gets values from readPrefs() and set prefs
 	public void setValues(){
 		double value;
 		HashMap<String, String> newPrefs = readPrefs();
-		for(String s: TempPrefs.keySet()){
+		for(String s: TempPrefs.keySet()) {
 			String key = s;
-			if(newPrefs.containsKey(key)){
+			if(newPrefs.containsKey(key)) {
 				value = prefs.get(key);
 				try{
 					value = Double.parseDouble(newPrefs.get(key));
-				}catch(Exception e){
+				}
+				catch(Exception e) {
 					e.printStackTrace();
 				}
 				prefs.remove(key);
@@ -56,12 +58,12 @@ public class Preferences {
 			String[] vals;
 			String value;
 			String key;
-			while((temp = br.readLine()) != null){
-				if(temp.substring(0, 1).equals("#")){
+			while((temp = br.readLine()) != null) {
+				if(temp.substring(0, 1).equals("#")) {
 					vals = temp.split(" ");
 					key = vals[0].substring(1);
 					value = vals[2];
-					if(key.substring(key.length() - 3).equals("PID")){
+					if(key.substring(key.length() - 3).equals("PID")) {
 						String[] PID = value.split(",");
 						key = key.substring(0, key.length() - 3);
 						try{
@@ -71,17 +73,20 @@ public class Preferences {
 							values.put(key + "Tolerance", PID[3]);
 							values.put(key + "Min", PID[4]);
 							values.put(key + "Max", PID[5]);
-						}catch(Exception e){
+						}
+						catch(Exception e) {
 							e.printStackTrace();
 						}
-					}else{
+					}
+					else{
 
 						values.put(key, value);
 					}
 				}
 
 			}
-		}catch(Exception e){
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
 
@@ -90,9 +95,10 @@ public class Preferences {
 
 	//Gets a value from the HashMap prefs based on key
 	public double get(String key) {
-		if(prefs.containsKey(key)){
+		if(prefs.containsKey(key)) {
 			return prefs.get(key);
-		}else{
+		}
+		else{
 			return 0.0;
 		}
 	}
