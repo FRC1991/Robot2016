@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1991.robot.control;
+package org.usfirst.frc.team1991.robot.teleop;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -21,7 +21,7 @@ public class XboxController {
 		Select = new JoystickButton(controller, 7);
 	}
 
-	private double axis(int axis) {
+	public double axis(int axis) {
 		double value = controller.getRawAxis(axis);
 		// On an Xbox controller, full up on the Y axis equals -1, so multiply by -1 to get 1
 		if (( axis == 1) || ( axis == 5) ) {

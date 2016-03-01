@@ -1,110 +1,114 @@
 
 package org.usfirst.frc.team1991.robot;
-
-import org.usfirst.frc.team1991.robot.drivetrain.Drivetrain;
-import org.usfirst.frc.team1991.robot.drivetrain.StraightDrive;
-import org.usfirst.frc.team1991.robot.drivetrain.TurnToAngle;
-import org.usfirst.frc.team1991.robot.intake.Intake;
-import org.usfirst.frc.team1991.robot.shooter.MoveShooter;
-import org.usfirst.frc.team1991.robot.shooter.Shooter;
-import org.usfirst.frc.team1991.robot.control.BaseOI;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team1991.robot.subsystems.*;
+import org.usfirst.frc.team1991.robot.teleop.*;
+import org.usfirst.frc.team1991.robot.teleop.XboxController;
 
+// This code written by Andi Duro and Aakash Balaji
+// Unless it doesn't work
+// In which case, we don't know who wrote it
 public class Robot extends IterativeRobot {
 
+	private static Preferences prefs;
+	public static XboxController driver;
+	public static XboxController aux;
 	public static Drivetrain drivetrain;
 	public static Shooter shooter;
-	public static BaseOI oi;
 	public static Intake intake;
-	public static Camera cam;
-	public static Command autonomous;
 
-	@Override
-	public void robotInit() {
-		initialMessages();
-		RobotMap.init();
-		drivetrain = new Drivetrain();
-		shooter = new Shooter();
-		intake = new Intake();
-		cam = new Camera();
-		oi = new BaseOI();
-		autonomous = new StraightDrive(0.9, 8);
-		// SmartDashboard.putNumber("Angle_Turn_P", 0.04);
-		// SmartDashboard.putNumber("Angle_Turn_I", 0.006);
-		// SmartDashboard.putNumber("Angle_Turn_D", 0.115);
-		SmartDashboard.putNumber("P", 0.5);
-		SmartDashboard.putNumber("I", 0.0);
-		SmartDashboard.putNumber("D", 0.0);
-	}
+	public enum Position {
+		ShooterStowed(0), ShooterFeed(0.848), ShooterClose(0), ShooterFar(0), ShooterBarf(1.768),
+		IntakeStowed(0), IntakeFeed(2.45);
 
-	public void initialMessages() {
-		System.out.println("Shooter timeout is set to 5 seconds. Perhaps read from file instead. FireShooter");
-		System.out.println("Shooter position is manually set to far shot. Shooter");
-		System.out.println("isAtSpeed always returns true. FireShooter");
-	}
-
-	@Override
-	public void disabledInit() {
-		// Robot.shooter.stop();
-		Robot.drivetrain.stop();
-		Robot.intake.stop();
-		//Robot.cam.stop();
-	}
-
-	@Override
-	public void disabledPeriodic() {
-		Scheduler.getInstance().run();
-	}
-
-	@Override
-	public void autonomousInit() {
-		RobotMap.reloadPreferences();
-		RobotMap.navX.reset();
-		//cam.start("cam1");
-		autonomous.start();
-	}
-
-	@Override
-	public void autonomousPeriodic() {
-		cam.refreshFrame();
-		Scheduler.getInstance().run();
-	}
-
-	@Override
-	public void teleopInit() {
-		RobotMap.reloadPreferences();
-		if (autonomous != null) autonomous.cancel();
-		RobotMap.navX.reset();
-		//cam.start("cam1");
-	}
-
-	@Override
-	public void teleopPeriodic() {
-		//cam.refreshFrame();
-		SmartDashboard.putNumber("Shooter Encoder Voltage", RobotMap.shooter_angleEncoder.getAverageVoltage());
-    SmartDashboard.putNumber("Shooter Encoder Scaled Voltage", Robot.shooter.encoderZero - RobotMap.shooter_angleEncoder.getAverageVoltage());
-		// SmartDashboard.putNumber("Intake Encoder Voltage", RobotMap.intake_angleEncoder.getAverageVoltage());
-		// SmartDashboard.putNumber("Intake Encoder Scaled Voltage", -Robot.intake.encoderZero + RobotMap.intake_angleEncoder.getAverageVoltage());
-		// SmartDashboard.putBoolean("Limit Switch Value", RobotMap.intake_limitSwitch.get());
-		// if (RobotMap.intake_limitSwitch.get() == false) {
-		// 	Robot.intake.encoderZero = RobotMap.intake_angleEncoder.getAverageVoltage();
-		// }
-		SmartDashboard.putNumber("Zero", Robot.shooter.encoderZero);
-		boolean zeroLimit = RobotMap.shooter_angleMotor.isFwdLimitSwitchClosed();
-		if (zeroLimit == false) {
-			Robot.shooter.encoderZero = RobotMap.shooter_angleEncoder.getAverageVoltage();
+		public final double setpoint;
+		Position(double setpoint) {
+			this.setpoint = setpoint;
 		}
-		SmartDashboard.putBoolean("Forward Limit", zeroLimit);
-		SmartDashboard.putBoolean("Back Limit", RobotMap.shooter_angleMotor.isRevLimitSwitchClosed());
+	}
+
+	public void robotInit() {
+		prefs = new Preferences("home/lvuser/DataFiles/Preferences.txt");
+		prefs.setValues();
+		drivetrain = new Drivetrain();
+		drivetrain.init();
+		drivetrain.resetNavigation();
+		shooter = new Shooter();
+		shooter.init();
+		intake = new Intake();
+		intake.init();
+		driver = new XboxController(0);
+		aux = new XboxController(1);
+		CameraServer.getInstance().setQuality(100);
+		CameraServer.getInstance().startAutomaticCapture("cam1");
+		registerControls();
+		drivetrain.debug();
+		shooter.debug();
+		intake.debug();
+	}
+
+	// Driver controls
+	public void registerControls() {
+		driver.X.whenPressed(new MethodCommand() {
+			public void call() {
+			        drivetrain.toggleReverse();
+			}
+		});
+		driver.RBumper.whileHeld(new DriveStraight());
+		aux.A.whenPressed(new SetpointCommand(shooter, Position.ShooterStowed));
+		aux.X.whenPressed(new SetpointCommand(shooter, Position.ShooterFeed));
+		aux.Y.whenPressed(new SetpointCommand(shooter, Position.ShooterBarf));
+		aux.LJoystick.whileHeld(new PositionSubsystem(shooter, 1));
+		aux.RJoystick.whileHeld(new PositionSubsystem(intake, 5));
+
+	}
+
+	// Code that runs periodicially regardless of mode
+	public void genericPeriodic() {
+		shooter.periodic();
+		intake.periodic();
 		Scheduler.getInstance().run();
 	}
 
-	@Override
+	public static double get(String key) {
+		return prefs.get(key);
+	}
+
+	public void disabledInit() {
+		drivetrain.disable();
+		shooter.disable();
+		intake.disable();
+	}
+
+
+	public void disabledPeriodic() {}
+
+
+	public void autonomousInit() {
+		prefs.setValues();
+	}
+
+
+	public void autonomousPeriodic() {
+		genericPeriodic();
+	}
+
+
+	public void teleopInit() {
+		prefs.setValues();
+	}
+
+
+	public void teleopPeriodic() {
+		genericPeriodic();
+	}
+
 	public void testPeriodic() {
+		genericPeriodic();
 		LiveWindow.run();
 	}
 }
