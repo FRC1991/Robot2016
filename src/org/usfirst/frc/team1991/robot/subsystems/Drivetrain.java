@@ -4,115 +4,112 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
+import java.util.ArrayList;
+
 import org.usfirst.frc.team1991.robot.Robot;
 import org.usfirst.frc.team1991.robot.teleop.Drive;
 
 public class Drivetrain extends PIDSubsystem {
 
-  private CANTalon left, right;
-  private AHRS navX;
-  // Used for autonomous driving
-  private double speed = 0;
-  private boolean reverseMode = false;
+	private ArrayList<CANTalon> right, left;
+	private AHRS navX;
+	// Used for autonomous driving
+	private double speed = 0;
+	private boolean reverseMode = false;
+	private double continuous;
 
-  public Drivetrain() {
-    super("Drivetrain", 0.045, 0.006, 0.115);
-    setAbsoluteTolerance(0.5);
-    getPIDController().setContinuous(true);
-    setInputRange(-180.0, 180.0);
-    setOutputRange(-1, 1);
-  }
+	public Drivetrain() {
+		super("Drivetrain", Robot.prefs.get("DriveTrain_Turn_P"), Robot.prefs.get("DriveTrain_Turn_I"),
+		      Robot.prefs.get("DriveTrain_Turn_D"));
+		//super("Drivetrain", .045, .006, .115);
+		continuous = Robot.prefs.get("DriveTrain_Turn_Continuous");
+		setAbsoluteTolerance(Robot.prefs.get("DriveTrain_Turn_Tolerance"));
+		if(continuous == 0.0) {
+			getPIDController().setContinuous(false);
+		}
+		else{
+			getPIDController().setContinuous(true);
+		}
+		setInputRange(Robot.prefs.get("DriveTrain_Turn_Min"), Robot.prefs.get("DriveTrain_Turn_Max"));
+		setOutputRange(-1, 1);
+		navX = new AHRS(SPI.Port.kMXP);
+		left = new ArrayList<CANTalon>();
+		right = new ArrayList<CANTalon>();
+		// Ramp rate? See 6.3
+		// Voltage Compensation Mode? See 9.2
+		right.add(new CANTalon(1));
+		right.add(new CANTalon(2));
+		right.add(new CANTalon(3));
+		left.add(new CANTalon(4));
+		left.add(new CANTalon(5));
+		left.add(new CANTalon(6));
+		initSide(left, false);
+		initSide(right, true);
+		LiveWindow.addActuator("Drivetrain", "navX", navX);
+		LiveWindow.addActuator("Drivetrain", "Yaw PID", getPIDController());
+	}
 
-  public void init() {
-    navX = new AHRS(SPI.Port.kMXP);
-    // Ramp rate? See 6.3
-    // Voltage Compensation Mode? See 9.2
-    CANTalon R2, R3, L2, L3;
-    right = new CANTalon(1);
-    right.enableBrakeMode(true);
-    right.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-    R2 = new CANTalon(2);
-    R2.enableBrakeMode(true);
-    R2.changeControlMode(CANTalon.TalonControlMode.Follower);
-    R2.set(1);
-    R3 = new CANTalon(3);
-    R3.enableBrakeMode(true);
-    R3.changeControlMode(CANTalon.TalonControlMode.Follower);
-    R3.set(1);
-    left = new CANTalon(4);
-    left.enableBrakeMode(true);
-    left.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-    L2 = new CANTalon(5);
-    L2.enableBrakeMode(true);
-    L2.changeControlMode(CANTalon.TalonControlMode.Follower);
-    L2.set(4);
-    L3 = new CANTalon(6);
-    L3.enableBrakeMode(true);
-    L3.changeControlMode(CANTalon.TalonControlMode.Follower);
-    L3.set(4);
-    // Go through each motor and enable brake mode and set up master-slave
-    // for (CANTalon motor : new CANTalon[]{right, R2, R3, left, L2, L3}) {
-    //   motor.enableBrakeMode(true);
-    //   if (motor.getDeviceID() != right.getDeviceID() || motor.getDeviceID() != left.getDeviceID()) {
-    //     motor.changeControlMode(CANTalon.TalonControlMode.Follower);
-    //     int masterID = (motor.getDeviceID() <= 3) ? right.getDeviceID() : left.getDeviceID();
-    //     motor.set(masterID);
-    //   }
-    // }
-    right.setInverted(true);
-  }
+	public void toggleReverse() {
+		reverseMode ^= true;
+	}
+	public void initSide(ArrayList<CANTalon> side, boolean inverted) {
+		for(CANTalon motor: side) {
+			motor.enableBrakeMode(true);
+			motor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+			motor.setInverted(inverted);
+		}
+	}
+	public void driveSide(ArrayList<CANTalon> side, double speed){
+		for(CANTalon motor: side) {
+			motor.set(speed);
+		}
+	}
 
-  public void debug() {
-    LiveWindow.addSensor("Drivetrain", "navX", navX);
-    LiveWindow.addActuator("Drivetrain", "Left Side", left);
-    LiveWindow.addActuator("Drivetrain", "Right Side", right);
-    LiveWindow.addActuator("Drivetrain", "Yaw PID", getPIDController());
-  }
+	public void drive(double leftSpeed, double rightSpeed) {
+		leftSpeed += Robot.get("DriveTrain_Offset_Left");
+		rightSpeed += Robot.get("DriveTrain_Offset_Right");
+		leftSpeed *= Robot.get("DriveTrain_Speed_Multiplier");
+		rightSpeed *= Robot.get("DriveTrain_Speed_Multiplier");
+		if (reverseMode) {
+			driveSide(left, -rightSpeed);
+			driveSide(right, -leftSpeed);
+		}
+		else {
+			driveSide(left, leftSpeed);
+			driveSide(right, rightSpeed);
+		}
+	}
 
-  public void toggleReverse() {
-    reverseMode ^= true;
-  }
+	public void disable() {
+		super.disable();
+		driveSide(left, 0);
+		driveSide(right, 0);
+	}
 
-  public void drive(double leftSpeed, double rightSpeed) {
-    leftSpeed += Robot.get("Drivetrain_Offset_Left");
-    rightSpeed += Robot.get("Drivetrain_Offset_Right");
-    leftSpeed *= Robot.get("Drivetrain_Speed_Multiplier");
-    rightSpeed *= Robot.get("Drivetrain_Speed_Multiplier");
-    if (reverseMode) {
-      left.set(-rightSpeed);
-      right.set(-leftSpeed);
-    }
-    else {
-      left.set(leftSpeed);
-      right.set(rightSpeed);
-    }
-  }
+	public void resetNavigation() {
+		navX.reset();
+	}
 
-  public void disable() {
-    super.disable();
-    left.set(0);
-    right.set(0);
-  }
+	public void setYawAndSpeed(double yaw, double speed) {
+		this.speed = speed;
+		setSetpoint(yaw);
+	}
 
-  public void resetNavigation() {
-    navX.reset();
-  }
-
-  public void setYawAndSpeed(double yaw, double speed) {
-    this.speed = speed;
-    setSetpoint(yaw);
-  }
-
-  protected double returnPIDInput() {
+	protected double returnPIDInput() {
 		return navX.getYaw();
 	}
 
-  protected void usePIDOutput(double output) {
+	protected void usePIDOutput(double output) {
 		drive(speed + output, speed - output);
 	}
 
-  public void initDefaultCommand() {
+	public void initDefaultCommand() {
 		setDefaultCommand(new Drive());
+	}
+
+	public double getPitch() {
+		return navX.getPitch();
 	}
 
 }

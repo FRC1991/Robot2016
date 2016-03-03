@@ -1,41 +1,106 @@
 package org.usfirst.frc.team1991.robot.teleop;
 
-import java.util.HashMap;
 import org.usfirst.frc.team1991.robot.Robot;
-import org.usfirst.frc.team1991.robot.subsystems.Drivetrain;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 
-
 public class DriveStraight extends Command {
-  private XboxController driver;
-  private double initialYaw;
+	private XboxController driver;
+	private double initialYaw;
+	private double initialPitch;
+	private double currentPitch;
+	private double currentYaw;
+	private boolean turn = false;
+	private boolean autonomous = false;
+	private boolean reverse = false;
+	private double duration = 0.0;
+	private double tolerance = 0.5;
+	private int pitchChange;
 
-  public DriveStraight() {
-    requires(Robot.drivetrain);
-  }
+	public DriveStraight(boolean reverse) {
+		requires(Robot.drivetrain);
+		Robot.drivetrain.resetNavigation();
+		this.autonomous = false;
+		this.reverse = reverse;
+	}
 
-  protected void initialize() {
-    driver = Robot.driver;
-    initialYaw = Robot.drivetrain.getPosition();
-    Robot.drivetrain.enable();
-  }
+	public DriveStraight(double duration, boolean autonomous, boolean reverse) {
+		requires(Robot.drivetrain);
+		Robot.drivetrain.resetNavigation();
+		this.autonomous = autonomous;
+		this.reverse = reverse;
+		this.duration = duration;
+		if (duration > 0) {
+			setTimeout(duration);
+		}
 
-  protected void execute() {
-    double speed = driver.getRJoystickY();
-    Robot.drivetrain.setYawAndSpeed(initialYaw, speed);
-  }
+	}
 
-  protected boolean isFinished() {
-    return false;
-  }
+	public DriveStraight(boolean turn, double currentYaw) {
+		requires(Robot.drivetrain);
+		Robot.drivetrain.resetNavigation();
+		this.turn = turn;
+		this.currentYaw = currentYaw;
+	}
 
-  protected void end() {
-    Robot.drivetrain.disable();
-  }
+	protected void initialize() {
+		driver = Robot.driver;
+		initialYaw = Robot.drivetrain.getPosition();
+		initialPitch = Robot.drivetrain.getPitch();
+		pitchChange = 0;
+		Robot.drivetrain.enable();
+	}
 
-  protected void interrupted() {
-    Robot.drivetrain.disable();
-  }
+	protected void execute() {
+		double speed = driver.getRJoystickY();
+		if (turn) {
+			speed = 0;
+			initialYaw = currentYaw;
+		} else if (autonomous) {
+			speed = 1.0;
+		}
+		if (reverse) {
+			speed = -speed;
+		}
+		Robot.drivetrain.setYawAndSpeed(initialYaw, speed);
+	}
+
+	protected boolean isFinished() {
+		if (turn) {
+			return Robot.drivetrain.onTarget();
+		} else if (duration > 0) {
+			return isTimedOut();
+		} else if (autonomous) {
+			return hasPitchChanged();
+		} else {
+			return false;
+		}
+	}
+
+	protected void end() {
+		Robot.drivetrain.setYawAndSpeed(initialYaw, 0);
+		Robot.drivetrain.disable();
+		Robot.drivetrain.resetNavigation();
+		reverse = false;
+		turn = false;
+		autonomous = false;
+		duration = 0;
+		pitchChange = 0;
+	}
+
+	protected void interrupted() {
+		Robot.drivetrain.disable();
+	}
+
+	protected boolean hasPitchChanged() {
+		if (pitchChange < 1) {
+			if (this.initialPitch < Robot.drivetrain.getPitch() + 5) {
+				pitchChange++;
+			}
+			return false;
+		} else {
+			return (Robot.drivetrain.getPitch() > initialPitch - tolerance)
+					&& (Robot.drivetrain.getPitch() < initialPitch + tolerance);
+		}
+	}
 }

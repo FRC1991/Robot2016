@@ -1,10 +1,7 @@
 package org.usfirst.frc.team1991.robot.teleop;
 
-import java.util.HashMap;
 import org.usfirst.frc.team1991.robot.Robot;
-import org.usfirst.frc.team1991.robot.subsystems.Drivetrain;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 
 
@@ -35,8 +32,8 @@ public class Drive extends Command {
         rightSpeed = -rightTrigger;
         leftSpeed = -rightSpeed;
       }
-      leftSpeed *= Robot.get("Drivetrain_Speed_Rotation");
-      rightSpeed *= Robot.get("Drivetrain_Speed_Rotation");
+      leftSpeed *= 0.5; //Robot.get("Drivetrain_Speed_Rotation");
+      rightSpeed *= 0.5; //Robot.get("Drivetrain_Speed_Rotation");
     }
     Robot.drivetrain.drive(leftSpeed, rightSpeed);
   }

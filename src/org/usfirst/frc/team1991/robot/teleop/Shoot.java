@@ -1,33 +1,30 @@
 package org.usfirst.frc.team1991.robot.teleop;
 
 import org.usfirst.frc.team1991.robot.Robot;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
-public class Shoot extends Command {
+public class Shoot extends CommandGroup {
+  public Shoot() {
+    addSequential(new XCommand() {
+      public void runOnce() {
+        Robot.shooter.run(0.6);
+      }
+    });
+    addSequential(new WaitCommand(2));
+    addSequential(new XCommand() {
+      public void runOnce() {
+        Robot.shooter.feed(0.8);
+      }
+    });
+    addSequential(new WaitCommand(1));
+  };
 
-  boolean finished = false;
+  protected void end() {
+    Robot.shooter.disable();
+  }
 
-	protected void initialize() {}
-
-	protected void execute() {
-		Robot.shooter.run(0.6);
-    if (timeSinceInitialized() > 2) {
-      Robot.shooter.feed(0.8);
-    }
-    if (timeSinceInitialized() > 4) {
-      finished = true;
-    }
-	}
-
-	protected boolean isFinished() {
-		return finished;
-	}
-
-	protected void end() {
-		Robot.shooter.disable();
-	}
-
-	protected void interrupted() {
-		Robot.intake.disable();
-	}
+  protected void interrupted() {
+    Robot.shooter.disable();
+  }
 }

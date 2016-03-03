@@ -5,15 +5,22 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class Feed extends Command {
 
-	protected void initialize() {}
+	protected void initialize() {
+	}
 
 	protected void execute() {
-		Robot.intake.feed(0.6);
-		Robot.shooter.feed(0.35);
+		if (!Robot.shooter.ballPresent()) {
+			Robot.intake.feed(0.7);
+			Robot.shooter.feed(0.35);
+		}
+		else {
+			Robot.intake.feed(0);
+			Robot.shooter.feed(0);
+		}
 	}
 
 	protected boolean isFinished() {
-		return Robot.shooter.ballPresent();
+		return false;
 	}
 
 	protected void end() {
