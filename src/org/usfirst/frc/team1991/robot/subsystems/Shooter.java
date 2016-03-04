@@ -1,24 +1,20 @@
 package org.usfirst.frc.team1991.robot.subsystems;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-public class Shooter extends PIDSubsystem {
+import javax.swing.text.Position;
+public class Shooter extends SwegSystem {
 
   private CANTalon left, right, feeder, angle;
   private AnalogInput encoder;
-  private double zeroPosition;
   private DigitalInput ballPresent;
 
   public Shooter() {
-    super("Shooter", 3, 0, 0);
-    setAbsoluteTolerance(0.1);
-    getPIDController().setContinuous(false);
-    setInputRange(1.726, 3.486);
-    setOutputRange(-1, 1);
+    super(0.8, -0.3, 1, 3.7, 0.06);
     left = new CANTalon(8);
     left.setInverted(true);
     right = new CANTalon(7);
@@ -33,24 +29,15 @@ public class Shooter extends PIDSubsystem {
     LiveWindow.addSensor("Shooter", "Ball Present", ballPresent);
     LiveWindow.addActuator("Shooter", "Angle", angle);
     LiveWindow.addSensor("Shooter", "Encoder", encoder);
-    LiveWindow.addActuator("Shooter", "Angle PID", getPIDController());
   }
 
   public void periodic() {
-    // Open = zero position
-    if (angle.isFwdLimitSwitchClosed() == false) {
-      zeroPosition = encoder.getAverageVoltage();
-    }
-    if (onTarget()) {
-      disable();
-      System.out.println("Disabled because shooter on target.");
-    }
-    SmartDashboard.putNumber("Shooter Encoder", encoder.getAverageVoltage());
-    SmartDashboard.putNumber("Inverted Shooter Encoder", 5 - encoder.getAverageVoltage());
-    SmartDashboard.putNumber("Shooter Encoder", encoder.getAverageVoltage());
-    SmartDashboard.putBoolean("Shooter Enabled", getPIDController().isEnabled());
-    SmartDashboard.putBoolean("Shooter On Target", getPIDController().onTarget());
-    SmartDashboard.putNumber("Shooter Error", getPIDController().getError());
+    super.periodic();
+    SmartDashboard.putNumber("Shooter Setpoint", getSetpoint());
+    SmartDashboard.putNumber("Shooter Position", getCurrentPosition());
+    SmartDashboard.putBoolean("Shooter Enabled", isEnabled());
+    SmartDashboard.putBoolean("Shooter On Target", onPoint());
+    SmartDashboard.putNumber("Shooter Error", getError());
   }
 
   public void run(double speed) {
@@ -78,19 +65,14 @@ public class Shooter extends PIDSubsystem {
     return ballPresent.get();
   }
 
-  public double getEncoderValue() {
-      return 5 - encoder.getAverageVoltage();
+  public void useOutput(double output) {
+    move(output);
   }
 
-  protected double returnPIDInput() {
-		return 5 - encoder.getAverageVoltage();
-	}
+  public double getCurrentPosition() {
+    return 5 - encoder.getAverageVoltage();
+  }
 
-  protected void usePIDOutput(double output) {
-    move(output);
-	}
-
-  public void initDefaultCommand() {
-	}
+  public void initDefaultCommand() {}
 
 }

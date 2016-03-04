@@ -8,20 +8,15 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Intake extends PIDSubsystem {
+public class Intake extends SwegSystem {
 
   private CANTalon leftAngle, rightAngle;
   private Talon feeder;
   private AnalogInput encoder;
   private DigitalInput limitSwitch;
-  private double zeroPosition;
 
   public Intake() {
-    super("Intake", 0.5, 0, 0);
-    setAbsoluteTolerance(0.05);
-    getPIDController().setContinuous(false);
-    setInputRange(0.7, 4.3);
-    setOutputRange(-1, 1);
+    super(0.6, -0.4, 0.6, 4.1, 0.1);
     leftAngle = new CANTalon(12);
     leftAngle.setInverted(true);
     rightAngle = new CANTalon(11);
@@ -32,17 +27,15 @@ public class Intake extends PIDSubsystem {
     LiveWindow.addActuator("Intake", "Right Angle", rightAngle);
     LiveWindow.addActuator("Intake", "Feeder", feeder);
     LiveWindow.addSensor("Intake", "Encoder", encoder);
-    LiveWindow.addActuator("Intake", "Angle PID", getPIDController());
   }
 
   public void periodic() {
-    // // Open = zero position
-    // if (limitSwitch.get() == false) {
-    //   zeroPosition = encoder.getAverageVoltage();
-    // }
-    SmartDashboard.putNumber("Intake Encoder", encoder.getAverageVoltage());
-    SmartDashboard.putBoolean("Intake Enabled", getPIDController().isEnabled());
-    SmartDashboard.putNumber("Intake Error", getPIDController().getError());
+    super.periodic();
+    SmartDashboard.putNumber("Intake Setpoint", getSetpoint());
+    SmartDashboard.putNumber("Intake Position", getCurrentPosition());
+    SmartDashboard.putBoolean("Intake Enabled", isEnabled());
+    SmartDashboard.putBoolean("Intake On Target", onPoint());
+    SmartDashboard.putNumber("Intake Error", getError());
   }
 
   public void feed(double speed) {
@@ -58,17 +51,18 @@ public class Intake extends PIDSubsystem {
 
   public void move(double speed) {
     // Invert so moving joystick up moves intake up
-	  usePIDOutput(speed * -1);
+	  leftAngle.set(speed *-1);
+    rightAngle.set(speed *-1);
+    System.out.println(speed);
   }
 
-  protected double returnPIDInput() {
-		return encoder.getAverageVoltage(); // - zeroPosition;
-	}
+  public void useOutput(double output) {
+    move(output);
+  }
 
-  protected void usePIDOutput(double output) {
-    leftAngle.set(output);
-    rightAngle.set(output);
-	}
+  public double getCurrentPosition() {
+    return 5 - encoder.getAverageVoltage();
+  }
 
   public void initDefaultCommand() {
 	}

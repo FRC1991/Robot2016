@@ -1,29 +1,19 @@
 package org.usfirst.frc.team1991.robot.teleop;
 
+import org.usfirst.frc.team1991.robot.subsystems.SwegSystem;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 
-public class ManualPosition extends XCommand {
+public abstract class ManualPosition extends XCommand {
 
-  public ManualPosition(PIDSubsystem system) {
-    super(system);
-  }
-  
-  public double getSpeed() {
-	  // Return a double speed
-	  return 0.0;
+  public ManualPosition(SwegSystem system) {
+    super(system, true);
   }
 
-  protected void move(double speed) {
-	  // Move a motor or something here
-    return;
-  }
+  protected abstract double getSpeed();
+
+  protected abstract void useOutput(double output);
 
   protected void execute() {
-    move(getSpeed());
-  }
-
-  protected boolean isFinished() {
-    return false;
+    useOutput(getSpeed());
   }
 }

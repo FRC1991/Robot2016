@@ -7,22 +7,13 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveStraight extends Command {
 	private XboxController driver;
 	private double initialYaw;
-	private double initialPitch;
-	private double currentPitch;
 	private double currentYaw;
 	private boolean turn = false;
 	private boolean autonomous = false;
 	private boolean reverse = false;
 	private double duration = 0.0;
 	private double tolerance = 0.5;
-	private int pitchChange;
 
-	public DriveStraight(boolean reverse) {
-		requires(Robot.drivetrain);
-		Robot.drivetrain.resetNavigation();
-		this.autonomous = false;
-		this.reverse = reverse;
-	}
 
 	public DriveStraight(double duration, boolean autonomous, boolean reverse) {
 		requires(Robot.drivetrain);
@@ -46,8 +37,6 @@ public class DriveStraight extends Command {
 	protected void initialize() {
 		driver = Robot.driver;
 		initialYaw = Robot.drivetrain.getPosition();
-		initialPitch = Robot.drivetrain.getPitch();
-		pitchChange = 0;
 		Robot.drivetrain.enable();
 	}
 
@@ -70,8 +59,6 @@ public class DriveStraight extends Command {
 			return Robot.drivetrain.onTarget();
 		} else if (duration > 0) {
 			return isTimedOut();
-		} else if (autonomous) {
-			return hasPitchChanged();
 		} else {
 			return false;
 		}
@@ -85,22 +72,11 @@ public class DriveStraight extends Command {
 		turn = false;
 		autonomous = false;
 		duration = 0;
-		pitchChange = 0;
 	}
 
 	protected void interrupted() {
 		Robot.drivetrain.disable();
 	}
 
-	protected boolean hasPitchChanged() {
-		if (pitchChange < 1) {
-			if (this.initialPitch < Robot.drivetrain.getPitch() + 5) {
-				pitchChange++;
-			}
-			return false;
-		} else {
-			return (Robot.drivetrain.getPitch() > initialPitch - tolerance)
-					&& (Robot.drivetrain.getPitch() < initialPitch + tolerance);
-		}
-	}
+
 }

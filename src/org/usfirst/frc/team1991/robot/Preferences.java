@@ -52,44 +52,43 @@ public class Preferences {
 				prefs.put(key, value);
 			}
 		}
-		printPrefs(prefs);
 	}
 	//Reads user Preferences from a text file written in AakashLang
 	public void readPrefs(){
 		try{
 			try{
-				fr = new FileReader(file); 
+				fr = new FileReader(file);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			
-			br = new BufferedReader(fr); 
+
+			br = new BufferedReader(fr);
 			String line;
 			String type = null;
 			String subtype = null;
 			while((line = br.readLine()) != null)
-			{ 
+			{
 				linecounter++;
-				
+
 				if(line != "" && line.length() > 5){
 					  line = line.trim();
 					  String key;
 					  String value;
 					  String variable;
 					  String[]texts = line.split(" ");
-					  
-					 if(line.substring(0,1).equals("[") && 
+
+					 if(line.substring(0,1).equals("[") &&
 							line.substring(line.length() - 1).equals("]")){
 					    	type = line.substring(1, line.length()-1);
 					    	errorCheck(type);
-						
-					    }else if(line.substring(0,1).equals("(") && 
+
+					    }else if(line.substring(0,1).equals("(") &&
 							line.substring(line.length() - 1).equals(")")){
 					    	subtype = line.substring(1, line.length()-1);
 					    	errorCheck(subtype);
 					    }
-					  
-					  
+
+
 					  	if(type != null){
 					  		 if(type.equals("END")){
 							    	type = null;
@@ -101,7 +100,7 @@ public class Preferences {
 					    	if(subtype.equals("PID")){
 					    		String[] moreTexts = texts[2].split(",");
 					    		key = type + "_" + variable +  "_";
-					    		
+
 					    		addValue(key + "P", moreTexts[0]);
 					    		addValue(key + "I", moreTexts[1]);
 					    		addValue(key + "D", moreTexts[2]);
@@ -110,12 +109,12 @@ public class Preferences {
 					    		addValue(key + "Max", moreTexts[5]);
 					    		if(moreTexts[06].equals(false)){
 					    			addValue(key + "Continuous", "0.0");
-					    			
+
 					    		}else{
 					    			addValue(key + "Continuous", "1.0");
 					    		}
-					    		
-					    		
+
+
 					    	}else{
 					    		key = type + "_" + subtype +  "_" + variable;
 					    		value = texts[2];
@@ -123,12 +122,12 @@ public class Preferences {
 					    	}
 					    }
 					}
-			  
-			    
-				} 
+
+
+				}
 			br.close();
 			fr.close();
-			
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -148,9 +147,9 @@ public class Preferences {
 		}
 		for(String s:prefs.keySet()){
 			System.out.println(s + ": " + prefs.get(s) + "\n");
-			
+
 		}
-		
+
 	}
 	public void addValue(String key, String value){
 		errorCheck(value, ".", "-");
@@ -161,7 +160,7 @@ public class Preferences {
     			tempPrefs.put(key, val);
 			}
 		}catch(Exception e){
-			System.out.println("ERROR, the following prefs value is not a double. Line: " 
+			System.out.println("ERROR, the following prefs value is not a double. Line: "
 					+ linecounter);
 			System.out.println(key + " : " + value);
 			System.out.println("Using default values");
@@ -250,22 +249,22 @@ public class Preferences {
 		try{
 			check(line, null, null);
 		}catch(Exception e){
-			System.out.println("ERROR, Check syntax, Illegal characters. Line: " 
+			System.out.println("ERROR, Check syntax, Illegal characters. Line: "
 					+ linecounter);
 			System.out.println("'" + line + "'");
 			System.out.println("Using default values");
 		}
-		
+
 	}
 	public void errorCheck(String line, String exception, String exception2){
 		try{
 			check(line, exception, exception2);
 		}catch(Exception e){
-			System.out.println("ERROR, Check syntax, Illegal characters. Line: " 
+			System.out.println("ERROR, Check syntax, Illegal characters. Line: "
 					+ linecounter);
 			System.out.println("Using default values");
 		}
-		
+
 	}
 
 }

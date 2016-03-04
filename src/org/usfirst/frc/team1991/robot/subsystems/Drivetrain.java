@@ -69,8 +69,8 @@ public class Drivetrain extends PIDSubsystem {
 	public void drive(double leftSpeed, double rightSpeed) {
 		leftSpeed += Robot.get("DriveTrain_Offset_Left");
 		rightSpeed += Robot.get("DriveTrain_Offset_Right");
-		leftSpeed *= Robot.get("DriveTrain_Speed_Multiplier");
-		rightSpeed *= Robot.get("DriveTrain_Speed_Multiplier");
+		//leftSpeed *= Robot.get("DriveTrain_Speed_Multiplier");
+		//rightSpeed *= Robot.get("DriveTrain_Speed_Multiplier");
 		if (reverseMode) {
 			driveSide(left, -rightSpeed);
 			driveSide(right, -leftSpeed);
