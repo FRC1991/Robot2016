@@ -1,6 +1,5 @@
 package org.usfirst.frc.team1991.robot.subsystems;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 public abstract class SwegSystem extends Subsystem {
   private double setpoint, tolerance, upSpeed, downSpeed, minPosition, maxPosition;

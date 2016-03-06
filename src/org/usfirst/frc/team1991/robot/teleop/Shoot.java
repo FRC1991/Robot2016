@@ -8,7 +8,7 @@ public class Shoot extends CommandGroup {
   public Shoot() {
     addSequential(new XCommand() {
       public void runOnce() {
-        Robot.shooter.run(0.6);
+        Robot.shooter.run(0.9);
       }
     });
     addSequential(new WaitCommand(2));

@@ -11,7 +11,7 @@ public class Feed extends Command {
 	protected void execute() {
 		if (!Robot.shooter.ballPresent()) {
 			Robot.intake.feed(0.7);
-			Robot.shooter.feed(0.35);
+			Robot.shooter.feed(0.8);
 		}
 		else {
 			Robot.intake.feed(0);

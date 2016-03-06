@@ -27,10 +27,10 @@ public class Preferences {
 		TempPrefs = (HashMap<String, Double> )prefs.clone();
 		try{
 			file = new File(dir);
-			System.out.println("Preferences directrory: " + dir);
+			//System.out.println("Preferences directrory: " + dir);
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 
 		readPrefs();
@@ -59,7 +59,7 @@ public class Preferences {
 			try{
 				fr = new FileReader(file);
 			}catch(Exception e){
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 
 			br = new BufferedReader(fr);

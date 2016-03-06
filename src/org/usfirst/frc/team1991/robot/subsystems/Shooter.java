@@ -3,10 +3,8 @@ package org.usfirst.frc.team1991.robot.subsystems;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import javax.swing.text.Position;
 public class Shooter extends SwegSystem {
 
   private CANTalon left, right, feeder, angle;
@@ -14,12 +12,12 @@ public class Shooter extends SwegSystem {
   private DigitalInput ballPresent;
 
   public Shooter() {
-    super(0.8, -0.3, 1, 3.7, 0.06);
+    super(0.8, -0.3, 0, 5, 0.06);
     left = new CANTalon(8);
     left.setInverted(true);
     right = new CANTalon(7);
     feeder = new CANTalon(10);
-    encoder = new AnalogInput(0);
+    encoder = new AnalogInput(2);
     angle = new CANTalon(9);
     angle.setInverted(true);
     ballPresent = new DigitalInput(0);
@@ -33,11 +31,12 @@ public class Shooter extends SwegSystem {
 
   public void periodic() {
     super.periodic();
-    SmartDashboard.putNumber("Shooter Setpoint", getSetpoint());
-    SmartDashboard.putNumber("Shooter Position", getCurrentPosition());
+    SmartDashboard.putNumber("Shooter Angle Setpoint", getSetpoint());
+    SmartDashboard.putNumber("Shooter Angle", getCurrentPosition());
     SmartDashboard.putBoolean("Shooter Enabled", isEnabled());
-    SmartDashboard.putBoolean("Shooter On Target", onPoint());
+    SmartDashboard.putBoolean("Shooter Angle On Target", onPoint());
     SmartDashboard.putNumber("Shooter Error", getError());
+    SmartDashboard.putBoolean("Ball Present", ballPresent());
   }
 
   public void run(double speed) {

@@ -13,6 +13,7 @@ public class DriveStraight extends Command {
 	private boolean reverse = false;
 	private double duration = 0.0;
 	private double tolerance = 0.5;
+	private double givenSpeed = 1.0;
 
 
 	public DriveStraight(double duration, boolean autonomous, boolean reverse) {
@@ -26,11 +27,24 @@ public class DriveStraight extends Command {
 		}
 
 	}
+	public DriveStraight(double duration, double gSpeed, boolean autonomous, boolean reverse) {
+		requires(Robot.drivetrain);
+		Robot.drivetrain.resetNavigation();
+		this.autonomous = autonomous;
+		this.reverse = reverse;
+		this.duration = duration;
+		this.givenSpeed = gSpeed;
+		if (duration > 0) {
+			setTimeout(duration);
+		}
+
+	}
 
 	public DriveStraight(boolean turn, double currentYaw) {
 		requires(Robot.drivetrain);
 		Robot.drivetrain.resetNavigation();
 		this.turn = turn;
+		this.duration = 3;
 		this.currentYaw = currentYaw;
 	}
 
@@ -46,7 +60,7 @@ public class DriveStraight extends Command {
 			speed = 0;
 			initialYaw = currentYaw;
 		} else if (autonomous) {
-			speed = 1.0;
+			speed = givenSpeed;
 		}
 		if (reverse) {
 			speed = -speed;
@@ -56,7 +70,8 @@ public class DriveStraight extends Command {
 
 	protected boolean isFinished() {
 		if (turn) {
-			return Robot.drivetrain.onTarget();
+			return Robot.drivetrain.isYawGucci(currentYaw);
+				
 		} else if (duration > 0) {
 			return isTimedOut();
 		} else {
@@ -68,6 +83,12 @@ public class DriveStraight extends Command {
 		Robot.drivetrain.setYawAndSpeed(initialYaw, 0);
 		Robot.drivetrain.disable();
 		Robot.drivetrain.resetNavigation();
+		if (turn) {
+			System.out.println("turnt");
+			
+		} else if (duration > 0) {
+			System.out.println("durated");
+		}
 		reverse = false;
 		turn = false;
 		autonomous = false;

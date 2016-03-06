@@ -3,24 +3,21 @@ package org.usfirst.frc.team1991.robot.subsystems;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends SwegSystem {
 
-  private CANTalon leftAngle, rightAngle;
-  private Talon feeder;
+  private CANTalon leftAngle, rightAngle, feeder;
   private AnalogInput encoder;
   private DigitalInput limitSwitch;
 
   public Intake() {
-    super(0.6, -0.4, 0.6, 4.1, 0.1);
-    leftAngle = new CANTalon(12);
+    super(0.6, -0.4, 0, 5, 0.1);
+    leftAngle = new CANTalon(11);
     leftAngle.setInverted(true);
-    rightAngle = new CANTalon(11);
-    feeder = new Talon(0);
+    rightAngle = new CANTalon(12);
+    feeder = new CANTalon(13);
     encoder = new AnalogInput(1);
     limitSwitch = new DigitalInput(1);
     LiveWindow.addActuator("Intake", "Left Angle", leftAngle);
@@ -31,8 +28,8 @@ public class Intake extends SwegSystem {
 
   public void periodic() {
     super.periodic();
-    SmartDashboard.putNumber("Intake Setpoint", getSetpoint());
-    SmartDashboard.putNumber("Intake Position", getCurrentPosition());
+    SmartDashboard.putNumber("Intake Angle Setpoint", getSetpoint());
+    SmartDashboard.putNumber("Intake Angle", getCurrentPosition());
     SmartDashboard.putBoolean("Intake Enabled", isEnabled());
     SmartDashboard.putBoolean("Intake On Target", onPoint());
     SmartDashboard.putNumber("Intake Error", getError());
@@ -52,8 +49,7 @@ public class Intake extends SwegSystem {
   public void move(double speed) {
     // Invert so moving joystick up moves intake up
 	  leftAngle.set(speed *-1);
-    rightAngle.set(speed *-1);
-    System.out.println(speed);
+	  rightAngle.set(speed *-1);
   }
 
   public void useOutput(double output) {

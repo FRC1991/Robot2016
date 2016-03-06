@@ -18,8 +18,8 @@ public class Drive extends Command {
 
   protected void execute() {
     double leftSpeed, rightSpeed, leftTrigger, rightTrigger;
-    leftSpeed = driver.getLJoystickY();
-    rightSpeed = driver.getRJoystickY();
+    leftSpeed = driver.getLJoystickY() * 0.9;
+    rightSpeed = driver.getRJoystickY() * 0.9;
     // Handle rotation
     if (driver.areTriggersPressed()) {
       leftTrigger = driver.getLTrigger();
@@ -32,8 +32,8 @@ public class Drive extends Command {
         rightSpeed = -rightTrigger;
         leftSpeed = -rightSpeed;
       }
-      leftSpeed *= 0.5; //Robot.get("Drivetrain_Speed_Rotation");
-      rightSpeed *= 0.5; //Robot.get("Drivetrain_Speed_Rotation");
+      leftSpeed *= 0.4; //Robot.get("Drivetrain_Speed_Rotation");
+      rightSpeed *= 0.4; //Robot.get("Drivetrain_Speed_Rotation");
     }
     Robot.drivetrain.drive(leftSpeed, rightSpeed);
   }

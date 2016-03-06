@@ -1,14 +1,16 @@
 package org.usfirst.frc.team1991.robot.subsystems;
-import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-
 import java.util.ArrayList;
 
 import org.usfirst.frc.team1991.robot.Robot;
 import org.usfirst.frc.team1991.robot.teleop.Drive;
+
+import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drivetrain extends PIDSubsystem {
 
@@ -22,7 +24,8 @@ public class Drivetrain extends PIDSubsystem {
 	public Drivetrain() {
 		super("Drivetrain", Robot.prefs.get("DriveTrain_Turn_P"), Robot.prefs.get("DriveTrain_Turn_I"),
 		      Robot.prefs.get("DriveTrain_Turn_D"));
-		//super("Drivetrain", .045, .006, .115);
+		//super("Drivetrain", .05, .01, .115);
+		this.setAbsoluteTolerance(1);
 		continuous = Robot.prefs.get("DriveTrain_Turn_Continuous");
 		setAbsoluteTolerance(Robot.prefs.get("DriveTrain_Turn_Tolerance"));
 		if(continuous == 0.0) {
@@ -49,6 +52,17 @@ public class Drivetrain extends PIDSubsystem {
 		LiveWindow.addActuator("Drivetrain", "navX", navX);
 		LiveWindow.addActuator("Drivetrain", "Yaw PID", getPIDController());
 	}
+	
+	public void setReverse(boolean reverse) {
+		this.reverseMode = reverse;
+	}
+	
+	public void periodic() {
+		SmartDashboard.putNumber("Yaw", navX.getYaw());
+		SmartDashboard.putBoolean("Yaw On Target", isYawGucci(getSetpoint()));
+		SmartDashboard.putNumber("Yaw Setpoint", getSetpoint());
+		//getPIDController().setPID(SmartDashboard.getNumber("P"), SmartDashboard.getNumber("I"), SmartDashboard.get("D"));
+	}
 
 	public void toggleReverse() {
 		reverseMode ^= true;
@@ -65,7 +79,14 @@ public class Drivetrain extends PIDSubsystem {
 			motor.set(speed);
 		}
 	}
-
+	public boolean isYawGucci(double setPoint){
+		double difference = setPoint - navX.getYaw();
+		if(Math.abs(difference) < 0.2){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	public void drive(double leftSpeed, double rightSpeed) {
 		leftSpeed += Robot.get("DriveTrain_Offset_Left");
 		rightSpeed += Robot.get("DriveTrain_Offset_Right");
@@ -81,7 +102,14 @@ public class Drivetrain extends PIDSubsystem {
 		}
 	}
 
+//	public double getDisplacement(){
+//		double x, y;
+//		x = navX.getDisplacementX();
+//		y = navX.getDisplacementY();
+//		return Math.sqrt((x*x) + (y*y));
+//	}
 	public void disable() {
+		
 		super.disable();
 		driveSide(left, 0);
 		driveSide(right, 0);
