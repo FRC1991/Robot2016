@@ -1,4 +1,10 @@
 package org.usfirst.frc.team1991.robot;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.vision.USBCamera;
 import org.usfirst.frc.team1991.robot.autonomous.Autonomous;
 import org.usfirst.frc.team1991.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1991.robot.subsystems.Intake;
@@ -11,12 +17,6 @@ import org.usfirst.frc.team1991.robot.teleop.ManualPosition;
 import org.usfirst.frc.team1991.robot.teleop.Shoot;
 import org.usfirst.frc.team1991.robot.teleop.XCommand;
 import org.usfirst.frc.team1991.robot.teleop.XboxController;
-import edu.wpi.first.wpilibj.vision.USBCamera;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 // This code written by Andi Duro and Aakash Balaji
 // Unless it doesn't work
 // In which case, we don't know who wrote it
@@ -48,7 +48,7 @@ public class Robot extends IterativeRobot {
 		drivetrain = new Drivetrain();
 		drivetrain.resetNavigation();
 		shooter = new Shooter();
-	    intake = new Intake();
+		intake = new Intake();
 		driver = new XboxController(0);
 		aux = new XboxController(1);
 		try{
@@ -56,10 +56,11 @@ public class Robot extends IterativeRobot {
 			shooterCam = new USBCamera("cam1");
 			AndiCamServer.getInstance().setQuality(75);
 			AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
-		}catch(Exception e){
+		}
+		catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		registerControls();
 	}
 	public void auto(){
@@ -81,21 +82,22 @@ public class Robot extends IterativeRobot {
 		//driver.Y.whileHeld(new DriveStraight(true, 90));
 		driver.RBumper.whenPressed(new XCommand() {
 			protected void runOnce() {
-				try{
-					if (Robot.currentCam == 0) {
-						AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
-						Robot.currentCam = 1;
+			        try{
+			                if (Robot.currentCam == 0) {
+			                        AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
+			                        Robot.currentCam = 1;
 					}
-					else {
-						AndiCamServer.getInstance().startAutomaticCapture(frontCam);
-						Robot.currentCam = 0;
-					
+			                else {
+			                        AndiCamServer.getInstance().startAutomaticCapture(frontCam);
+			                        Robot.currentCam = 0;
+
 					}
-				}catch(Exception e){
-					e.printStackTrace();
 				}
-				
-				
+			        catch(Exception e) {
+			                e.printStackTrace();
+				}
+
+
 			}
 		});
 		aux.LBumper.whileHeld(new Feed());
@@ -106,25 +108,25 @@ public class Robot extends IterativeRobot {
 		aux.Y.whenPressed(new GoToSetpoint(shooter, Position.ShooterBarf));
 		aux.LJoystick.whileHeld(new ManualPosition(shooter) {
 			public double getSpeed() {
-				return aux.getLJoystickY();
+			        return aux.getLJoystickY();
 			}
 
 			public void useOutput(double output) {
-				shooter.move(output * 0.6);
+			        shooter.move(output * 0.6);
 			}
 		});
 		aux.RJoystick.whileHeld(new ManualPosition(intake) {
 			public double getSpeed() {
-				return aux.getRJoystickY();
+			        return aux.getRJoystickY();
 			}
 
 			public void useOutput(double output) {
-				intake.move(output * 0.8);
+			        intake.move(output * 0.8);
 			}
 		});
 	}
 
-  // Code that runs periodicially regardless of mode
+	// Code that runs periodicially regardless of mode
 	public void genericPeriodic() {
 		drivetrain.periodic();
 		shooter.periodic();

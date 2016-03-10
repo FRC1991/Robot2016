@@ -1,5 +1,4 @@
-package org.usfirst.frc.team1991.robot;
-
+package org.usfirst.frc.team1991.robot.subsystems;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,9 +24,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.vision.USBCamera;
 
+// A replica of the WPILib CameraServer class
+// Stops an already running camera when startAutomaticCapture is called instead of silently failing like the original CameraServer class did
 
-public class AndiCamServer {
-
+public class CameraServer {
 	private static final int kPort = 1180;
 	private static final byte[] kMagicNumber = { 0x01, 0x00, 0x00, 0x00 };
 	private static final int kSize640x480 = 0;
@@ -36,19 +36,19 @@ public class AndiCamServer {
 	private static final int kHardwareCompression = -1;
 	private static final String kDefaultCameraName = "cam1";
 	private static final int kMaxImageSize = 200000;
-	private static AndiCamServer server;
-	private static boolean runThread = false;
+	private static CameraServer server;
+	// Custom variables
+	private static Thread captureThread = null;
 
-	public static AndiCamServer getInstance() {
+	public static CameraServer getInstance() {
 		if (server == null) {
-			server = new AndiCamServer();
+			server = new CameraServer();
 		}
 		return server;
 	}
 
 	private Thread serverThread;
 	private int m_quality;
-	private boolean m_autoCaptureStarted;
 	private boolean m_hwClient = true;
 	private USBCamera m_camera;
 	private CameraData m_imageData;
@@ -63,7 +63,7 @@ public class AndiCamServer {
 		}
 	}
 
-	private AndiCamServer() {
+	private CameraServer() {
 		m_quality = 50;
 		m_camera = null;
 		m_imageData = null;
@@ -74,7 +74,7 @@ public class AndiCamServer {
 		serverThread = new Thread(new Runnable() {
 			public void run() {
 			        try {
-			                serve();
+			        				serve();
 				}
 			        catch (IOException e) {
 			                // do stuff here
@@ -172,70 +172,57 @@ public class AndiCamServer {
 	}
 
 	public synchronized void startAutomaticCapture(USBCamera camera) {
-		// if (m_autoCaptureStarted) return;
-		// m_autoCaptureStarted = true;
-		runThread = false;
+		// If a camera is already streaming, stop it
 		if (m_camera != null) {
 			m_camera.stopCapture();
 		}
 		m_camera = camera;
-		runThread = true;
 		m_camera.startCapture();
 
-		Thread captureThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-			        capture();
-			}
-		});
-		captureThread.setName("Camera Capture Thread");
-		captureThread.start();
+		if (captureThread == null) {
+			captureThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+				        capture();
+				}
+			});
+			captureThread.setName("Camera Capture Thread");
+			captureThread.start();
+		}
 	}
 
 	protected void capture() {
 		Image frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		while (runThread) {
-			boolean hwClient;
-			ByteBuffer dataBuffer = null;
-			synchronized (this) {
-				hwClient = m_hwClient;
-				if (hwClient) {
-					dataBuffer = m_imageDataPool.removeLast();
-				}
+		boolean hwClient;
+		ByteBuffer dataBuffer = null;
+		synchronized (this) {
+			hwClient = m_hwClient;
+			if (hwClient) {
+				dataBuffer = m_imageDataPool.removeLast();
 			}
+		}
 
-			try {
-				if (hwClient && ( dataBuffer != null) ) {
-					// Reset the image buffer limit
-					dataBuffer.limit(dataBuffer.capacity() - 1);
-					m_camera.getImageData(dataBuffer);
-					setImageData(new RawData(dataBuffer), 0);
-				}
-				else {
-					m_camera.getImage(frame);
-					setImage(frame);
-				}
+		try {
+			if (hwClient && ( dataBuffer != null) ) {
+				// Reset the image buffer limit
+				dataBuffer.limit(dataBuffer.capacity() - 1);
+				m_camera.getImageData(dataBuffer);
+				setImageData(new RawData(dataBuffer), 0);
 			}
-			catch (VisionException ex) {
-				DriverStation.reportError("Error when getting image from the camera: " + ex.getMessage(), true);
-				if (dataBuffer != null) {
-					synchronized (this) {
-						m_imageDataPool.addLast(dataBuffer);
-						Timer.delay(.1);
-					}
+			else {
+				m_camera.getImage(frame);
+				setImage(frame);
+			}
+		}
+		catch (VisionException ex) {
+			DriverStation.reportError("Error when getting image from the camera: " + ex.getMessage(), true);
+			if (dataBuffer != null) {
+				synchronized (this) {
+					m_imageDataPool.addLast(dataBuffer);
+					Timer.delay(.1);
 				}
 			}
 		}
-	}
-
-
-
-	/**
-	 * check if auto capture is started
-	 *
-	 */
-	public synchronized boolean isAutoCaptureStarted() {
-		return m_autoCaptureStarted;
 	}
 
 	/**
