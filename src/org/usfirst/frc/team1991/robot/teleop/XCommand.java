@@ -1,8 +1,8 @@
 package org.usfirst.frc.team1991.robot.teleop;
 
 import org.usfirst.frc.team1991.robot.subsystems.SwegSystem;
-
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 // Extendable Command
@@ -35,6 +35,9 @@ public class XCommand extends Command {
     if (!shouldDisableSystemAfterQuit) return;
     if (system != null && (system instanceof SwegSystem)) {
       ((SwegSystem) system).disable();
+    }
+    else if (system != null && (system instanceof PIDSubsystem)) {
+      ((PIDSubsystem) system).disable();
     }
   }
 

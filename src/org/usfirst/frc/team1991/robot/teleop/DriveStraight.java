@@ -71,7 +71,7 @@ public class DriveStraight extends Command {
 	protected boolean isFinished() {
 		if (turn) {
 			return Robot.drivetrain.isYawGucci(currentYaw);
-				
+
 		} else if (duration > 0) {
 			return isTimedOut();
 		} else {
@@ -85,7 +85,7 @@ public class DriveStraight extends Command {
 		Robot.drivetrain.resetNavigation();
 		if (turn) {
 			System.out.println("turnt");
-			
+
 		} else if (duration > 0) {
 			System.out.println("durated");
 		}

@@ -16,25 +16,14 @@ public class Drivetrain extends PIDSubsystem {
 
 	private ArrayList<CANTalon> right, left;
 	private AHRS navX;
-	// Used for autonomous driving
 	private double speed = 0;
 	private boolean reverseMode = false;
-	private double continuous;
 
 	public Drivetrain() {
-		super("Drivetrain", Robot.prefs.get("DriveTrain_Turn_P"), Robot.prefs.get("DriveTrain_Turn_I"),
-		      Robot.prefs.get("DriveTrain_Turn_D"));
-		//super("Drivetrain", .05, .01, .115);
-		this.setAbsoluteTolerance(1);
-		continuous = Robot.prefs.get("DriveTrain_Turn_Continuous");
-		setAbsoluteTolerance(Robot.prefs.get("DriveTrain_Turn_Tolerance"));
-		if(continuous == 0.0) {
-			getPIDController().setContinuous(false);
-		}
-		else{
-			getPIDController().setContinuous(true);
-		}
-		setInputRange(Robot.prefs.get("DriveTrain_Turn_Min"), Robot.prefs.get("DriveTrain_Turn_Max"));
+		super("Drivetrain", 0.05, 0.01, 0.115);
+		getPIDController().setContinuous(true);
+		setAbsoluteTolerance(0.2);
+		setInputRange(-180.0, 180.0);
 		setOutputRange(-1, 1);
 		navX = new AHRS(SPI.Port.kMXP);
 		left = new ArrayList<CANTalon>();
@@ -52,46 +41,36 @@ public class Drivetrain extends PIDSubsystem {
 		LiveWindow.addActuator("Drivetrain", "navX", navX);
 		LiveWindow.addActuator("Drivetrain", "Yaw PID", getPIDController());
 	}
-	
-	public void setReverse(boolean reverse) {
-		this.reverseMode = reverse;
-	}
-	
-	public void periodic() {
-		SmartDashboard.putNumber("Yaw", navX.getYaw());
-		SmartDashboard.putBoolean("Yaw On Target", isYawGucci(getSetpoint()));
-		SmartDashboard.putNumber("Yaw Setpoint", getSetpoint());
-		//getPIDController().setPID(SmartDashboard.getNumber("P"), SmartDashboard.getNumber("I"), SmartDashboard.get("D"));
-	}
 
-	public void toggleReverse() {
-		reverseMode ^= true;
-	}
 	public void initSide(ArrayList<CANTalon> side, boolean inverted) {
-		for(CANTalon motor: side) {
+		for (CANTalon motor: side) {
 			motor.enableBrakeMode(true);
 			motor.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
 			motor.setInverted(inverted);
 		}
 	}
-	public void driveSide(ArrayList<CANTalon> side, double speed){
+
+	public void periodic() {
+		SmartDashboard.putNumber("Yaw", navX.getYaw());
+		SmartDashboard.putBoolean("Yaw On Target", onTarget());
+		SmartDashboard.putNumber("Yaw Setpoint", getSetpoint());
+	}
+
+	public void setReverse(boolean reverse) {
+		this.reverseMode = reverse;
+	}
+
+	public void toggleReverse() {
+		reverseMode ^= true;
+	}
+
+	public void driveSide(ArrayList<CANTalon> side, double speed) {
 		for(CANTalon motor: side) {
 			motor.set(speed);
 		}
 	}
-	public boolean isYawGucci(double setPoint){
-		double difference = setPoint - navX.getYaw();
-		if(Math.abs(difference) < 0.2){
-			return true;
-		}else{
-			return false;
-		}
-	}
+
 	public void drive(double leftSpeed, double rightSpeed) {
-		leftSpeed += Robot.get("DriveTrain_Offset_Left");
-		rightSpeed += Robot.get("DriveTrain_Offset_Right");
-		//leftSpeed *= Robot.get("DriveTrain_Speed_Multiplier");
-		//rightSpeed *= Robot.get("DriveTrain_Speed_Multiplier");
 		if (reverseMode) {
 			driveSide(left, -rightSpeed);
 			driveSide(right, -leftSpeed);
@@ -102,14 +81,7 @@ public class Drivetrain extends PIDSubsystem {
 		}
 	}
 
-//	public double getDisplacement(){
-//		double x, y;
-//		x = navX.getDisplacementX();
-//		y = navX.getDisplacementY();
-//		return Math.sqrt((x*x) + (y*y));
-//	}
 	public void disable() {
-		
 		super.disable();
 		driveSide(left, 0);
 		driveSide(right, 0);
