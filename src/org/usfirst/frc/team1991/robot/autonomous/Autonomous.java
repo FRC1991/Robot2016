@@ -16,8 +16,7 @@ public class Autonomous extends CommandGroup{
 		//DriveStraight(double duration,double speed, boolean autonomous,boolean reverse);
 		//Duration = -1 if no duration needed.
 	
-		addSequential(new DualSetpoint(Robot.Position.ShooterStowed, Robot.Position.IntakeFeed));
-		addSequential(new WaitCommand(1));
+		
 	    switch(mode){
 	    case 1: defaulted();
 	    	break;
@@ -32,9 +31,12 @@ public class Autonomous extends CommandGroup{
 	}
 	
 	public void defaulted(){
-		addSequential(new DriveStraight(3,0.75,true, false));
+		addSequential(new DriveStraight(0.3,0.5,true, false));
+	    addSequential(new WaitCommand(0.5));
+		addSequential(new DualSetpoint(Robot.Position.ShooterStowed, Robot.Position.IntakeDown));
+		addSequential(new WaitCommand(1));
+		addSequential(new DriveStraight(2.8,0.75,true, false));
 	    addSequential(new WaitCommand(1));
-	   // addSequential(new DriveStraight(1, 0.75,true, true));
 	}
 	
 	public void ramparts(){

@@ -33,8 +33,8 @@ public class Robot extends IterativeRobot {
 	public static Command autonomous;
 
 	public enum Position {
-		ShooterStowed(2.08), ShooterFeed(2.969), ShooterBarf(3.95),
-		IntakeStowed(4.1), IntakeFeed(2.620);
+		ShooterStowed(2.08), ShooterFeed(3.057), ShooterBarf(3.95),
+		IntakeStowed(4.1), IntakeFeed(2.358), IntakeDown(2.084);
 
 		public final double setpoint;
 		Position(double setpoint) {
@@ -51,10 +51,15 @@ public class Robot extends IterativeRobot {
 	    intake = new Intake();
 		driver = new XboxController(0);
 		aux = new XboxController(1);
-		frontCam = new USBCamera("cam0");
-		shooterCam = new USBCamera("cam1");
-		AndiCamServer.getInstance().setQuality(75);
-		AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
+		try{
+			frontCam = new USBCamera("cam0");
+			shooterCam = new USBCamera("cam1");
+			AndiCamServer.getInstance().setQuality(75);
+			AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		registerControls();
 	}
 	public void auto(){
@@ -76,14 +81,21 @@ public class Robot extends IterativeRobot {
 		//driver.Y.whileHeld(new DriveStraight(true, 90));
 		driver.RBumper.whenPressed(new XCommand() {
 			protected void runOnce() {
-				if (Robot.currentCam == 0) {
-					AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
-					Robot.currentCam = 1;
+				try{
+					if (Robot.currentCam == 0) {
+						AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
+						Robot.currentCam = 1;
+					}
+					else {
+						AndiCamServer.getInstance().startAutomaticCapture(frontCam);
+						Robot.currentCam = 0;
+					
+					}
+				}catch(Exception e){
+					e.printStackTrace();
 				}
-				else {
-					AndiCamServer.getInstance().startAutomaticCapture(frontCam);
-					Robot.currentCam = 0;
-				}
+				
+				
 			}
 		});
 		aux.LBumper.whileHeld(new Feed());
