@@ -1,5 +1,5 @@
 package org.usfirst.frc.team1991.robot.teleop;
-
+import org.usfirst.frc.team1991.robot.XCommand;
 import org.usfirst.frc.team1991.robot.subsystems.SwegSystem;
 
 public abstract class ManualPosition extends XCommand {

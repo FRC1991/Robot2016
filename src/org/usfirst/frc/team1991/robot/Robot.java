@@ -15,7 +15,6 @@ import org.usfirst.frc.team1991.robot.teleop.Feed;
 import org.usfirst.frc.team1991.robot.teleop.GoToSetpoint;
 import org.usfirst.frc.team1991.robot.teleop.ManualPosition;
 import org.usfirst.frc.team1991.robot.teleop.Shoot;
-import org.usfirst.frc.team1991.robot.teleop.XCommand;
 import org.usfirst.frc.team1991.robot.teleop.XboxController;
 // This code written by Andi Duro and Aakash Balaji
 // Unless it doesn't work

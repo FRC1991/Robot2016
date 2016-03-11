@@ -70,7 +70,7 @@ public class DriveStraight extends Command {
 
 	protected boolean isFinished() {
 		if (turn) {
-			return Robot.drivetrain.isYawGucci(currentYaw);
+			return Robot.drivetrain.onTarget();
 
 		} else if (duration > 0) {
 			return isTimedOut();

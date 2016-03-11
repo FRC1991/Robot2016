@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1991.robot.teleop;
+package org.usfirst.frc.team1991.robot;
 
 import org.usfirst.frc.team1991.robot.subsystems.SwegSystem;
 import edu.wpi.first.wpilibj.command.Command;
@@ -41,6 +41,7 @@ public class XCommand extends Command {
     }
   }
 
+  // Note that if the command is run whileHeld, isFinished() will not get called and execute() will continue running until the button is let go
   protected void execute() {
     runOnce();
     finished = true;
