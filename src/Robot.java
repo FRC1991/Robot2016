@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.vision.USBCamera;
 import src.autonomous.Autonomous;
 import src.subsystems.Drivetrain;
+import src.subsystems.CameraServer;
 import src.subsystems.Intake;
 import src.subsystems.Shooter;
 import src.teleop.DualSetpoint;
@@ -22,11 +23,10 @@ public class Robot extends IterativeRobot {
 	public static Preferences prefs;
 	public static XboxController driver;
 	public static XboxController aux;
+	public static CameraServer cameraServer;
 	public static Drivetrain drivetrain;
 	public static Shooter shooter;
 	public static Intake intake;
-	public static USBCamera frontCam, shooterCam;
-	public static int currentCam = 1;
 	public static Command autonomous;
 
 	public enum Position {
@@ -48,16 +48,14 @@ public class Robot extends IterativeRobot {
 		intake = new Intake();
 		driver = new XboxController(0);
 		aux = new XboxController(1);
-		try{
-			frontCam = new USBCamera("cam0");
-			shooterCam = new USBCamera("cam2");
-			AndiCamServer.getInstance().setQuality(75);
-			AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
+		cameraServer = CameraServer.getInstance();
+		try {
+			cameraServer.setQuality(100);
+			cameraServer.startAutomaticCapture("cam0");
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-
 		registerControls();
 	}
 	public void auto(){
@@ -79,22 +77,14 @@ public class Robot extends IterativeRobot {
 		//driver.Y.whileHeld(new DriveStraight(true, 90));
 		driver.RBumper.whenPressed(new XCommand() {
 			protected void runOnce() {
-			        try{
-			                if (Robot.currentCam == 0) {
-			                        AndiCamServer.getInstance().startAutomaticCapture(shooterCam);
-			                        Robot.currentCam = 1;
-					}
-			                else {
-			                        AndiCamServer.getInstance().startAutomaticCapture(frontCam);
-			                        Robot.currentCam = 0;
-
-					}
+				try {
+					String currentCam = cameraServer.getCamera();
+					System.out.println(currentCam);
+					cameraServer.startAutomaticCapture((currentCam == "cam0" ? "cam2" : "cam0"));
 				}
-			        catch(Exception e) {
-			                e.printStackTrace();
+				catch (Exception e) {
+					e.printStackTrace();
 				}
-
-
 			}
 		});
 		aux.LBumper.whileHeld(new Feed());

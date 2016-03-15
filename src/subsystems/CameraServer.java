@@ -185,6 +185,10 @@ public class CameraServer {
 		}
 	}
 
+	public String getCamera() {
+		return m_camera.toString();
+	}
+
 	protected void capture() {
 		Image frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		boolean hwClient;
