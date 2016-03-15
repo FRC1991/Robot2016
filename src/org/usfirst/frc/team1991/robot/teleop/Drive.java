@@ -18,8 +18,12 @@ public class Drive extends Command {
 
 	protected void execute() {
 		double leftSpeed, rightSpeed, leftTrigger, rightTrigger;
-		leftSpeed = driver.getLJoystickY() * 0.7;
-		rightSpeed = driver.getRJoystickY() * 0.7;
+		// leftSpeed = driver.getLJoystickY() * 0.7;
+		// rightSpeed = driver.getRJoystickY() * 0.7;
+		double speed = driver.getLJoystickY() * 0.7;
+		double turn = driver.getLJoystickX();
+		leftSpeed = speed + turn;
+		rightSpeed = speed - turn;
 		// Handle rotation
 		if (driver.areTriggersPressed()) {
 			leftTrigger = driver.getLTrigger();
