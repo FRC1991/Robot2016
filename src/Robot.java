@@ -4,17 +4,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.vision.USBCamera;
-import src.autonomous.Autonomous;
-import src.subsystems.Drivetrain;
-import src.subsystems.CameraServer;
-import src.subsystems.Intake;
-import src.subsystems.Shooter;
-import src.teleop.DualSetpoint;
-import src.teleop.Feed;
-import src.teleop.GoToSetpoint;
-import src.teleop.ManualPosition;
-import src.teleop.Shoot;
-import src.teleop.XboxController;
+import src.autonomous.*;
+import src.subsystems.*;
+import src.teleop.*;
 // This code written by Andi Duro and Aakash Balaji
 // Unless it doesn't work
 // In which case, we don't know who wrote it
@@ -68,15 +60,16 @@ public class Robot extends IterativeRobot {
 	// Driver controls
 	public void registerControls() {
 		driver.LBumper.whenPressed(new XCommand() {
-			public void runOnce() {
+			protected void execute() {
 			        drivetrain.toggleReverse();
+							finish();
 			}
 		});
 
 		//driver.RBumper.whileHeld(new DriveStraight(-1,false, false));
 		//driver.Y.whileHeld(new DriveStraight(true, 90));
 		driver.RBumper.whenPressed(new XCommand() {
-			protected void runOnce() {
+			protected void execute() {
 				try {
 					String currentCam = cameraServer.getCamera();
 					System.out.println(currentCam);
@@ -85,32 +78,17 @@ public class Robot extends IterativeRobot {
 				catch (Exception e) {
 					e.printStackTrace();
 				}
+				finish();
 			}
 		});
 		aux.LBumper.whileHeld(new Feed());
 		aux.RBumper.whenPressed(new Shoot());
-		aux.B.whenPressed(new DualSetpoint(Position.ShooterFeed, Position.IntakeFeed));
-		aux.A.whenPressed(new DualSetpoint(Position.ShooterStowed, Position.IntakeFeed));
-		aux.X.whenPressed(new GoToSetpoint(shooter, Position.ShooterStowed));
-		aux.Y.whenPressed(new GoToSetpoint(shooter, Position.ShooterBarf));
-		aux.LJoystick.whileHeld(new ManualPosition(shooter) {
-			public double getSpeed() {
-			        return aux.getLJoystickY();
-			}
-
-			public void useOutput(double output) {
-			        shooter.move(output * 0.6);
-			}
-		});
-		aux.RJoystick.whileHeld(new ManualPosition(intake) {
-			public double getSpeed() {
-			        return aux.getRJoystickY();
-			}
-
-			public void useOutput(double output) {
-			        intake.move(output * 0.8);
-			}
-		});
+		aux.B.whenPressed(new MoveSystemsToPositions(Position.IntakeFeed, Position.ShooterFeed));
+		aux.A.whenPressed(new MoveSystemsToPositions(Position.IntakeStowed, Position.ShooterFeed));
+		aux.X.whenPressed(new MoveShooterToPosition(Position.ShooterStowed));
+		aux.Y.whenPressed(new MoveShooterToPosition(Position.ShooterBarf));
+		aux.LJoystick.whileHeld(new MoveShooterManually());
+		aux.RJoystick.whileHeld(new MoveIntakeManually());
 	}
 
 	// Code that runs periodicially regardless of mode
@@ -118,7 +96,6 @@ public class Robot extends IterativeRobot {
 		drivetrain.periodic();
 		shooter.periodic();
 		intake.periodic();
-
 		Scheduler.getInstance().run();
 	}
 

@@ -16,7 +16,7 @@ public abstract class XCommand extends Command {
 
   protected abstract void execute();
 
-  protected abstract void quit(boolean wasInterrupted);
+  protected void quit(boolean wasInterrupted) {}
 
   protected void finish() {
     finished = true;
