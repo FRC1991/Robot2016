@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="lib" path="C:/Users/Driver/wpilib/java/current/lib/NetworkTables.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/Users/Driver/wpilib/java/current/lib/WPILib.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Driver/wpilib/java/current/lib/WPILib.jar" sourcepath="C:/Users/Driver/wpilib/java/current/lib/WPILib-sources.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="lib" path="C:/Users/Driver/navx-mxp/java/lib/navx_frc.jar"/>

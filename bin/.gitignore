@@ -61,3 +61,13 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/.classpath
+/.gitattributes
+/.gitignore
+/.project
+/build.properties
+/build.xml
+/src/
+/sysProps.xml
+/build/
+/dist/
