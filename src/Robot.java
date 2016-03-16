@@ -34,15 +34,15 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		prefs = new Preferences("home/lvuser/DataFiles/prefs.txt");
 		prefs.setValues();
+		cameraServer = CameraServer.getInstance();
 		drivetrain = new Drivetrain();
 		drivetrain.resetNavigation();
 		shooter = new Shooter();
 		intake = new Intake();
 		driver = new XboxController(0);
 		aux = new XboxController(1);
-		cameraServer = CameraServer.getInstance();
 		try {
-			cameraServer.setQuality(100);
+			cameraServer.setQuality(75);
 			cameraServer.startAutomaticCapture("cam0");
 		}
 		catch(Exception e) {
@@ -50,6 +50,7 @@ public class Robot extends IterativeRobot {
 		}
 		registerControls();
 	}
+	
 	public void auto(){
 		autonomous = new Autonomous(1);
 		drivetrain.setReverse(false);
@@ -71,8 +72,7 @@ public class Robot extends IterativeRobot {
 		driver.RBumper.whenPressed(new XCommand() {
 			protected void execute() {
 				try {
-					String currentCam = cameraServer.getCamera();
-					System.out.println(currentCam);
+					String currentCam = cameraServer.getCameraName();
 					cameraServer.startAutomaticCapture((currentCam == "cam0" ? "cam2" : "cam0"));
 				}
 				catch (Exception e) {
@@ -91,7 +91,7 @@ public class Robot extends IterativeRobot {
 		aux.RJoystick.whileHeld(new MoveIntakeManually());
 	}
 
-	// Code that runs periodicially regardless of mode
+	// Code that runs periodically regardless of mode
 	public void genericPeriodic() {
 		drivetrain.periodic();
 		shooter.periodic();

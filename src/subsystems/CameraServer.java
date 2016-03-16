@@ -28,11 +28,12 @@ public class CameraServer {
 	private static final int kSize320x240 = 1;
 	private static final int kSize160x120 = 2;
 	private static final int kHardwareCompression = -1;
-	private static final String kDefaultCameraName = "cam1";
+	private static final String kDefaultCameraName = "cam0";
 	private static final int kMaxImageSize = 200000;
 	private static CameraServer server;
 	// Custom variables
 	private static Thread captureThread = null;
+	private static String currentCameraName = "cam0";
 
 	public static CameraServer getInstance() {
 		if (server == null) {
@@ -66,9 +67,10 @@ public class CameraServer {
 			m_imageDataPool.addLast(ByteBuffer.allocateDirect(kMaxImageSize));
 		}
 		serverThread = new Thread(new Runnable() {
+			@Override
 			public void run() {
 			        try {
-			        				serve();
+			        serve();
 				}
 			        catch (IOException e) {
 			                // do stuff here
@@ -160,6 +162,7 @@ public class CameraServer {
 	 *            The name of the camera interface (e.g. "cam1")
 	 */
 	public void startAutomaticCapture(String cameraName) {
+		currentCameraName = cameraName;
 		USBCamera camera = new USBCamera(cameraName);
 		camera.openCamera();
 		startAutomaticCapture(camera);
@@ -172,7 +175,6 @@ public class CameraServer {
 		}
 		m_camera = camera;
 		m_camera.startCapture();
-
 		if (captureThread == null) {
 			captureThread = new Thread(new Runnable() {
 				@Override
@@ -185,42 +187,43 @@ public class CameraServer {
 		}
 	}
 
-	public String getCamera() {
-		return m_camera.toString();
+	public String getCameraName() {
+		return currentCameraName;
 	}
 
 	protected void capture() {
 		Image frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		boolean hwClient;
-		ByteBuffer dataBuffer = null;
-		synchronized (this) {
-			hwClient = m_hwClient;
-			if (hwClient) {
-				dataBuffer = m_imageDataPool.removeLast();
-			}
-		}
+		while (true) {
+				boolean hwClient;
+		      ByteBuffer dataBuffer = null;
+		      synchronized (this) {
+		        hwClient = m_hwClient;
+		        if (hwClient) {
+		          dataBuffer = m_imageDataPool.removeLast();
+		        }
+		      }
 
-		try {
-			if (hwClient && ( dataBuffer != null) ) {
-				// Reset the image buffer limit
-				dataBuffer.limit(dataBuffer.capacity() - 1);
-				m_camera.getImageData(dataBuffer);
-				setImageData(new RawData(dataBuffer), 0);
-			}
-			else {
-				m_camera.getImage(frame);
-				setImage(frame);
-			}
-		}
-		catch (VisionException ex) {
-			DriverStation.reportError("Error when getting image from the camera: " + ex.getMessage(), true);
-			if (dataBuffer != null) {
-				synchronized (this) {
-					m_imageDataPool.addLast(dataBuffer);
-					Timer.delay(.1);
-				}
-			}
-		}
+		      try {
+		        if (hwClient && dataBuffer != null) {
+		          // Reset the image buffer limit
+		          dataBuffer.limit(dataBuffer.capacity() - 1);
+		          m_camera.getImageData(dataBuffer);
+		          setImageData(new RawData(dataBuffer), 0);
+		        } else {
+		          m_camera.getImage(frame);
+		          setImage(frame);
+		        }
+		      } catch (VisionException ex) {
+		        DriverStation.reportError("Error when getting image from the camera: " + ex.getMessage(),
+		            true);
+		        if (dataBuffer != null) {
+		          synchronized (this) {
+		            m_imageDataPool.addLast(dataBuffer);
+		            Timer.delay(.1);
+		          }
+		        }
+		      }
+		     }
 	}
 
 	/**
