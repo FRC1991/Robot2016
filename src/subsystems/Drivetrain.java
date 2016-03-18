@@ -15,12 +15,14 @@ public class Drivetrain extends PIDSubsystem {
 	private ArrayList<CANTalon> right, left;
 	private AHRS navX;
 	private double speed = 0;
+	private double PIDOutput = 0;
+	private double tolerance = 0.2;
 	private boolean reverseMode = false;
 
 	public Drivetrain() {
 		super("Drivetrain", 0.05, 0.01, 0.115);
 		getPIDController().setContinuous(true);
-		setAbsoluteTolerance(0.2);
+		setAbsoluteTolerance(tolerance);
 		setInputRange(-180.0, 180.0);
 		setOutputRange(-1, 1);
 		navX = new AHRS(SPI.Port.kMXP);
@@ -52,6 +54,9 @@ public class Drivetrain extends PIDSubsystem {
 		SmartDashboard.putNumber("Yaw", navX.getYaw());
 		SmartDashboard.putBoolean("Yaw On Target", onTarget());
 		SmartDashboard.putNumber("Yaw Setpoint", getSetpoint());
+		SmartDashboard.putNumber("Displacement X", navX.getDisplacementX());
+		SmartDashboard.putNumber("Displacement Y", navX.getDisplacementY());
+		SmartDashboard.putNumber("Displacement Z", navX.getDisplacementZ());
 	}
 
 	public void setReverse(boolean reverse) {
@@ -78,6 +83,18 @@ public class Drivetrain extends PIDSubsystem {
 			driveSide(right, rightSpeed);
 		}
 	}
+	
+	public void driveUsingPID() {
+		drive(speed + PIDOutput, speed - PIDOutput);
+	}
+	
+	public boolean onTarget() {
+		return (getError() < tolerance);
+	}
+	
+	public double getError() {
+		return getSetpoint() - getPosition();
+	}
 
 	public void disable() {
 		super.disable();
@@ -87,6 +104,7 @@ public class Drivetrain extends PIDSubsystem {
 
 	public void resetNavigation() {
 		navX.reset();
+		navX.resetDisplacement();
 	}
 
 	public void setYawAndSpeed(double yaw, double speed) {
@@ -99,7 +117,7 @@ public class Drivetrain extends PIDSubsystem {
 	}
 
 	protected void usePIDOutput(double output) {
-		drive(speed + output, speed - output);
+		PIDOutput = output;
 	}
 
 	public void initDefaultCommand() {

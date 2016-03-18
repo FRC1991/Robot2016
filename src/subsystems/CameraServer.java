@@ -33,7 +33,7 @@ public class CameraServer {
 	private static CameraServer server;
 	// Custom variables
 	private static Thread captureThread = null;
-	private static String currentCameraName = "cam0";
+	private static String currentCameraName = "";
 
 	public static CameraServer getInstance() {
 		if (server == null) {
@@ -162,10 +162,12 @@ public class CameraServer {
 	 *            The name of the camera interface (e.g. "cam1")
 	 */
 	public void startAutomaticCapture(String cameraName) {
-		currentCameraName = cameraName;
-		USBCamera camera = new USBCamera(cameraName);
-		camera.openCamera();
-		startAutomaticCapture(camera);
+		if (!cameraName.equals(currentCameraName)) {
+			currentCameraName = cameraName;
+			USBCamera camera = new USBCamera(cameraName);
+			camera.openCamera();
+			startAutomaticCapture(camera);
+		}
 	}
 
 	public synchronized void startAutomaticCapture(USBCamera camera) {

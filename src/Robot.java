@@ -3,10 +3,19 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.vision.USBCamera;
-import src.autonomous.*;
-import src.subsystems.*;
-import src.teleop.*;
+import src.autonomous.Autonomous;
+import src.autonomous.DriveTime;
+import src.autonomous.MoveShooterToPosition;
+import src.autonomous.MoveSystemsToPositions;
+import src.subsystems.CameraServer;
+import src.subsystems.Drivetrain;
+import src.subsystems.Intake;
+import src.subsystems.Shooter;
+import src.teleop.Feed;
+import src.teleop.MoveIntakeManually;
+import src.teleop.MoveShooterManually;
+import src.teleop.Shoot;
+import src.teleop.XboxController;
 // This code written by Andi Duro and Aakash Balaji
 // Unless it doesn't work
 // In which case, we don't know who wrote it
@@ -42,8 +51,8 @@ public class Robot extends IterativeRobot {
 		driver = new XboxController(0);
 		aux = new XboxController(1);
 		try {
-			cameraServer.setQuality(75);
-			cameraServer.startAutomaticCapture("cam0");
+			cameraServer.setQuality(100);
+			cameraServer.startAutomaticCapture("cam2");
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -73,11 +82,18 @@ public class Robot extends IterativeRobot {
 			protected void execute() {
 				try {
 					String currentCam = cameraServer.getCameraName();
-					cameraServer.startAutomaticCapture((currentCam == "cam0" ? "cam2" : "cam0"));
+					cameraServer.startAutomaticCapture((currentCam == "cam2" ? "cam2" : "cam2"));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
 				}
+				finish();
+			}
+		});
+		driver.Y.whenPressed(new DriveTime(2));
+		driver.X.whenPressed(new XCommand() {
+			public void execute() {
+				Robot.drivetrain.resetNavigation();
 				finish();
 			}
 		});
@@ -97,6 +113,15 @@ public class Robot extends IterativeRobot {
 		shooter.periodic();
 		intake.periodic();
 		Scheduler.getInstance().run();
+	}
+	
+	public void genericInit() {
+		try {
+			cameraServer.startAutomaticCapture(cameraServer.getCameraName());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static double get(String key) {
@@ -118,6 +143,7 @@ public class Robot extends IterativeRobot {
 
 
 	public void autonomousInit() {
+		genericInit();
 		prefs.setValues();
 		auto();
 
@@ -130,6 +156,7 @@ public class Robot extends IterativeRobot {
 
 
 	public void teleopInit() {
+		genericInit();
 		Robot.drivetrain.disable();
 		prefs.setValues();
 	}

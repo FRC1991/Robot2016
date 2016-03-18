@@ -3,19 +3,17 @@ package src.autonomous;
 import src.Robot;
 import src.XCommand;
 
-public class DriveTime extends XCommand {
+public class TurnToYaw extends XCommand {
 
-	private double timeout, speed;
+	private double desiredYaw;
 	
-	public DriveTime(double timeout, double speed) {
-		this.timeout = timeout;
-		this.speed = speed;
+	public TurnToYaw(double desiredYaw) {
+		this.desiredYaw = desiredYaw;
 		requires(Robot.drivetrain);
 	}
 	
 	protected void initialize() {
-		setTimeout(timeout);
-		Robot.drivetrain.setYawAndSpeed(Robot.drivetrain.getPosition(), speed);
+		Robot.drivetrain.setYawAndSpeed(desiredYaw, 0);
 		Robot.drivetrain.enable();
 	}
 	
@@ -29,6 +27,6 @@ public class DriveTime extends XCommand {
 	}
 	
 	protected boolean isFinished() {
-		return isTimedOut();
+		return Robot.drivetrain.onTarget();
 	}
 }
