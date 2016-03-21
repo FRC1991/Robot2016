@@ -7,7 +7,7 @@ import src.autonomous.Autonomous;
 import src.autonomous.DriveTime;
 import src.autonomous.MoveShooterToPosition;
 import src.autonomous.MoveSystemsToPositions;
-import src.autonomous.TurnToYaw;
+import src.autonomous.TurnToAlignWithTarget;
 import src.subsystems.CameraServer;
 import src.subsystems.Drivetrain;
 import src.subsystems.Intake;
@@ -81,7 +81,7 @@ public class Robot extends IterativeRobot {
 			protected void execute() {
 				try {
 					String currentCam = cameraServer.getCameraName();
-					cameraServer.startAutomaticCapture((currentCam == "cam2" ? "cam2" : "cam2"));
+					cameraServer.startAutomaticCapture((currentCam == "cam2" ? "cam0" : "cam2"));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -89,7 +89,7 @@ public class Robot extends IterativeRobot {
 				finish();
 			}
 		});
-		driver.LJoystick.whileHeld(new StraightDrive());
+		driver.RJoystick.whileHeld(new StraightDrive());
 		driver.Y.whenPressed(new DriveTime(2, 0.5));
 		driver.X.whenPressed(new XCommand() {
 			public void execute() {
@@ -97,7 +97,7 @@ public class Robot extends IterativeRobot {
 				finish();
 			}
 		});
-		driver.B.whileHeld(new TurnToYaw(100));
+		driver.B.whileHeld(new TurnToAlignWithTarget());
 		aux.LBumper.whileHeld(new Feed());
 		aux.RBumper.whenPressed(new Shoot());
 		aux.B.whenPressed(new MoveSystemsToPositions(Position.IntakeFeed, Position.ShooterFeed));

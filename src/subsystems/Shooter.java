@@ -18,7 +18,7 @@ public class Shooter extends SwegSystem {
     left.setInverted(true);
     right = new CANTalon(7);
     feeder = new CANTalon(10);
-    encoder = new AnalogInput(2);
+    encoder = new AnalogInput(2); 
     angle = new CANTalon(9);
     angle.setInverted(true);
     ballPresent = new DigitalInput(0);
