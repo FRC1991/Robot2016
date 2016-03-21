@@ -7,6 +7,7 @@ import src.autonomous.Autonomous;
 import src.autonomous.DriveTime;
 import src.autonomous.MoveShooterToPosition;
 import src.autonomous.MoveSystemsToPositions;
+import src.autonomous.TurnToYaw;
 import src.subsystems.CameraServer;
 import src.subsystems.Drivetrain;
 import src.subsystems.Intake;
@@ -15,6 +16,7 @@ import src.teleop.Feed;
 import src.teleop.MoveIntakeManually;
 import src.teleop.MoveShooterManually;
 import src.teleop.Shoot;
+import src.teleop.StraightDrive;
 import src.teleop.XboxController;
 // This code written by Andi Duro and Aakash Balaji
 // Unless it doesn't work
@@ -75,9 +77,6 @@ public class Robot extends IterativeRobot {
 							finish();
 			}
 		});
-
-		//driver.RBumper.whileHeld(new DriveStraight(-1,false, false));
-		//driver.Y.whileHeld(new DriveStraight(true, 90));
 		driver.RBumper.whenPressed(new XCommand() {
 			protected void execute() {
 				try {
@@ -90,13 +89,15 @@ public class Robot extends IterativeRobot {
 				finish();
 			}
 		});
-		driver.Y.whenPressed(new DriveTime(2));
+		driver.LJoystick.whileHeld(new StraightDrive());
+		driver.Y.whenPressed(new DriveTime(2, 0.5));
 		driver.X.whenPressed(new XCommand() {
 			public void execute() {
 				Robot.drivetrain.resetNavigation();
 				finish();
 			}
 		});
+		driver.B.whileHeld(new TurnToYaw(100));
 		aux.LBumper.whileHeld(new Feed());
 		aux.RBumper.whenPressed(new Shoot());
 		aux.B.whenPressed(new MoveSystemsToPositions(Position.IntakeFeed, Position.ShooterFeed));

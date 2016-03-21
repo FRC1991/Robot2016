@@ -15,13 +15,13 @@ public class DriveTime extends XCommand {
 	
 	protected void initialize() {
 		setTimeout(timeout);
+		Robot.drivetrain.setReverse(false);
 		Robot.drivetrain.setYawAndSpeed(Robot.drivetrain.getPosition(), speed);
 		Robot.drivetrain.enable();
 	}
 	
 	@Override
 	protected void execute() {
-		Robot.drivetrain.driveUsingPID();
 	}
 	
 	protected void quit(boolean wasInterrupted) {

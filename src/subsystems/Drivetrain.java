@@ -13,10 +13,10 @@ import src.teleop.Drive;
 public class Drivetrain extends PIDSubsystem {
 
 	private ArrayList<CANTalon> right, left;
+	private boolean testMode = false;
 	private AHRS navX;
 	private double speed = 0;
-	private double PIDOutput = 0;
-	private double tolerance = 0.2;
+	private double tolerance = 1.5;
 	private boolean reverseMode = false;
 
 	public Drivetrain() {
@@ -24,7 +24,7 @@ public class Drivetrain extends PIDSubsystem {
 		getPIDController().setContinuous(true);
 		setAbsoluteTolerance(tolerance);
 		setInputRange(-180.0, 180.0);
-		setOutputRange(-1, 1);
+		setOutputRange(-0.4, 0.4);
 		navX = new AHRS(SPI.Port.kMXP);
 		left = new ArrayList<CANTalon>();
 		right = new ArrayList<CANTalon>();
@@ -38,6 +38,10 @@ public class Drivetrain extends PIDSubsystem {
 		left.add(new CANTalon(6));
 		initSide(left, false);
 		initSide(right, true);
+		SmartDashboard.putNumber("Test P", getPIDController().getP());
+		SmartDashboard.putNumber("Test I", getPIDController().getI());
+		SmartDashboard.putNumber("Test D", getPIDController().getD());
+		SmartDashboard.putBoolean("Test PID Mode", testMode);
 		LiveWindow.addActuator("Drivetrain", "navX", navX);
 		LiveWindow.addActuator("Drivetrain", "Yaw PID", getPIDController());
 	}
@@ -51,12 +55,19 @@ public class Drivetrain extends PIDSubsystem {
 	}
 
 	public void periodic() {
+		if (testMode) {
+			getPIDController().setPID(SmartDashboard.getNumber("Test P"), SmartDashboard.getNumber("Test I"),SmartDashboard.getNumber("Test D"));
+		}
 		SmartDashboard.putNumber("Yaw", navX.getYaw());
 		SmartDashboard.putBoolean("Yaw On Target", onTarget());
 		SmartDashboard.putNumber("Yaw Setpoint", getSetpoint());
+		SmartDashboard.putNumber("Yaw Error", getPIDController().getError());
 		SmartDashboard.putNumber("Displacement X", navX.getDisplacementX());
 		SmartDashboard.putNumber("Displacement Y", navX.getDisplacementY());
 		SmartDashboard.putNumber("Displacement Z", navX.getDisplacementZ());
+		SmartDashboard.putNumber("Pitch", navX.getPitch());
+		double totalDisplacement = Math.sqrt((navX.getDisplacementX()*navX.getDisplacementX()) + (navX.getDisplacementY()*navX.getDisplacementY()));
+		SmartDashboard.putNumber("Displacement Total", totalDisplacement);
 	}
 
 	public void setReverse(boolean reverse) {
@@ -84,16 +95,12 @@ public class Drivetrain extends PIDSubsystem {
 		}
 	}
 	
-	public void driveUsingPID() {
-		drive(speed + PIDOutput, speed - PIDOutput);
-	}
-	
 	public boolean onTarget() {
 		return (getError() < tolerance);
 	}
 	
 	public double getError() {
-		return getSetpoint() - getPosition();
+		return Math.abs(getSetpoint() - getPosition());
 	}
 
 	public void disable() {
@@ -117,7 +124,7 @@ public class Drivetrain extends PIDSubsystem {
 	}
 
 	protected void usePIDOutput(double output) {
-		PIDOutput = output;
+		drive(speed + output, speed - output);
 	}
 
 	public void initDefaultCommand() {

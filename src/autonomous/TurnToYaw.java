@@ -19,7 +19,6 @@ public class TurnToYaw extends XCommand {
 	
 	@Override
 	protected void execute() {
-		Robot.drivetrain.driveUsingPID();
 	}
 	
 	protected void quit(boolean wasInterrupted) {
