@@ -7,6 +7,7 @@ import src.autonomous.Autonomous;
 import src.autonomous.DriveTime;
 import src.autonomous.MoveShooterToPosition;
 import src.autonomous.MoveSystemsToPositions;
+import src.autonomous.PowerUpShooter;
 import src.autonomous.TurnToAlignWithTarget;
 import src.subsystems.CameraServer;
 import src.subsystems.Drivetrain;
@@ -15,7 +16,6 @@ import src.subsystems.Shooter;
 import src.teleop.Feed;
 import src.teleop.MoveIntakeManually;
 import src.teleop.MoveShooterManually;
-import src.teleop.Shoot;
 import src.teleop.StraightDrive;
 import src.teleop.XboxController;
 // This code written by Andi Duro and Aakash Balaji
@@ -99,7 +99,7 @@ public class Robot extends IterativeRobot {
 		});
 		driver.B.whileHeld(new TurnToAlignWithTarget());
 		aux.LBumper.whileHeld(new Feed());
-		aux.RBumper.whenPressed(new Shoot());
+		aux.RBumper.whenPressed(new PowerUpShooter());
 		aux.B.whenPressed(new MoveSystemsToPositions(Position.IntakeFeed, Position.ShooterFeed));
 		aux.A.whenPressed(new MoveSystemsToPositions(Position.IntakeStowed, Position.ShooterFeed));
 		aux.X.whenPressed(new MoveShooterToPosition(Position.ShooterStowed));

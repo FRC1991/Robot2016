@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Shooter extends SwegSystem {
 
   private CANTalon left, right, feeder, angle;
+  private double speedP = 5, speedI = 0, speedD = 0, speedTolerance = 0.1;
+  private double upSpeed = 0.8, downSpeed = -0.3;
   private AnalogInput encoder;
   private DigitalInput ballPresent;
 
@@ -16,7 +18,13 @@ public class Shooter extends SwegSystem {
     super(0.8, -0.3, 0, 5, 0.06);
     left = new CANTalon(8);
     left.setInverted(true);
+    left.changeControlMode(CANTalon.TalonControlMode.Speed);
+    left.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
+    left.setPID(speedP, speedI, speedD);
     right = new CANTalon(7);
+    right.changeControlMode(CANTalon.TalonControlMode.Speed);
+    right.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
+    right.setPID(speedP, speedI, speedD);
     feeder = new CANTalon(10);
     encoder = new AnalogInput(2); 
     angle = new CANTalon(9);
@@ -33,6 +41,10 @@ public class Shooter extends SwegSystem {
   public void periodic() {
     super.periodic();
     SmartDashboard.putNumber("Shooter Angle Setpoint", getSetpoint());
+    SmartDashboard.putNumber("Shooter Left RPM", left.getPosition());
+    SmartDashboard.putNumber("Shooter Right RPM", right.getPosition());
+    SmartDashboard.putNumber("Shooter RPM Setpoint", left.getSetpoint()); // Both motors will always have the same setpoint
+    SmartDashboard.putBoolean("Shooter RPM On Target", shooterMotorsAtSpeed()); 
     SmartDashboard.putNumber("Shooter Angle", getCurrentPosition());
     SmartDashboard.putBoolean("Shooter Enabled", isEnabled());
     SmartDashboard.putBoolean("Shooter Angle On Target", onPoint());
@@ -40,9 +52,13 @@ public class Shooter extends SwegSystem {
     SmartDashboard.putBoolean("Ball Present", ballPresent());
   }
 
-  public void run(double speed) {
-    left.set(speed);
-    right.set(speed);
+  public void runShooterMotorsWithRPM(double rpm) {
+    left.set(rpm);
+    right.set(rpm);
+  }
+  
+  public boolean shooterMotorsAtSpeed() {
+	  return ((left.getClosedLoopError() < speedTolerance) && (right.getClosedLoopError() < speedTolerance));
   }
 
   public void feed(double speed) {
