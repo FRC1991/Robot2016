@@ -18,6 +18,9 @@ public class Drivetrain extends PIDSubsystem {
 	private double speed = 0;
 	private double tolerance = 1.5;
 	private boolean reverseMode = false;
+	private double last_world_linear_accel_x;
+	private double last_world_linear_accel_y;
+	private final double kCollisionThreshold_DeltaG = 0.8;
 
 	public Drivetrain() {
 		super("Drivetrain", 0.05, 0.01, 0.115);
@@ -83,16 +86,38 @@ public class Drivetrain extends PIDSubsystem {
 			motor.set(speed);
 		}
 	}
+	
+	public boolean collisionDetection(){
+		boolean collisionDetected = false;
+        
+        double curr_world_linear_accel_x = navX.getWorldLinearAccelX();
+        double currentJerkX = curr_world_linear_accel_x - last_world_linear_accel_x;
+        last_world_linear_accel_x = curr_world_linear_accel_x;
+        double curr_world_linear_accel_y = navX.getWorldLinearAccelY();
+        double currentJerkY = curr_world_linear_accel_y - last_world_linear_accel_y;
+        last_world_linear_accel_y = curr_world_linear_accel_y;
+        
+        if ( ( Math.abs(currentJerkX) > kCollisionThreshold_DeltaG ) ||
+             ( Math.abs(currentJerkY) > kCollisionThreshold_DeltaG) ) {
+            collisionDetected = true;
+            System.out.println(Math.abs(currentJerkX) + " " + Math.abs(currentJerkY));
+        }
+        
+        return collisionDetected;
+	}
 
 	public void drive(double leftSpeed, double rightSpeed) {
-		if (reverseMode) {
-			driveSide(left, -rightSpeed);
-			driveSide(right, -leftSpeed);
+		if(!collisionDetection()){
+			if (reverseMode) {
+				driveSide(left, -rightSpeed);
+				driveSide(right, -leftSpeed);
+			}
+			else {
+				driveSide(left, leftSpeed);
+				driveSide(right, rightSpeed);
+			}
 		}
-		else {
-			driveSide(left, leftSpeed);
-			driveSide(right, rightSpeed);
-		}
+		
 	}
 	
 	public boolean onTarget() {
@@ -133,6 +158,10 @@ public class Drivetrain extends PIDSubsystem {
 
 	public double getPitch() {
 		return navX.getPitch();
+	}
+	
+	public AHRS getNavX(){
+		return navX;
 	}
 
 }

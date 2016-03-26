@@ -1,19 +1,22 @@
 package src.autonomous;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import src.Robot;
-import src.teleop.*;
 import edu.wpi.first.wpilibj.command.WaitCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import src.Robot;
+import src.teleop.DriveStraight;
 
 public class Autonomous extends CommandGroup{
-	public Autonomous(int mode){
+	int mode = 1;
+	public Autonomous(){
 		System.out.println("Autonomous started");
 		//DriveStraight(boolean turn,double yaw);
 		//DriveStraight(double duration,boolean autonomous,boolean reverse);
 		//DriveStraight(double duration,double speed, boolean autonomous,boolean reverse);
 		//Duration = -1 if no duration needed.
 
-
+		
+		mode = 1;
 	    switch(mode){
 	    case 1: defaulted();
 	    	break;

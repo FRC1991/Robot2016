@@ -14,7 +14,7 @@ public class Shoot extends CommandGroup {
         finish();
       }
     });
-    addSequential(new WaitCommand(1));
+    addSequential(new WaitCommand(0.5));
   };
 
   protected void end() {

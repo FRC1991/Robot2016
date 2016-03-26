@@ -3,19 +3,21 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import src.autonomous.Autonomous;
 import src.autonomous.DriveTime;
 import src.autonomous.MoveShooterToPosition;
 import src.autonomous.MoveSystemsToPositions;
-import src.autonomous.PowerUpShooter;
 import src.autonomous.TurnToAlignWithTarget;
 import src.subsystems.CameraServer;
+import src.subsystems.Climber;
 import src.subsystems.Drivetrain;
 import src.subsystems.Intake;
 import src.subsystems.Shooter;
 import src.teleop.Feed;
 import src.teleop.MoveIntakeManually;
 import src.teleop.MoveShooterManually;
+import src.teleop.Shoot;
 import src.teleop.StraightDrive;
 import src.teleop.XboxController;
 // This code written by Andi Duro and Aakash Balaji
@@ -30,6 +32,7 @@ public class Robot extends IterativeRobot {
 	public static Drivetrain drivetrain;
 	public static Shooter shooter;
 	public static Intake intake;
+	public static Climber climber;
 	public static Command autonomous;
 
 	public enum Position {
@@ -49,21 +52,22 @@ public class Robot extends IterativeRobot {
 		drivetrain = new Drivetrain();
 		drivetrain.resetNavigation();
 		shooter = new Shooter();
-		intake = new Intake();
+		//intake = new Intake();
+		climber = new Climber();
 		driver = new XboxController(0);
 		aux = new XboxController(1);
 		try {
 			cameraServer.setQuality(100);
-			cameraServer.startAutomaticCapture("cam2");
+			cameraServer.startAutomaticCapture("cam1");
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
 		registerControls();
-	}
+	}	
 	
 	public void auto(){
-		autonomous = new Autonomous(1);
+		autonomous = new Autonomous();
 		drivetrain.setReverse(false);
 		autonomous.cancel();
 		autonomous.start();
@@ -81,7 +85,7 @@ public class Robot extends IterativeRobot {
 			protected void execute() {
 				try {
 					String currentCam = cameraServer.getCameraName();
-					cameraServer.startAutomaticCapture((currentCam == "cam2" ? "cam0" : "cam2"));
+					cameraServer.startAutomaticCapture((currentCam == "cam2" ? "cam1" : "cam2"));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
@@ -97,22 +101,25 @@ public class Robot extends IterativeRobot {
 				finish();
 			}
 		});
-		driver.B.whileHeld(new TurnToAlignWithTarget());
+		driver.B.whenPressed(new TurnToAlignWithTarget());
 		aux.LBumper.whileHeld(new Feed());
-		aux.RBumper.whenPressed(new PowerUpShooter());
-		aux.B.whenPressed(new MoveSystemsToPositions(Position.IntakeFeed, Position.ShooterFeed));
-		aux.A.whenPressed(new MoveSystemsToPositions(Position.IntakeStowed, Position.ShooterFeed));
-		aux.X.whenPressed(new MoveShooterToPosition(Position.ShooterStowed));
-		aux.Y.whenPressed(new MoveShooterToPosition(Position.ShooterBarf));
+		aux.RBumper.whenPressed(new Shoot());
+//		aux.B.whenPressed(new MoveSystemsToPositions(Position.IntakeFeed, Position.ShooterFeed));
+//		aux.A.whenPressed(new MoveSystemsToPositions(Position.IntakeStowed, Position.ShooterFeed));
+//		aux.X.whenPressed(new MoveShooterToPosition(Position.ShooterStowed));
+//		aux.Y.whenPressed(new MoveShooterToPosition(Position.ShooterBarf));
 		aux.LJoystick.whileHeld(new MoveShooterManually());
-		aux.RJoystick.whileHeld(new MoveIntakeManually());
+		//aux.RJoystick.whileHeld(new MoveIntakeManually());
+		// Climber code is run automatically in MoveClimberManually
 	}
 
+	
 	// Code that runs periodically regardless of mode
 	public void genericPeriodic() {
 		drivetrain.periodic();
 		shooter.periodic();
-		intake.periodic();
+		//intake.periodic();
+		climber.periodic();
 		Scheduler.getInstance().run();
 	}
 	
@@ -136,7 +143,8 @@ public class Robot extends IterativeRobot {
 	public void disabledInit() {
 		drivetrain.disable();
 		shooter.disable();
-		intake.disable();
+		//intake.disable();
+		climber.disable();
 	}
 
 
@@ -160,6 +168,9 @@ public class Robot extends IterativeRobot {
 		genericInit();
 		Robot.drivetrain.disable();
 		prefs.setValues();
+		double desiredYaw = SmartDashboard.getNumber("Target Yaw");
+		//int mode = (int)SmartDashboard.getNumber("Autonomous mode");
+		System.out.println(desiredYaw);
 	}
 
 

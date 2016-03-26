@@ -18,13 +18,16 @@ public class Shooter extends SwegSystem {
     super(0.8, -0.3, 0, 5, 0.06);
     left = new CANTalon(8);
     left.setInverted(true);
-    left.changeControlMode(CANTalon.TalonControlMode.Speed);
-    left.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
-    left.setPID(speedP, speedI, speedD);
+    left.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+//    left.changeControlMode(CANTalon.TalonControlMode.Speed);
+//    left.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
+//    left.setPID(speedP, speedI, speedD);
     right = new CANTalon(7);
-    right.changeControlMode(CANTalon.TalonControlMode.Speed);
-    right.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
-    right.setPID(speedP, speedI, speedD);
+    right.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
+
+//    right.changeControlMode(CANTalon.TalonControlMode.Speed);
+//    right.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
+//    right.setPID(speedP, speedI, speedD);
     feeder = new CANTalon(10);
     encoder = new AnalogInput(2); 
     angle = new CANTalon(9);
