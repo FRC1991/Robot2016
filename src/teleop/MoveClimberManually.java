@@ -5,13 +5,22 @@ import src.XCommand;
 
 public class MoveClimberManually extends XCommand {
 
+	private double speed, deadband = 0;
+	
 	public MoveClimberManually() {
 		requires(Robot.climber);
 	}
 	
 	@Override
 	protected void execute() {
-		Robot.climber.move(Robot.aux.getRTrigger() - Robot.aux.getLTrigger());
+		speed = Robot.aux.getRTrigger() - Robot.aux.getLTrigger();
+//		if (speed > deadband) {
+//			Robot.climber.move(speed);
+//		}
+//		else {
+//			Robot.climber.move(0);
+//		}
+		Robot.climber.move(speed);
 	}
 
 	@Override

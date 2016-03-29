@@ -5,9 +5,11 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import src.Robot;
 import src.teleop.DriveStraight;
+import src.teleop.Shoot;
 
 public class Autonomous extends CommandGroup{
 	int mode = 1;
+	int position = 1;
 	public Autonomous(){
 		System.out.println("Autonomous started");
 		//DriveStraight(boolean turn,double yaw);
@@ -16,15 +18,17 @@ public class Autonomous extends CommandGroup{
 		//Duration = -1 if no duration needed.
 
 		
-		mode = 1;
+
+		mode = (int)SmartDashboard.getNumber("Autonomous Mode");
+		position = (int)SmartDashboard.getNumber("Autonomous Position");
 	    switch(mode){
-	    case 1: defaulted();
+	    case 1: test1();
 	    	break;
-	    case 2: ramparts();
+	    case 2: test2();
 	    	break;
-	    case 3: RockWall();
+	    case 3: test3();
 	    	break;
-	    default: defaulted();
+	    default: 
 	   		break;
 	    }
 
@@ -39,25 +43,52 @@ public class Autonomous extends CommandGroup{
 	    addSequential(new WaitCommand(1));
 	}
 
-	public void ramparts(){
-		addSequential(new DriveStraight(true, 15));
+	public void test1(){
+		//Do Nothing
+		addSequential(new MoveSystemsToPositions(Robot.Position.IntakeDown, Robot.Position.ShooterFeed));
 		addSequential(new WaitCommand(1));
-		addSequential(new DriveStraight(3,true, false));
-	    addSequential(new WaitCommand(1));
-	    addSequential(new DriveStraight(3,true, true));
-	    addSequential(new WaitCommand(1));
-	    addSequential(new DriveStraight(true, 15));
-	    addSequential(new WaitCommand(1));
-	    addSequential(new DriveStraight(3, true, true));
+		//5vc0ltuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	//ddSequential(new Shoot());
 	}
-
-	public void RockWall(){
-		addSequential(new DriveStraight(1.5,0.7,true, false));
-		addSequential(new DriveStraight(2,1.0,true, false));
-		addSequential(new WaitCommand(1));
-		addSequential(new DriveStraight(1.5,0.7,true, true));
-		addSequential(new DriveStraight(2,1.0,true, true));
-
+	
+	public void test2(){
+		//Drive Straight
+		addSequential(new DriveStraight(1,0.3,true, false));
+	    addSequential(new WaitCommand(0.5));
+	    addSequential(new MoveSystemsToPositions(Robot.Position.IntakeDown, Robot.Position.ShooterFeed));
+	}
+	
+	public void test3(){
+		//Drive Straigh and back
+		addSequential(new DriveStraight(1,0.3,true, false));
+	    addSequential(new WaitCommand(1));
+	    addSequential(new DriveStraight(1,0.3,true, true));
 	}
 
 }

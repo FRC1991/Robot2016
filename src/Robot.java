@@ -6,8 +6,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import src.autonomous.Autonomous;
 import src.autonomous.DriveTime;
-import src.autonomous.MoveShooterToPosition;
-import src.autonomous.MoveSystemsToPositions;
 import src.autonomous.TurnToAlignWithTarget;
 import src.subsystems.CameraServer;
 import src.subsystems.Climber;
@@ -15,7 +13,7 @@ import src.subsystems.Drivetrain;
 import src.subsystems.Intake;
 import src.subsystems.Shooter;
 import src.teleop.Feed;
-import src.teleop.MoveIntakeManually;
+import src.teleop.MoveClimberManually;
 import src.teleop.MoveShooterManually;
 import src.teleop.Shoot;
 import src.teleop.StraightDrive;
@@ -36,7 +34,7 @@ public class Robot extends IterativeRobot {
 	public static Command autonomous;
 
 	public enum Position {
-		ShooterStowed(2.08), ShooterFeed(3.057), ShooterBarf(3.95),
+		ShooterStowed(2.08), ShooterFeed(1.74), ShooterBarf(3.95),
 		IntakeStowed(4.1), IntakeFeed(2.358), IntakeDown(2.084);
 
 		public final double setpoint;
@@ -109,6 +107,7 @@ public class Robot extends IterativeRobot {
 //		aux.X.whenPressed(new MoveShooterToPosition(Position.ShooterStowed));
 //		aux.Y.whenPressed(new MoveShooterToPosition(Position.ShooterBarf));
 		aux.LJoystick.whileHeld(new MoveShooterManually());
+		aux.Select.whileHeld(new MoveClimberManually());
 		//aux.RJoystick.whileHeld(new MoveIntakeManually());
 		// Climber code is run automatically in MoveClimberManually
 	}
@@ -168,9 +167,6 @@ public class Robot extends IterativeRobot {
 		genericInit();
 		Robot.drivetrain.disable();
 		prefs.setValues();
-		double desiredYaw = SmartDashboard.getNumber("Target Yaw");
-		//int mode = (int)SmartDashboard.getNumber("Autonomous mode");
-		System.out.println(desiredYaw);
 	}
 
 

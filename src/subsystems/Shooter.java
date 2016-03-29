@@ -15,7 +15,7 @@ public class Shooter extends SwegSystem {
   private DigitalInput ballPresent;
 
   public Shooter() {
-    super(0.8, -0.3, 0, 5, 0.06);
+    super(0.6, -0.2, 0, 5, 0.06);
     left = new CANTalon(8);
     left.setInverted(true);
     left.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
