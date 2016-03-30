@@ -15,7 +15,6 @@ public class DriveTime extends XCommand {
 	
 	protected void initialize() {
 		setTimeout(timeout);
-		Robot.drivetrain.setReverse(false);
 		Robot.drivetrain.setYawAndSpeed(Robot.drivetrain.getPosition(), speed);
 		Robot.drivetrain.enable();
 	}
