@@ -36,7 +36,7 @@ public class Robot extends IterativeRobot {
 	public static Command autonomous = null;
 
 	public enum Position {
-		ShooterStowed(2.08), ShooterFeed(2.79), ShooterAutoAim(3.14), ShooterBarf(3.95),
+		ShooterStowed(2.08), ShooterFeed(2.95), ShooterAutoAim(3.14), ShooterBarf(3.95),
 		IntakeStowed(4.1), IntakeFeed(2.358), IntakeDown(2.084);
 
 		public final double setpoint;

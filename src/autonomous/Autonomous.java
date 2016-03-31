@@ -41,6 +41,7 @@ public class Autonomous extends CommandGroup{
 	    	addSequential(new WaitCommand(2));
 	    	addSequential(new TurnToAlignWithTarget());
 	    	addSequential(new WaitCommand(0.3));
+	    	// Check if shot should be taken
 	    	addSequential(new XCommand() {
 	    		private double farthestDistance = 11.5;
 	    		private double lowestDistance = 7;

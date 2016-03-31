@@ -5,7 +5,7 @@ import src.XCommand;
 
 public class PowerUpShooter extends XCommand {
 	
-	private double timeout = 1.0;
+	private double timeout = 2;
 	
 	public PowerUpShooter() {	
 		requires(Robot.shooter);
@@ -18,7 +18,7 @@ public class PowerUpShooter extends XCommand {
 
 	@Override
 	protected void execute() {
-		Robot.shooter.runShooterMotorsWithRPM(0.6);
+		Robot.shooter.runShooterMotorsWithRPM(150);
 	}
 
 	protected boolean isFinished() {

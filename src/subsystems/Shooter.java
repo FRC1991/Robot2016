@@ -19,15 +19,14 @@ public class Shooter extends SwegSystem {
     left = new CANTalon(8);
     left.setInverted(true);
     left.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-//    left.changeControlMode(CANTalon.TalonControlMode.Speed);
-//    left.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
-//    left.setPID(speedP, speedI, speedD);
+    left.changeControlMode(CANTalon.TalonControlMode.Speed);
+    left.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
+    left.setPID(speedP, speedI, speedD);
     right = new CANTalon(7);
     right.changeControlMode(CANTalon.TalonControlMode.PercentVbus);
-
-//    right.changeControlMode(CANTalon.TalonControlMode.Speed);
-//    right.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
-//    right.setPID(speedP, speedI, speedD);
+    right.changeControlMode(CANTalon.TalonControlMode.Speed);
+    right.setFeedbackDevice(CANTalon.FeedbackDevice.AnalogEncoder);
+    right.setPID(speedP, speedI, speedD);
     feeder = new CANTalon(10);
     encoder = new AnalogInput(2); 
     angle = new CANTalon(9);
@@ -43,6 +42,13 @@ public class Shooter extends SwegSystem {
 
   public void periodic() {
     super.periodic();
+    System.out.println("Speed: " + left.getSpeed());
+    System.out.println("Position: " + left.getPosition());
+    System.out.println("Raw: " + left.getAnalogInRaw());
+    System.out.println("Temp: " + left.getTemperature());
+    System.out.println("Velocity: " + left.getAnalogInVelocity());
+    System.out.println("Voltage: " + left.getBusVoltage());
+    System.out.println("PW Velocity: " + left.getPulseWidthVelocity());
     SmartDashboard.putNumber("Shooter Angle Setpoint", getSetpoint());
     SmartDashboard.putNumber("Shooter Left RPM", left.getPosition());
     SmartDashboard.putNumber("Shooter Right RPM", right.getPosition());
