@@ -26,9 +26,9 @@ import src.teleop.XboxController;
 public class Robot extends IterativeRobot {
 
 	
-	public static final String startCam = "cam1";
-	public static final String secondaryCam = "cam2";
-	public static Preferences prefs;
+	public static final String startCam = "cam0";
+	public static final String secondaryCam = "cam1";
+	//public static Preferences prefs;
 	public static XboxController driver;
 	public static XboxController aux;
 	public static CameraServer cameraServer;
@@ -49,8 +49,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void robotInit() {
-		prefs = new Preferences("home/lvuser/DataFiles/prefs.txt");
-		prefs.setValues();
+		//prefs = new Preferences("home/lvuser/DataFiles/prefs.txt");
+		//prefs.setValues();
 		cameraServer = CameraServer.getInstance();
 		drivetrain = new Drivetrain();
 		drivetrain.resetNavigation();
@@ -131,7 +131,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public static double get(String key) {
-		return prefs.get(key);
+		return 0;
 	}
 
 	public static void print(String output) {
@@ -151,7 +151,7 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		genericInit();
-		prefs.setValues();
+		//prefs.setValues();
 		auto();
 
 	}
@@ -168,7 +168,7 @@ public class Robot extends IterativeRobot {
 			autonomous.cancel();
 		}
 		Robot.drivetrain.disable();
-		prefs.setValues();
+		//prefs.setValues();
 	}
 
 

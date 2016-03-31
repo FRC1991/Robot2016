@@ -42,13 +42,13 @@ public class Shooter extends SwegSystem {
 
   public void periodic() {
     super.periodic();
-    System.out.println("Speed: " + left.getSpeed());
-    System.out.println("Position: " + left.getPosition());
-    System.out.println("Raw: " + left.getAnalogInRaw());
-    System.out.println("Temp: " + left.getTemperature());
-    System.out.println("Velocity: " + left.getAnalogInVelocity());
-    System.out.println("Voltage: " + left.getBusVoltage());
-    System.out.println("PW Velocity: " + left.getPulseWidthVelocity());
+//    System.out.println("Speed: " + left.getSpeed());
+//    System.out.println("Position: " + left.getPosition());
+//    System.out.println("Raw: " + left.getAnalogInRaw());
+//    System.out.println("Temp: " + left.getTemperature());
+//    System.out.println("Velocity: " + left.getAnalogInVelocity());
+//    System.out.println("Voltage: " + left.getBusVoltage());
+//    System.out.println("PW Velocity: " + left.getPulseWidthVelocity());
     SmartDashboard.putNumber("Shooter Angle Setpoint", getSetpoint());
     SmartDashboard.putNumber("Shooter Left RPM", left.getPosition());
     SmartDashboard.putNumber("Shooter Right RPM", right.getPosition());
