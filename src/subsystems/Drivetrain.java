@@ -13,7 +13,7 @@ import src.teleop.Drive;
 public class Drivetrain extends PIDSubsystem {
 
 	private ArrayList<CANTalon> right, left;
-	private boolean testMode = false;
+	private boolean testMode = true; //false;
 	private AHRS navX;
 	private double speed = 0;
 	private double tolerance = 0.7;
