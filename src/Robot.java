@@ -25,6 +25,9 @@ import src.teleop.XboxController;
 // In which case, we don't know who wrote it
 public class Robot extends IterativeRobot {
 
+	
+	public static final String startCam = "cam1";
+	public static final String secondaryCam = "cam2";
 	public static Preferences prefs;
 	public static XboxController driver;
 	public static XboxController aux;
@@ -58,7 +61,7 @@ public class Robot extends IterativeRobot {
 		aux = new XboxController(1);
 		try {
 			cameraServer.setQuality(100);
-			cameraServer.startAutomaticCapture("cam1");
+			cameraServer.startAutomaticCapture(startCam);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -79,7 +82,7 @@ public class Robot extends IterativeRobot {
 			protected void execute() {
 				try {
 					String currentCam = cameraServer.getCameraName();
-					cameraServer.startAutomaticCapture((currentCam == "cam2" ? "cam1" : "cam2"));
+					cameraServer.startAutomaticCapture((currentCam == secondaryCam ? startCam : secondaryCam));
 				}
 				catch (Exception e) {
 					e.printStackTrace();
