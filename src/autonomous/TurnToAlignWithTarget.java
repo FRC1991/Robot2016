@@ -9,7 +9,7 @@ public class TurnToAlignWithTarget extends XCommand {
 	
 	private double differenceTolerance = 8;
 	private double onTargetStartTime = 0;
-	private double alignInterval = 1;
+	private double alignInterval = 1.00;
 	private boolean onTarget = false;
 	
 	public TurnToAlignWithTarget() {
@@ -43,7 +43,9 @@ public class TurnToAlignWithTarget extends XCommand {
 	
 	@Override
 	protected void execute() {
-		if (timeSinceInitialized() % alignInterval <= 0.2) align();
+		if (timeSinceInitialized() % alignInterval <= 0.2) {
+			align();
+		}
 		if (differenceOnTarget()) {
 			if (!onTarget) {
 				onTarget = true;
