@@ -13,14 +13,14 @@ import src.teleop.Drive;
 public class Drivetrain extends PIDSubsystem {
 
 	private ArrayList<CANTalon> right, left;
-	private boolean testMode = true; //false;
+	private boolean testMode = false;
 	private AHRS navX;
 	private double speed = 0;
 	private double tolerance = 0.7;
 	private boolean reverseMode = false;
 
 	public Drivetrain() {
-		super("Drivetrain", 0.05, 0.01, 0.115);
+		super("Drivetrain", 0.05, 0.005, 0.115);
 		getPIDController().setContinuous(true);
 		setAbsoluteTolerance(tolerance);
 		setInputRange(-180.0, 180.0);
