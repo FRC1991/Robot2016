@@ -20,8 +20,7 @@ public class Drivetrain extends PIDSubsystem {
 	private boolean reverseMode = false;
 
 	public Drivetrain() {
-		//super("Drivetrain", 0.05, 0.005, 0.115);
-		super("Drivetrain", 0.05, 0.01, 0.115);
+		super("Drivetrain", 0.05, 0.005, 0.115);
 		getPIDController().setContinuous(true);
 		setAbsoluteTolerance(tolerance);
 		setInputRange(-180.0, 180.0);
@@ -105,7 +104,6 @@ public class Drivetrain extends PIDSubsystem {
 	}
 
 	public void resetNavigation() {
-		navX.reset();
 		navX.zeroYaw();
 	}
 

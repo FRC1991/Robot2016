@@ -19,6 +19,7 @@ public class TurnToAlignWithTarget extends XCommand {
 	protected void initialize() {
 		Robot.drivetrain.enable();
 		align();
+		setTimeout(6);
 	}
 	
 	private boolean differenceOnTarget() {
@@ -62,7 +63,8 @@ public class TurnToAlignWithTarget extends XCommand {
 	}
 	
 	protected boolean isFinished() {
+		if (isTimedOut()) System.out.println("Timed out");
 		if (aimedLongEnough()) System.out.println("Aimed long enough");
-		return aimedLongEnough();
+		return aimedLongEnough() || isTimedOut();
 	}
 }

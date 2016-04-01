@@ -12,7 +12,7 @@ import src.teleop.Shoot;
 public class Autonomous extends CommandGroup {
 	private int mode, position;
 	private final double driveTime = 2.5;
-	private final double driveSpeed = 0.3; //0.7;
+	private final double driveSpeed = 0.3;
 	
 	public Autonomous() {
 		addSequential(new MoveSystemsToPositions(Robot.Position.IntakeDown, Robot.Position.ShooterStowed));
@@ -37,14 +37,13 @@ public class Autonomous extends CommandGroup {
 	
 	private void moveUp(){
 		addSequential(new DriveTime(driveTime, driveSpeed));
-		
 	}
 	
 	private void moveUpNoShoot(){
 		moveUp();
 		//positionStrategy();
-    	addSequential(new MoveShooterToPosition(Robot.Position.ShooterAutoAim, true));
-    	addSequential(new WaitCommand(1));
+    	addSequential(new MoveShooterToPosition(Robot.Position.ShooterAutoAim));
+    	addSequential(new WaitCommand(2));
     	addSequential(new TurnToAlignWithTarget());
     	addSequential(new WaitCommand(1));
     	addSequential(new DistanceReckon());
@@ -57,7 +56,8 @@ public class Autonomous extends CommandGroup {
 	}
 	
 	private void shoot(){
-    	addSequential(new MoveShooterToPosition(Robot.Position.ShooterFeed, true));
+    	addSequential(new MoveShooterToPosition(Robot.Position.ShooterFeed));
+    	addSequential(new WaitCommand(1));
     	addSequential(new Shoot());
 	}
 	

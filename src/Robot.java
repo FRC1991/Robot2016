@@ -26,7 +26,7 @@ import src.teleop.XboxController;
 public class Robot extends IterativeRobot {
 
 	
-	public static final String startCam = "cam1"; // Actually cam0
+	public static final String startCam = "cam0";
 	public static final String secondaryCam = "cam1";
 	//public static Preferences prefs;
 	public static XboxController driver;
@@ -102,6 +102,8 @@ public class Robot extends IterativeRobot {
 				finish();
 			}
 		});
+		driver.A.whenPressed(new TurnToYaw(179.99));
+		driver.B.whenPressed(new TurnToAlignWithTarget());
 		aux.LBumper.whileHeld(new Feed());
 		aux.RBumper.whenPressed(new Shoot());
 		aux.B.whenPressed(new MoveSystemsToPositions(Position.IntakeFeed, Position.ShooterFeed));
@@ -126,7 +128,6 @@ public class Robot extends IterativeRobot {
 	
 	public void genericInit() {
 		try {
-			drivetrain.resetNavigation();
 			cameraServer.startAutomaticCapture(cameraServer.getCameraName());
 		}
 		catch (Exception e) {
