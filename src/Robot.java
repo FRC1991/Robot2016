@@ -47,11 +47,6 @@ public class Robot extends IterativeRobot {
 			this.setpoint = setpoint;
 		}
 	}
-	
-	/*public enum Position {
-		ShooterStowed(2.08), ShooterFeed(3.057), ShooterBarf(3.95),
-		IntakeStowed(4.1), IntakeFeed(2.358), IntakeDown(2.084);*/
-
 
 	public void robotInit() {
 		//prefs = new Preferences("home/lvuser/DataFiles/prefs.txt");
@@ -102,7 +97,7 @@ public class Robot extends IterativeRobot {
 				finish();
 			}
 		});
-		driver.A.whenPressed(new TurnToYaw(179.99));
+		driver.A.whenPressed(new TurnToYaw(100));
 		driver.B.whenPressed(new TurnToAlignWithTarget());
 		aux.LBumper.whileHeld(new Feed());
 		aux.RBumper.whenPressed(new Shoot());

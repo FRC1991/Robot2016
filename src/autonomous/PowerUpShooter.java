@@ -18,11 +18,11 @@ public class PowerUpShooter extends XCommand {
 
 	@Override
 	protected void execute() {
-		Robot.shooter.runShooterMotorsWithVoltage(0.8);
+		Robot.shooter.runShooterMotorsWithRPM(150);
 	}
 
 	protected boolean isFinished() {
-		return isTimedOut();
+		return isTimedOut(); // Robot.shooter.shooterMotorsAtSpeed() || isTimedOut();
 	}
 	
 }
