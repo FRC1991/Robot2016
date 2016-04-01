@@ -29,16 +29,11 @@ public class Autonomous extends CommandGroup{
 	    	addSequential(new DriveTime(driveTime, driveSpeed));
 	    	break;
 	    case 2:
-//	    	addSequential(new DriveTime(driveTime, driveSpeed));
-//	    	addSequential(new SetDriveBackwards(true));
-//	    	addSequential(new WaitCommand(0.5));
-//	    	addSequential(new DriveTime(driveTime, driveSpeed));
-//	    	addSequential(new SetDriveBackwards(false));
-	    	// Drive and auto aim
 	    	addSequential(new DriveTime(driveTime, driveSpeed));
-	    	addSequential(new MoveShooterToPosition(Robot.Position.ShooterAutoAim));
-	    	addSequential(new WaitCommand(2));
-	    	addSequential(new TurnToAlignWithTarget());
+	    	addSequential(new SetDriveBackwards(true));
+	    	addSequential(new WaitCommand(0.5));
+	    	addSequential(new DriveTime(driveTime, driveSpeed));
+	    	addSequential(new SetDriveBackwards(false));
 	    	break;
 	    case 3:
 	    	addSequential(new DriveTime(driveTime, driveSpeed));

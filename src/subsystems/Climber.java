@@ -9,8 +9,8 @@ public class Climber extends Subsystem {
 	private CANTalon left, right;
 	
 	public Climber() {
-		left = new CANTalon(14);
-		right = new CANTalon(15);
+		left = new CANTalon(11);
+		right = new CANTalon(12);
 	}
 	
 	public void periodic() {
