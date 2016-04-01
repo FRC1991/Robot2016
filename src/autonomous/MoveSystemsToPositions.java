@@ -6,9 +6,8 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class MoveSystemsToPositions extends CommandGroup {
 
   public MoveSystemsToPositions(Robot.Position intakePos, Robot.Position shooterPos) {
-    addSequential(new MoveIntakeToPosition(intakePos));
-    addSequential(new WaitCommand(1));
-    addSequential(new MoveShooterToPosition(shooterPos));
+    addSequential(new MoveIntakeToPosition(intakePos, true));
+    addSequential(new MoveShooterToPosition(shooterPos, true));
   }
 
 }
