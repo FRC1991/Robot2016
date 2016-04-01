@@ -110,7 +110,8 @@ public class Drivetrain extends PIDSubsystem {
 	}
 
 	public void resetNavigation() {
-		navX.zeroYaw();
+		navX.reset();
+		navX.resetDisplacement();
 	}
 
 	public void setYawAndSpeed(double yaw, double speed) {
