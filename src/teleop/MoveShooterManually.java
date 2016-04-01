@@ -13,7 +13,7 @@ public class MoveShooterManually extends XCommand {
   }
 
   protected void execute() {
-    Robot.shooter.move(Robot.aux.getLJoystickY() * 0.6);
+    Robot.shooter.move(Robot.aux.getLJoystickY() * 0.5);
   }
 
   protected void quit(boolean wasInterrupted) {

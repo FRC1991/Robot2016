@@ -62,12 +62,6 @@ public class Drivetrain extends PIDSubsystem {
 		SmartDashboard.putBoolean("Yaw On Target", onTarget());
 		SmartDashboard.putNumber("Yaw Setpoint", getSetpoint());
 		SmartDashboard.putNumber("Yaw Error", getPIDController().getError());
-		SmartDashboard.putNumber("Displacement X", navX.getDisplacementX());
-		SmartDashboard.putNumber("Displacement Y", navX.getDisplacementY());
-		SmartDashboard.putNumber("Displacement Z", navX.getDisplacementZ());
-		SmartDashboard.putNumber("Pitch", navX.getPitch());
-		double totalDisplacement = Math.sqrt((navX.getDisplacementX()*navX.getDisplacementX()) + (navX.getDisplacementY()*navX.getDisplacementY()));
-		SmartDashboard.putNumber("Displacement Total", totalDisplacement);
 	}
 
 	public boolean isReversed() {
