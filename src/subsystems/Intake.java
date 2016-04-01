@@ -8,21 +8,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends SwegSystem {
 
-  private CANTalon leftAngle, rightAngle, feeder;
+  private CANTalon angle, leftFeeder, rightFeeder;
   private AnalogInput encoder;
   private DigitalInput limitSwitch;
 
   public Intake() {
     super(0.6, -0.4, 0, 5, 0.1);
-    leftAngle = new CANTalon(11);
-    leftAngle.setInverted(true);
-    rightAngle = new CANTalon(12);
-    feeder = new CANTalon(13);
+    angle = new CANTalon(11);
+    leftFeeder = new CANTalon(12);
+    leftFeeder.setInverted(true);
+    rightFeeder = new CANTalon(13);
     encoder = new AnalogInput(1);
     limitSwitch = new DigitalInput(1);
-    LiveWindow.addActuator("Intake", "Left Angle", leftAngle);
-    LiveWindow.addActuator("Intake", "Right Angle", rightAngle);
-    LiveWindow.addActuator("Intake", "Feeder", feeder);
+    LiveWindow.addActuator("Intake", "Angle", angle);
+    LiveWindow.addActuator("Intake", "Right Feeder", rightFeeder);
+    LiveWindow.addActuator("Intake", "Left Feeder", leftFeeder);
     LiveWindow.addSensor("Intake", "Encoder", encoder);
   }
 
@@ -36,20 +36,19 @@ public class Intake extends SwegSystem {
   }
 
   public void feed(double speed) {
-    feeder.set(speed);
+    leftFeeder.set(speed);
+    rightFeeder.set(speed);
   }
 
   public void disable() {
     super.disable();
-    leftAngle.set(0);
-    rightAngle.set(0);
-    feeder.set(0);
+    leftFeeder.set(0);
+    rightFeeder.set(0);
+    angle.set(0);
   }
 
   public void move(double speed) {
-    // Invert so moving joystick up moves intake up
-	  leftAngle.set(speed *-1);
-	  rightAngle.set(speed *-1);
+	  angle.set(speed);
   }
 
   public void useOutput(double output) {

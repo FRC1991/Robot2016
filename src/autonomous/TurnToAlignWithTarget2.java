@@ -5,19 +5,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import src.Robot;
 import src.XCommand;
 
-public class TurnToAlignWithTarget extends XCommand {
+public class TurnToAlignWithTarget2 extends XCommand {
 	
 	private double differenceTolerance = 8;
 	private double onTargetStartTime = 0;
 	private double alignInterval = 1.00;
 	private boolean onTarget = false;
 	
-	public TurnToAlignWithTarget() {
+	public TurnToAlignWithTarget2() {
 		requires(Robot.drivetrain);
 	}
 	
 	protected void initialize() {
-		Robot.drivetrain.enable();
 		align();
 	}
 	
@@ -26,33 +25,16 @@ public class TurnToAlignWithTarget extends XCommand {
 		return (Math.abs(differenceInPixels) <= differenceTolerance);
 
 	}
-	
-	private double timeSinceOnTarget() {
-		return timeSinceInitialized() - onTargetStartTime;
-	}
-	
-	private boolean aimedLongEnough() {
-		return (onTarget && timeSinceOnTarget() > 2);
-	}
+
 	
 	private void align() {
-		double desiredYaw = SmartDashboard.getNumber("Target Yaw");
-		Robot.drivetrain.setYawAndSpeed(desiredYaw, 0);
+		
 	}
 	
 	@Override
 	protected void execute() {
 		if (timeSinceInitialized() % alignInterval <= 0.2) {
 			align();
-		}
-		if (differenceOnTarget()) {
-			if (!onTarget) {
-				onTarget = true;
-				onTargetStartTime = timeSinceInitialized();
-			}	
-		}
-		else {
-			onTarget = false;
 		}
 		
 	}
@@ -62,7 +44,6 @@ public class TurnToAlignWithTarget extends XCommand {
 	}
 	
 	protected boolean isFinished() {
-		if (aimedLongEnough()) System.out.println("Aimed long enough");
-		return aimedLongEnough();
+		return false;
 	}
 }

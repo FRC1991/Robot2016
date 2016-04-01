@@ -28,7 +28,7 @@ public class MoveIntakeToPosition extends XCommand {
   }
   
   protected boolean isFinished() {
-	  if (shouldWait) return Robot.shooter.onPoint();
+	  if(shouldWait) return Robot.shooter.onPoint();
 	  return isFinished();
   }
   
