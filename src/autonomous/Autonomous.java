@@ -16,6 +16,7 @@ public class Autonomous extends CommandGroup {
 	
 	public Autonomous() {
 		addSequential(new MoveSystemsToPositions(Robot.Position.IntakeDown, Robot.Position.ShooterStowed));
+		addSequential(new WaitCommand(1));
 		mode = (int)SmartDashboard.getNumber("Autonomous Mode", 0);
 		position = (int)SmartDashboard.getNumber("Autonomous Position", 0);
 		
