@@ -61,6 +61,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-/src/
 /build/
+/src/
 /dist/
+/teleop/
