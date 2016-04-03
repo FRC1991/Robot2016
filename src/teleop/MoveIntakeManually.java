@@ -9,7 +9,7 @@ public class MoveIntakeManually extends XCommand {
   }
 
   protected void execute() {
-    Robot.intake.move(Robot.aux.getRJoystickY() * 0.6);
+    Robot.intake.move(Robot.aux.getRJoystickY() * 0.5);
   }
 
   protected void quit(boolean wasInterrupted) {

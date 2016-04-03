@@ -24,7 +24,7 @@ public class Drivetrain extends PIDSubsystem {
 		getPIDController().setContinuous(true);
 		setAbsoluteTolerance(tolerance);
 		setInputRange(-180.0, 180.0);
-		setOutputRange(-0.4, 0.4);
+		setOutputRange(-0.5, 0.5);
 		navX = new AHRS(SPI.Port.kMXP);
 		left = new ArrayList<CANTalon>();
 		right = new ArrayList<CANTalon>();

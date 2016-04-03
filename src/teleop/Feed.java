@@ -1,17 +1,19 @@
 package src.teleop;
 
-import edu.wpi.first.wpilibj.command.Command;
 import src.Robot;
+import src.XCommand;
 
-public class Feed extends Command {
+public class Feed extends XCommand {
 
-	protected void initialize() {
+	public Feed() {
+		requires(Robot.shooter);
+		requires(Robot.intake);
 	}
 
 	protected void execute() {
 		if (!Robot.shooter.ballPresent()) {
-			Robot.intake.feed(0.7);
-			Robot.shooter.feed(0.8);
+			Robot.intake.feed(1);
+			Robot.shooter.feed(0.6);
 		}
 		else {
 			Robot.intake.feed(0);
@@ -19,16 +21,7 @@ public class Feed extends Command {
 		}
 	}
 
-	protected boolean isFinished() {
-		return false;
-	}
-
-	protected void end() {
-		Robot.intake.disable();
-		Robot.shooter.disable();
-	}
-
-	protected void interrupted() {
+	protected void quit(boolean wasInterrupted) {
 		Robot.intake.disable();
 		Robot.shooter.disable();
 	}

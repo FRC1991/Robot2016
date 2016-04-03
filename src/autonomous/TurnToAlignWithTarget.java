@@ -7,7 +7,7 @@ import src.XCommand;
 
 public class TurnToAlignWithTarget extends XCommand {
 	
-	private double differenceTolerance = 8;
+	private double differenceTolerance = 5;
 	private double onTargetStartTime = 0;
 	private double alignInterval = 1.00;
 	private boolean onTarget = false;

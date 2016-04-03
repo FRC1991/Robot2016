@@ -11,10 +11,14 @@ import src.teleop.Shoot;
 
 public class Autonomous extends CommandGroup {
 	private int mode, position;
-	private final double driveTime = 2.5;
-	private final double driveSpeed = 0.3;
+	
+	//Time/Speed from waterbury
+	private final double driveTime = 2.6;
+	private final double driveSpeed = 0.75;
 	
 	public Autonomous() {
+		//Moves Up then Stows Intake/Shooter
+		addSequential(new DriveTime(0.4, 0.5));//Move up to avoid foul
 		addSequential(new MoveSystemsToPositions(Robot.Position.IntakeDown, Robot.Position.ShooterStowed));
 		addSequential(new WaitCommand(1));
 		mode = (int)SmartDashboard.getNumber("Autonomous Mode", 0);
@@ -57,8 +61,10 @@ public class Autonomous extends CommandGroup {
 	}
 	
 	private void shoot(){
-    	addSequential(new MoveShooterToPosition(Robot.Position.ShooterFeed));
+    	addSequential(new MoveShooterToPosition(Robot.Position.ShooterHighGoal));
     	addSequential(new WaitCommand(1));
+    	//Check code
+    	
     	addSequential(new Shoot());
 	}
 	

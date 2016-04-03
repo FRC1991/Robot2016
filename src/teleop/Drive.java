@@ -37,8 +37,8 @@ public class Drive extends Command {
 				rightSpeed = -rightTrigger;
 				leftSpeed = -rightSpeed;
 			}
-			leftSpeed *= 0.4;
-			rightSpeed *= 0.4;
+			leftSpeed *= 0.5;
+			rightSpeed *= 0.5;
 		}
 		Robot.drivetrain.drive(leftSpeed, rightSpeed);
 	}

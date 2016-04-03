@@ -33,7 +33,12 @@ public class DistanceReckon extends XCommand {
 	}
 	
 	protected boolean isFinished() {
-		return onDesiredRange();
+		// If no target detected, never finish
+		if(currentDistance == 0){
+			return false;
+		}else{
+			return onDesiredRange();
+		}
 	}
 	
 	protected void alignDistance(){
@@ -47,7 +52,7 @@ public class DistanceReckon extends XCommand {
 		if(currentDistance != 0){
 			return(currentDistance > MIN_RANGE && currentDistance < MAX_RANGE);
 		}else{
-			return false;
+			return true;
 		}
 	}
 }
