@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.vision.USBCamera;
 import src.autonomous.Autonomous;
 import src.autonomous.MoveShooterToPosition;
 import src.autonomous.MoveSystemsToPositions;
+import src.autonomous.SnapshotAutoAim;
 import src.autonomous.TurnToAlignWithTarget;
+import src.autonomous.TurnToYaw;
 import src.subsystems.CameraServer;
 import src.subsystems.Climber;
 import src.subsystems.Drivetrain;
@@ -50,14 +52,11 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void robotInit() {
-		//prefs = new Preferences("home/lvuser/DataFiles/prefs.txt");
-		//prefs.setValues();
 		cameraServer = CameraServer.getInstance();
 		drivetrain = new Drivetrain();
 		drivetrain.resetNavigation();
 		shooter = new Shooter();
 		intake = new Intake();
-		//climber = new Climber();
 		driver = new XboxController(0);
 		aux = new XboxController(1);
 		try {
@@ -88,18 +87,6 @@ public class Robot extends IterativeRobot {
 	public void registerControls() {
 		driver.LBumper.whenPressed(new SetDriveBackwards());
 		driver.RBumper.whenPressed(new TurnToAlignWithTarget());
-//		driver.RBumper.whenPressed(new XCommand() {
-//			protected void execute() {
-//				try {
-//					String currentCam = cameraServer.getCameraName();
-//					cameraServer.startAutomaticCapture((currentCam == secondaryCam ? startCam : secondaryCam));
-//				}
-//				catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//				finish();
-//			}
-//		});
 		driver.RJoystick.whileHeld(new StraightDrive());
 		driver.Start.whenPressed(new XCommand() {
 			public void execute() {
@@ -107,17 +94,17 @@ public class Robot extends IterativeRobot {
 				finish();
 			}
 		});
+		driver.A.whenPressed(new TurnToYaw(58.4));
+		driver.B.whenPressed(new TurnToAlignWithTarget());
+		driver.Y.whenPressed(new SnapshotAutoAim());
 		aux.LBumper.whileHeld(new Feed());
 		aux.RBumper.whenPressed(new Shoot());
 		aux.B.whenPressed(new MoveSystemsToPositions(Position.IntakeFeed, Position.ShooterFeed));
 		aux.X.whenPressed(new MoveShooterToPosition(Position.ShooterStowed));
 		aux.Y.whenPressed(new MoveShooterToPosition(Position.ShooterBarf));
 		aux.A.whileHeld(new Regurgitate());
-		
 		aux.LJoystick.whileHeld(new MoveShooterManually());
-		//aux.Select.whileHeld(new MoveClimberManually());
 		aux.RJoystick.whileHeld(new MoveIntakeManually());
-		// Climber code is run automatically in MoveClimberManually
 	}
 
 	
@@ -151,8 +138,7 @@ public class Robot extends IterativeRobot {
 		drivetrain.disable();
 		shooter.disable();
 		intake.disable();
-		//climber.disable();
-	}
+		}
 
 
 	public void disabledPeriodic() {}
@@ -160,7 +146,6 @@ public class Robot extends IterativeRobot {
 
 	public void autonomousInit() {
 		genericInit();
-		//prefs.setValues();
 		auto();
 
 	}

@@ -1,6 +1,5 @@
 package src.autonomous;
 
-import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import src.Robot;
 import src.XCommand;
@@ -20,6 +19,7 @@ public class TurnToAlignWithTarget extends XCommand {
 		Robot.drivetrain.enable();
 		align();
 		setTimeout(6);
+		System.out.println("Beginning auto-aim.");
 	}
 	
 	private boolean differenceOnTarget() {
@@ -39,6 +39,7 @@ public class TurnToAlignWithTarget extends XCommand {
 	private void align() {
 		double desiredYaw = SmartDashboard.getNumber("Target Yaw");
 		Robot.drivetrain.setYawAndSpeed(desiredYaw, 0);
+		System.out.println("Aligning to yaw: " + desiredYaw);
 	}
 	
 	@Override
@@ -50,6 +51,7 @@ public class TurnToAlignWithTarget extends XCommand {
 			if (!onTarget) {
 				onTarget = true;
 				onTargetStartTime = timeSinceInitialized();
+				System.out.println("On target");
 			}	
 		}
 		else {

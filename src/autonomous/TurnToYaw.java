@@ -13,6 +13,7 @@ public class TurnToYaw extends XCommand {
 	}
 	
 	protected void initialize() {
+		System.out.println("Turning to yaw: " + desiredYaw);
 		Robot.drivetrain.setYawAndSpeed(desiredYaw, 0);
 		Robot.drivetrain.enable();
 	}
@@ -25,7 +26,10 @@ public class TurnToYaw extends XCommand {
 		Robot.drivetrain.disable();
 	}
 	
-	protected boolean isFinished() {
+	public boolean isFinished() {
+		if (Robot.drivetrain.onTarget()) {
+			System.out.println("Reached yaw of " + desiredYaw + " - Error: " + Robot.drivetrain.getError());
+		}
 		return Robot.drivetrain.onTarget();
 	}
 }

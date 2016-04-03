@@ -58,5 +58,9 @@ public class XboxController {
 	public boolean areTriggersPressed() {
 		return (getLTrigger() > 0 || getRTrigger() > 0);
 	}
+	
+	public boolean isButtonPressed(int button) {
+		return controller.getRawButton(button);
+	}
 
 }
