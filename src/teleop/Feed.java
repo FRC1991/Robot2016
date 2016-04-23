@@ -13,7 +13,7 @@ public class Feed extends XCommand {
 	protected void execute() {
 		if (!Robot.shooter.ballPresent()) {
 			Robot.intake.feed(1);
-			Robot.shooter.feed(0.6);
+			Robot.shooter.feed(0.5);
 		}
 		else {
 			Robot.intake.feed(0);

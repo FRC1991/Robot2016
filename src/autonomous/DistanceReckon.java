@@ -6,8 +6,8 @@ import src.XCommand;
 
 public class DistanceReckon extends XCommand {
 	
-	private final double MIN_RANGE = 7.5;
-	private final double MAX_RANGE = 11.0;
+	private final double MIN_RANGE = 9;
+	private final double MAX_RANGE = 10.5;
 	private final double SPEED = 0.3;
 	private final double ALIGN_INTERVAL = 1.0;
 	private double currentDistance;
@@ -45,6 +45,9 @@ public class DistanceReckon extends XCommand {
 		if(!onDesiredRange()){
 			if(currentDistance < MIN_RANGE) Robot.drivetrain.drive(-SPEED, -SPEED);
 			if(currentDistance > MAX_RANGE) Robot.drivetrain.drive(SPEED, SPEED);
+		}
+		else {
+			Robot.drivetrain.drive(0,  0);
 		}
 	}
 	

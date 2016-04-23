@@ -12,19 +12,20 @@ import src.teleop.Drive;
 
 public class Drivetrain extends PIDSubsystem {
 
-	private ArrayList<CANTalon> right, left;
+	public ArrayList<CANTalon> right, left;
 	private boolean testMode = false;
 	private AHRS navX;
 	private double speed = 0;
-	private double tolerance = 0.7;
+	public double tolerance = 1.5;
 	private boolean reverseMode = false;
+	private double speedMultiplier = 0.7;
 
 	public Drivetrain() {
-		super("Drivetrain", 0.05, 0.005, 0.115);
+		super("Drivetrain", 0.02, 0.003, 0.115);
 		getPIDController().setContinuous(true);
 		setAbsoluteTolerance(tolerance);
 		setInputRange(-180.0, 180.0);
-		setOutputRange(-0.5, 0.5);
+		setOutputRange(-0.7, 0.7);
 		navX = new AHRS(SPI.Port.kMXP);
 		left = new ArrayList<CANTalon>();
 		right = new ArrayList<CANTalon>();
@@ -73,6 +74,7 @@ public class Drivetrain extends PIDSubsystem {
 	}
 
 	public void driveSide(ArrayList<CANTalon> side, double speed) {
+		speed *= speedMultiplier;
 		for(CANTalon motor: side) {
 			motor.set(speed);
 		}
@@ -88,14 +90,6 @@ public class Drivetrain extends PIDSubsystem {
 				driveSide(right, rightSpeed);
 			}		
 	}
-	
-	public boolean onTarget() {
-		return (getError() < tolerance);
-	}
-	
-	public double getError() {
-		return Math.abs(getSetpoint() - getPosition());
-	}
 
 	public void disable() {
 		super.disable();
@@ -107,7 +101,18 @@ public class Drivetrain extends PIDSubsystem {
 		navX.zeroYaw();
 	}
 
-	public void setYawAndSpeed(double yaw, double speed) {
+	/*public void setYawAndSpeed(double yaw, double speed) {
+		setAbsoluteTolerance(tolerance);
+		this.speed = speed;
+		setSetpoint(yaw);
+	}*/
+	
+	public void setYawAndSpeed(double yaw, double speed, boolean setPointer) {
+		if(setPointer){
+			setAbsoluteTolerance(tolerance + 3.5);
+		}else{
+			setAbsoluteTolerance(tolerance);
+		}
 		this.speed = speed;
 		setSetpoint(yaw);
 	}

@@ -38,7 +38,7 @@ public class TurnToAlignWithTarget extends XCommand {
 	
 	private void align() {
 		double desiredYaw = SmartDashboard.getNumber("Target Yaw");
-		Robot.drivetrain.setYawAndSpeed(desiredYaw, 0);
+		Robot.drivetrain.setYawAndSpeed(desiredYaw, 0, false);
 		System.out.println("Aligning to yaw: " + desiredYaw);
 	}
 	

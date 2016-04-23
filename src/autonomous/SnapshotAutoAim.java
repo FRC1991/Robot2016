@@ -9,10 +9,15 @@ import src.XCommand;
 public class SnapshotAutoAim extends XCommand {
 
 	private TurnToYaw turn = null;
-	private double differenceTolerance = 3;
-
+	private int times = 0;
+	
 	protected void initialize() {
 		super.initialize();
+		times = 0;
+		if (turn != null) {
+			turn.cancel();
+			turn = null;
+		}
 		System.out.println("Starting SnapshotAutoAim.");
 	}
 	
@@ -22,27 +27,24 @@ public class SnapshotAutoAim extends XCommand {
 	
 	private void aim() {
 		double targetYaw = getTargetYaw();
-		System.out.println("Turning to target yaw: " + targetYaw);
 		turn = new TurnToYaw(targetYaw);
 		Scheduler.getInstance().add(turn);
-	}
-	
-	private boolean differenceOnTarget() {
-		double differenceInPixels = SmartDashboard.getNumber("Difference", 100);
-		return (Math.abs(differenceInPixels) <= differenceTolerance);
-
 	}
 
 	@Override
 	protected void execute() {
-		if (differenceOnTarget() || !Robot.driver.isButtonPressed(4)) {
-			System.out.println("On target with difference of: " +  SmartDashboard.getNumber("Difference", 100));
-			turn = null;
-			finish();
-		}
-		else if (turn == null || turn.isFinished()) {
+		if (turn == null) {
+			times += 1;
+			System.out.println("Starting turn number " + times);
 			aim();
-			System.out.println("Aiming");
+		}
+		else if (turn.isFinished()) {
+			System.out.println("Finished turning with difference of: " +  SmartDashboard.getNumber("Difference", 100));
+			turn = null;
+			if (times >= 2) {
+				System.out.println("SnapshotAutoAim finished");
+				finish();
+			}
 		}
 	}
 }

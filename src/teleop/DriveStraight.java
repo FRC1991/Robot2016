@@ -64,7 +64,7 @@ public class DriveStraight extends Command {
 		if (reverse) {
 			speed = -speed;
 		}
-		Robot.drivetrain.setYawAndSpeed(initialYaw, speed);
+		Robot.drivetrain.setYawAndSpeed(initialYaw, speed, false);
 	}
 
 	protected boolean isFinished() {
@@ -79,7 +79,7 @@ public class DriveStraight extends Command {
 	}
 
 	protected void end() {
-		Robot.drivetrain.setYawAndSpeed(initialYaw, 0);
+		Robot.drivetrain.setYawAndSpeed(initialYaw, 0, false);
 		Robot.drivetrain.disable();
 		Robot.drivetrain.resetNavigation();
 		if (turn) {

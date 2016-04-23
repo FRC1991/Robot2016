@@ -10,7 +10,7 @@ public class Shoot extends CommandGroup {
     addSequential(new PowerUpShooter());
     addSequential(new XCommand() {
       public void execute() {
-        Robot.shooter.feed(0.8);
+        Robot.shooter.feed(0.9);
         finish();
       }
     });

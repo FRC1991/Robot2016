@@ -180,8 +180,8 @@ public class Preferences {
 
 	//Sets default preference values
 	public void setPrefs() {
-		prefs.put("DriveTrain_Speed_Multiplier", 0.5);
-		prefs.put("DriveTrain_Speed_Rotation", 0.5);
+		prefs.put("DriveTrain_Speed_Multiplier", 0.2);
+		prefs.put("DriveTrain_Speed_Rotation", 0.2);
 		prefs.put("DriveTrain_Offset_Left", 0.0);
 		prefs.put("DriveTrain_Offset_Right", 0.0);
 		prefs.put("Arcade_Turn_Sensitivity", 0.7);

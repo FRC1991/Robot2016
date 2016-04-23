@@ -13,13 +13,13 @@ public class StraightDrive extends XCommand {
 	
 	protected void initialize() {
 		this.desiredYaw = Robot.drivetrain.getPosition();
-		Robot.drivetrain.setYawAndSpeed(desiredYaw, 0);
+		Robot.drivetrain.setYawAndSpeed(desiredYaw, 0, false);
 		Robot.drivetrain.enable();
 	}
 	
 	@Override
 	protected void execute() {
-		Robot.drivetrain.setYawAndSpeed(desiredYaw, Robot.driver.getLJoystickY());
+		Robot.drivetrain.setYawAndSpeed(desiredYaw, Robot.driver.getLJoystickY(), false);
 	}
 	
 	protected void quit(boolean wasInterrupted) {

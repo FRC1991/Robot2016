@@ -10,12 +10,12 @@ import src.autonomous.MoveShooterToPosition;
 import src.autonomous.MoveSystemsToPositions;
 import src.autonomous.SnapshotAutoAim;
 import src.autonomous.TurnToAlignWithTarget;
-import src.autonomous.TurnToYaw;
 import src.subsystems.CameraServer;
 import src.subsystems.Climber;
 import src.subsystems.Drivetrain;
 import src.subsystems.Intake;
 import src.subsystems.Shooter;
+import src.teleop.CancelDrivetrainCommands;
 import src.teleop.Feed;
 import src.teleop.MoveIntakeManually;
 import src.teleop.MoveShooterManually;
@@ -43,7 +43,8 @@ public class Robot extends IterativeRobot {
 	public static Command autonomous = null;
 
 	public enum Position {
-		ShooterStowed(2.08), ShooterFeed(3.00), ShooterHighGoal(3.067), ShooterAutoAim(3.682), ShooterBarf(3.95), IntakeFeed(1.35), IntakeDown(1.35);
+		//Comp bot point ShooterAutoAim(3.682) ShooterHighGoal(3.067)
+		ShooterStowed(2.08), ShooterFeed(3.00), ShooterHighGoal(2.96), ShooterAutoAim(3.282), ShooterBarf(3.95), IntakeFeed(1.35), IntakeDown(1.35);
 
 		public final double setpoint;
 		Position(double setpoint) {
@@ -86,7 +87,7 @@ public class Robot extends IterativeRobot {
 	// Driver controls
 	public void registerControls() {
 		driver.LBumper.whenPressed(new SetDriveBackwards());
-		driver.RBumper.whenPressed(new TurnToAlignWithTarget());
+		driver.RBumper.whenPressed(new CancelDrivetrainCommands());
 		driver.RJoystick.whileHeld(new StraightDrive());
 		driver.Start.whenPressed(new XCommand() {
 			public void execute() {
@@ -94,7 +95,6 @@ public class Robot extends IterativeRobot {
 				finish();
 			}
 		});
-		driver.A.whenPressed(new TurnToYaw(58.4));
 		driver.B.whenPressed(new TurnToAlignWithTarget());
 		driver.Y.whenPressed(new SnapshotAutoAim());
 		aux.LBumper.whileHeld(new Feed());

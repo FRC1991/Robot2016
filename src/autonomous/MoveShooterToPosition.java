@@ -16,4 +16,5 @@ public class MoveShooterToPosition extends XCommand {
     Robot.shooter.enable();
     finish();
   }
+  
 }

@@ -15,7 +15,7 @@ public class DriveTime extends XCommand {
 	
 	protected void initialize() {
 		setTimeout(timeout);
-		Robot.drivetrain.setYawAndSpeed(Robot.drivetrain.getPosition(), speed);
+		Robot.drivetrain.setYawAndSpeed(Robot.drivetrain.getPosition(), speed, false);
 		Robot.drivetrain.enable();
 		System.out.println("Driving in a straight line for " + timeout + " seconds at " + speed + " speed.");
 	}

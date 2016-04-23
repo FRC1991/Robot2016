@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import src.subsystems.SwegSystem;
 
 public abstract class XCommand extends Command {
-  private boolean finished = false;
+  protected boolean finished = false;
 
   public XCommand() {}
 
