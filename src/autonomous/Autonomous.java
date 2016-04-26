@@ -50,7 +50,7 @@ public class Autonomous extends CommandGroup {
 		positionStrategy();
     	addSequential(new MoveShooterToPosition(Robot.Position.ShooterAutoAim));
     	addSequential(new DistanceReckon());
-    	addSequential(new WaitCommand(.5));
+    	addSequential(new WaitCommand(1));
     	addSequential(new TurnToAlignWithTarget());
 	}
 	

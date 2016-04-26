@@ -16,7 +16,7 @@ public class Drivetrain extends PIDSubsystem {
 	private boolean testMode = false;
 	private AHRS navX;
 	private double speed = 0;
-	public double tolerance = 1.5;
+	public double tolerance = 1;
 	private boolean reverseMode = false;
 	private double speedMultiplier = 0.7;
 
@@ -109,7 +109,7 @@ public class Drivetrain extends PIDSubsystem {
 	
 	public void setYawAndSpeed(double yaw, double speed, boolean setPointer) {
 		if(setPointer){
-			setAbsoluteTolerance(tolerance + 3.5);
+			setAbsoluteTolerance(tolerance + 5);
 		}else{
 			setAbsoluteTolerance(tolerance);
 		}
